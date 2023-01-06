@@ -1,0 +1,28 @@
+//toolip arrow ALL direction mixin
+
+@mixin arrow($direction) {
+  content: "";
+  position: absolute;
+  border: 20px solid transparent;
+  @if $direction == "top" {
+    #{$direction}: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: inherit;
+  } @else if $direction == "right" {
+    #{$direction}: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: inherit;
+  } @else if $direction == "bottom" {
+    #{$direction}: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: inherit;
+  } @else if $direction == "left" {
+    #{$direction}: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: inherit;
+  }
+}
