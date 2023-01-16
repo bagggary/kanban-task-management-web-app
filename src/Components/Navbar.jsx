@@ -13,7 +13,7 @@ return (
                         media="(min-width: 600px)"
                     />
                     <img 
-                        src={lightLogo}
+                        src={mobileLogo}
                         alt="logo"
                     />
         </picture>
