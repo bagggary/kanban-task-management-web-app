@@ -1,0 +1,62 @@
+@use "../util/index2" as *;
+.dropdown {
+  &__options {
+    background-color: black;
+    border-radius: rem(8);
+    width: rem(264);
+    height: auto;
+    margin-inline: auto;
+    padding: rem(16) rem(24) 0 0;
+    color: #979797;
+    h2 {
+      font-size: rem(12);
+      font-weight: 700;
+      color: gray;
+      letter-spacing: 2.4px;
+      padding: 0 0 0 rem(24);
+      margin-bottom: 0;
+    }
+    ul {
+      padding: unset;
+      margin-top: 19px;
+      .active {
+        border-top-right-radius: 100px;
+        border-bottom-right-radius: 100px;
+        background-color: #635fc7;
+        color: white;
+        svg {
+          fill: white;
+        }
+      }
+      li {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        padding: rem(14) 0 rem(15) rem(16);
+        svg {
+          fill: #979797;
+        }
+        div {
+          margin-left: rem(16);
+        }
+      }
+    }
+  }
+  &__create {
+    display: flex;
+    padding: rem(14) 0 rem(15) rem(16);
+    cursor: pointer;
+    fill: white;
+    div {
+      margin-left: rem(16);
+      color: #635fc7;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: #635fc7;
+    }
+  }
+}

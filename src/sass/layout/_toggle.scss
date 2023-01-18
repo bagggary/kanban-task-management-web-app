@@ -1,0 +1,40 @@
+@use "../util/index2" as *;
+.dropdown__switch {
+  .toggle {
+    input[type="checkbox"] {
+      display: none;
+      &:checked ~ label::after {
+        transform: translateX(20px);
+      }
+    }
+    label {
+      background-color: #635fc7;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-block;
+      position: relative;
+      transition: all ease-in-out 0.3s;
+      width: 40px;
+      height: 20px;
+      &::after {
+        content: " ";
+        background-color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        display: inline-block;
+        position: absolute;
+        left: 3px;
+        top: 3px;
+        transition: all ease-in-out 0.3s;
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+  .light-icon,
+  .dark-icon {
+    svg {
+      fill: #979797;
+    }
+  }
+}
