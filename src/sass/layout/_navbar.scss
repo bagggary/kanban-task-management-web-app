@@ -1,1 +1,40 @@
 @use "../util/index2" as *;
+nav {
+  padding: rem(20) 0;
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .right,
+  .left {
+    display: flex;
+    align-items: center;
+    .add-task {
+      width: rem(48);
+      height: rem(32);
+      background-color: #a8a4ff;
+      border-radius: rem(24);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: rem(16);
+    }
+  }
+  .left {
+    .logo {
+      height: rem(25);
+    }
+    .dropdown {
+      margin-left: rem(16);
+      span {
+        margin-left: rem(8);
+        .fa-chevron-up:before {
+          font-size: 10px;
+          transform: rotate(180deg);
+          color: #635fc7;
+        }
+      }
+    }
+  }
+}

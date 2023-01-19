@@ -1,5 +1,13 @@
 @use "../util/index2" as *;
 .dropdown__switch {
+  display: flex;
+  margin: rem(16) auto;
+  padding: rem(14) rem(57);
+  justify-content: space-between;
+  background-color: #20212c;
+  border-radius: rem(6);
+  width: rem(235);
+  height: rem(48);
   .toggle {
     input[type="checkbox"] {
       display: none;

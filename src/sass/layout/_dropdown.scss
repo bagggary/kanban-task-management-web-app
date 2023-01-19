@@ -1,13 +1,27 @@
 @use "../util/index2" as *;
 .dropdown {
+  position: relative;
   &__options {
+    top: calc(rem(46) + rem(16));
+    position: absolute;
     background-color: black;
     border-radius: rem(8);
     width: rem(264);
-    height: auto;
+    height: rem(322);
     margin-inline: auto;
-    padding: rem(16) rem(24) 0 0;
     color: #979797;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+    &.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    &__boards {
+      padding: rem(16) rem(24) 0 0;
+    }
     h2 {
       font-size: rem(12);
       font-weight: 700;
@@ -19,6 +33,7 @@
     ul {
       padding: unset;
       margin-top: 19px;
+      margin-bottom: 0;
       .active {
         border-top-right-radius: 100px;
         border-bottom-right-radius: 100px;
