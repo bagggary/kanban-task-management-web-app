@@ -1,3 +1,5 @@
-@use "./globals/index";
-@use "./layout/container";
-@use "./util/index2";
+@use "./sass/globals/index";
+@use "./sass/layout/container";
+@use "./sass/layout/navbar";
+@use "./sass/layout/dropdown";
+@use "./sass/layout/toggle";

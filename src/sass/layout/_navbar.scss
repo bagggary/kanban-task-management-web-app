@@ -27,12 +27,15 @@ nav {
     }
     .dropdown {
       margin-left: rem(16);
-      span {
-        margin-left: rem(8);
-        .fa-chevron-up:before {
-          font-size: 10px;
+      .rot {
+        svg {
           transform: rotate(180deg);
-          color: #635fc7;
+        }
+      }
+      span {
+        svg {
+          margin-left: rem(8);
+          transition: transform 150ms ease-in-out;
         }
       }
     }
