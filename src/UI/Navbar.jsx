@@ -13,21 +13,25 @@ export default function Navbar(){
 
 return (
     <header>
+        <div className="container">
     <nav> 
+        <div className="logo-larger">
+            <img src={darkLogo} alt="larger-logo" />
+            
+        </div>
         <div className="container">
              <div className='left'>
                         <div className="logo">
                             <picture>
-                                        <source 
-                                            srcset={darkLogo}
-                                            media="(min-width: 600px)"
-                                        />
                                         <img 
                                             src={mobileLogo}
                                             alt="logo"
                                         />
                             </picture>
                         </div>
+                        <div className="left__larger">
+              Platform Launch
+              </div>
                         <div className="dropdown">
                             <div className='dropdown__name' onClick={handleDropdown}>
                                 Platform Lunch
@@ -76,12 +80,16 @@ return (
                 <div className="add-task">
                 <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"><path fill="#FFF" d="M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z"/></svg>
                 </div>
+                <div className="add-task-larger">
+                    <span><svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"><path fill="#FFF" d="M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z"/></svg></span> Add New Task
+                </div>
                 <div className='ellipsis'>
                 <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fill-rule="evenodd"><circle cx="2.308" cy="2.308" r="2.308"/><circle cx="2.308" cy="10" r="2.308"/><circle cx="2.308" cy="17.692" r="2.308"/></g></svg>
                 </div>
               </div>
         </div>
     </nav>
+    </div>
     </header>
 )
 }

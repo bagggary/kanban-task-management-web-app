@@ -1,11 +1,13 @@
 @use "./functions" as f;
 
 $breakpoints-up: (
+  "small": f.em(640),
   "medium": f.em(700),
   "large": f.em(800),
   "xlarge": f.em(1440),
 );
 $breakpoints-down: (
+  "xsmall": f.em(639.95),
   "small": f.em(699.95),
   "medium": f.em(899.95),
   "large": f.em(1399.95),

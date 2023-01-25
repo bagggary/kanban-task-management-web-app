@@ -1,16 +1,26 @@
 @use "../util/index2" as *;
+header {
+  background-color: #ffffff;
+}
 nav {
+  @include breakpoint(small) {
+    display: flex;
+    align-items: center;
+    padding: 0;
+  }
   padding: rem(20) 0;
   .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  .right,
-  .left {
+  .right {
     display: flex;
     align-items: center;
     .add-task {
+      @include breakpoint(small) {
+        display: none;
+      }
       width: rem(48);
       height: rem(32);
       background-color: #a8a4ff;
@@ -20,12 +30,51 @@ nav {
       align-items: center;
       margin-right: rem(16);
     }
+    .ellipsis {
+      cursor: pointer;
+    }
+    .add-task-larger {
+      width: rem(164);
+      height: rem(48);
+      border-radius: rem(24);
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 19px;
+      background-color: #635fc7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      &:hover {
+        background-color: #a8a4ff;
+      }
+      @include breakpoint(small) {
+        margin-right: rem(24);
+      }
+      @include breakpoint-down(xsmall) {
+        display: none;
+      }
+    }
   }
   .left {
+    display: flex;
+    align-items: center;
     .logo {
+      @include breakpoint(small) {
+        display: none;
+      }
       height: rem(25);
+      picture {
+        @include breakpoint(small) {
+          align-self: center;
+        }
+      }
     }
     .dropdown {
+      @include breakpoint(small) {
+        display: none;
+      }
       margin-left: rem(16);
       .rot {
         svg {
@@ -38,6 +87,30 @@ nav {
           transition: transform 150ms ease-in-out;
         }
       }
+    }
+  }
+  .left__larger {
+    font-weight: 700;
+    font-size: rem(20);
+    margin-left: rem(16);
+    @include breakpoint-down(xsmall) {
+      display: none;
+    }
+  }
+  .logo-larger {
+    padding: rem(35) rem(32.47) rem(36.78) rem(8);
+    position: relative;
+    @include breakpoint-down(xsmall) {
+      display: none;
+    }
+    &::after {
+      content: "";
+      border: 1px solid #e4ebfa;
+      border-width: 0 1px 0 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
     }
   }
 }
