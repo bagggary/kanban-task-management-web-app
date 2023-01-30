@@ -1,6 +1,6 @@
 @use "../util/index2" as *;
 .dropdown {
-  position: relative;
+  position: sticky;
   &__name {
     font-weight: 700;
     font-size: 18px;
@@ -78,6 +78,21 @@
       width: 16px;
       height: 16px;
       fill: #635fc7;
+    }
+  }
+}
+.content {
+  display: flex;
+  width: 100%;
+  overflow: auto;
+  .main-content {
+    width: 100vw;
+    transform: translateX(300px);
+    @include breakpoint-down(medium) {
+      transform: translateX(260px);
+    }
+    &.content-screen {
+      transform: translateX(0);
     }
   }
 }

@@ -1,13 +1,19 @@
 @use "../util/index2" as *;
 .sidenav {
-  position: relative;
+  position: absolute;
   @include breakpoint-down(small) {
     display: none;
+  }
+  @include breakpoint-down(medium) {
+    width: rem(260);
   }
   width: rem(300);
   height: calc(100vh - rem(101.27));
   background-color: white;
   &__boards {
+    @include breakpoint-down(medium) {
+      padding: rem(15) rem(20) 0 0;
+    }
     padding: rem(16) rem(24) 0 0;
     h2 {
       font-weight: 700;
@@ -35,6 +41,9 @@
         list-style: none;
         display: flex;
         align-items: center;
+        @include breakpoint-down(medium) {
+          padding: rem(14) 0 rem(15) rem(24);
+        }
         padding: rem(14) 0 rem(15) rem(32);
         svg {
           fill: #979797;
@@ -46,6 +55,9 @@
     }
     &__create {
       display: flex;
+      @include breakpoint-down(medium) {
+        padding: rem(14) 0 rem(15) rem(24);
+      }
       padding: rem(14) 0 rem(15) rem(32);
       cursor: pointer;
       fill: white;
@@ -68,9 +80,14 @@
     position: absolute;
     display: flex;
     padding: rem(14) rem(57);
+    margin: 0 auto;
     justify-content: space-between;
     background-color: #f4f7fd;
     border-radius: rem(6);
+    @include breakpoint-down(medium) {
+      left: rem(13);
+      width: rem(235);
+    }
     width: calc(100% - rem(49));
     height: rem(48);
     .toggle {
@@ -120,7 +137,11 @@
       margin-right: rem(10);
       fill: #828fa3;
     }
-    width: rem(240);
+    @include breakpoint-down(medium) {
+      width: rem(240);
+    }
+
+    width: rem(276);
     height: rem(48);
     display: flex;
     justify-content: center;

@@ -398,6 +398,14 @@ nav .logo-larger {
     display: none;
   }
 }
+nav .logo-larger.logo-screen {
+  padding-right: 7.716875rem;
+}
+@media (max-width: 56.246875em) {
+  nav .logo-larger.logo-screen {
+    padding-right: 5.279375rem;
+  }
+}
 nav .logo-larger::after {
   content: "";
   border: 1px solid #e4ebfa;
@@ -408,8 +416,29 @@ nav .logo-larger::after {
   height: 100%;
 }
 
+.side-toggle {
+  position: absolute;
+  width: 56px;
+  height: 48px;
+  left: 0px;
+  bottom: 32px;
+  background-color: #635fc7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 6.25rem 6.25rem 0;
+  z-index: 10;
+  cursor: pointer;
+}
+.side-toggle svg {
+  fill: white;
+}
+.side-toggle:hover {
+  background-color: #a8a4ff;
+}
+
 .dropdown {
-  position: relative;
+  position: sticky;
 }
 .dropdown__name {
   font-weight: 700;
@@ -491,6 +520,24 @@ nav .logo-larger::after {
   fill: #635fc7;
 }
 
+.content {
+  display: flex;
+  width: 100%;
+  overflow: auto;
+}
+.content .main-content {
+  width: 100vw;
+  transform: translateX(300px);
+}
+@media (max-width: 56.246875em) {
+  .content .main-content {
+    transform: translateX(260px);
+  }
+}
+.content .main-content.content-screen {
+  transform: translateX(0);
+}
+
 .dropdown__switch {
   display: flex;
   margin: 1rem auto;
@@ -536,7 +583,7 @@ nav .logo-larger::after {
 }
 
 .sidenav {
-  position: relative;
+  position: absolute;
   width: 18.75rem;
   height: calc(100vh - 6.329375rem);
   background-color: white;
@@ -546,8 +593,18 @@ nav .logo-larger::after {
     display: none;
   }
 }
+@media (max-width: 56.246875em) {
+  .sidenav {
+    width: 16.25rem;
+  }
+}
 .sidenav__boards {
   padding: 1rem 1.5rem 0 0;
+}
+@media (max-width: 56.246875em) {
+  .sidenav__boards {
+    padding: 0.9375rem 1.25rem 0 0;
+  }
 }
 .sidenav__boards h2 {
   font-weight: 700;
@@ -578,6 +635,11 @@ nav .logo-larger::after {
   align-items: center;
   padding: 0.875rem 0 0.9375rem 2rem;
 }
+@media (max-width: 56.246875em) {
+  .sidenav__boards ul li {
+    padding: 0.875rem 0 0.9375rem 1.5rem;
+  }
+}
 .sidenav__boards ul li svg {
   fill: #979797;
 }
@@ -589,6 +651,11 @@ nav .logo-larger::after {
   padding: 0.875rem 0 0.9375rem 2rem;
   cursor: pointer;
   fill: white;
+}
+@media (max-width: 56.246875em) {
+  .sidenav__boards__create {
+    padding: 0.875rem 0 0.9375rem 1.5rem;
+  }
 }
 .sidenav__boards__create div {
   margin-left: 1rem;
@@ -607,11 +674,18 @@ nav .logo-larger::after {
   position: absolute;
   display: flex;
   padding: 0.875rem 3.5625rem;
+  margin: 0 auto;
   justify-content: space-between;
   background-color: #f4f7fd;
   border-radius: 0.375rem;
   width: calc(100% - 3.0625rem);
   height: 3rem;
+}
+@media (max-width: 56.246875em) {
+  .sidenav__switch {
+    left: 0.8125rem;
+    width: 14.6875rem;
+  }
 }
 .sidenav__switch .toggle input[type=checkbox] {
   display: none;
@@ -651,7 +725,7 @@ nav .logo-larger::after {
   position: absolute;
   bottom: 32px;
   color: #828fa3;
-  width: 15rem;
+  width: 17.25rem;
   height: 3rem;
   display: flex;
   justify-content: center;
@@ -663,10 +737,21 @@ nav .logo-larger::after {
   margin-right: 0.625rem;
   fill: #828fa3;
 }
+@media (max-width: 56.246875em) {
+  .sidenav__sidebar {
+    width: 15rem;
+  }
+}
 .sidenav__sidebar:hover {
   background-color: rgba(99, 95, 199, 0.1019607843);
   color: #635fc7;
 }
 .sidenav__sidebar:hover span {
   fill: #635fc7;
+}
+
+.transition {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
 }/*# sourceMappingURL=main.css.map */

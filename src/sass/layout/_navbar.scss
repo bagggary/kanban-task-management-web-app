@@ -103,6 +103,12 @@ nav {
     @include breakpoint-down(xsmall) {
       display: none;
     }
+    &.logo-screen {
+      @include breakpoint-down(medium) {
+        padding-right: rem(84.47);
+      }
+      padding-right: rem(123.47);
+    }
     &::after {
       content: "";
       border: 1px solid #e4ebfa;
@@ -112,5 +118,25 @@ nav {
       top: 0;
       height: 100%;
     }
+  }
+}
+.side-toggle {
+  position: absolute;
+  width: 56px;
+  height: 48px;
+  left: 0px;
+  bottom: 32px;
+  background-color: #635fc7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 rem(100) rem(100) 0;
+  z-index: 10;
+  cursor: pointer;
+  svg {
+    fill: white;
+  }
+  &:hover {
+    background-color: #a8a4ff;
   }
 }

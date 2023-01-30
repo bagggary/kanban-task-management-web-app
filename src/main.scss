@@ -4,3 +4,9 @@
 @use "./sass/layout/dropdown";
 @use "./sass/layout/toggle";
 @use "./sass/layout/sidenav";
+
+.transition {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
