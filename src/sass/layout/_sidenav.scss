@@ -46,9 +46,11 @@
         }
         padding: rem(14) 0 rem(15) rem(32);
         svg {
+          pointer-events: none;
           fill: #979797;
         }
         div {
+          pointer-events: none;
           margin-left: rem(16);
         }
       }

@@ -497,9 +497,11 @@ nav .logo-larger::after {
   padding: 0.875rem 0 0.9375rem 1rem;
 }
 .dropdown__options ul li svg {
+  pointer-events: none;
   fill: #979797;
 }
 .dropdown__options ul li div {
+  pointer-events: none;
   margin-left: 1rem;
 }
 .dropdown__create {
@@ -641,9 +643,11 @@ nav .logo-larger::after {
   }
 }
 .sidenav__boards ul li svg {
+  pointer-events: none;
   fill: #979797;
 }
 .sidenav__boards ul li div {
+  pointer-events: none;
   margin-left: 1rem;
 }
 .sidenav__boards__create {
@@ -748,6 +752,69 @@ nav .logo-larger::after {
 }
 .sidenav__sidebar:hover span {
   fill: #635fc7;
+}
+
+.overlay {
+  position: relative;
+  background-color: red;
+  min-height: 100vh;
+}
+.overlay .add-task-board {
+  width: 30rem;
+  height: 42.1875rem;
+  position: absolute;
+  background-color: white;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.overlay .add-task-board h1 {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+  color: #000112;
+  margin-bottom: 0;
+}
+.overlay .add-task-board form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.overlay .add-task-board form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.overlay .add-task-board form > div > label {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  color: #828fa3;
+}
+.overlay .add-task-board form > div input {
+  border: 1px solid rgba(130, 143, 163, 0.25);
+  border-radius: 4px;
+}
+.overlay .add-task-board form .f-tit input {
+  height: 2.5rem;
+}
+.overlay .add-task-board form .f-des input {
+  min-height: 7rem;
+}
+.overlay .add-task-board form .f-sub > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.overlay .add-task-board form .f-sub > div input {
+  flex: 1;
+  height: 2.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .transition {
