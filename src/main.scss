@@ -4,7 +4,8 @@
 @use "./sass/layout/dropdown";
 @use "./sass/layout/toggle";
 @use "./sass/layout/sidenav";
-@use "./sass/layout/form";
+@use "./sass/layout/task-form";
+@use "./sass/layout/deletion";
 .transition {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
