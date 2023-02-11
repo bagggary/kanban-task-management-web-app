@@ -1,0 +1,168 @@
+@use "../util/index2" as *;
+
+//Add Task Form
+
+// .overlay {
+//   position: relative;
+//   background-color: gray;
+//   min-height: 100vh;
+.add-new {
+  z-index: 10;
+  &.task {
+    @include breakpoint-down(xsmall) {
+      min-width: 71.4%;
+      max-width: rem(343);
+      height: rem(659);
+      padding: rem(24);
+    }
+    border-radius: rem(6);
+    width: rem(480);
+    height: rem(675);
+  }
+  &.board {
+    width: rem(480);
+    height: rem(429);
+    border-radius: rem(6);
+
+    @include breakpoint-down(xsmall) {
+      min-width: 71.4%;
+      max-width: rem(343);
+      padding: rem(24);
+    }
+  }
+  position: absolute;
+  background-color: white;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: rem(32);
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+  h1 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 23px;
+    color: #000112;
+    margin-bottom: 0;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: rem(24);
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: rem(8);
+      > label {
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 15px;
+        color: #828fa3;
+      }
+      input,
+      textarea {
+        border: 1px solid rgba(130, 143, 163, 0.25);
+        border-radius: 4px;
+        padding-left: rem(16);
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 23px;
+        color: #000112;
+        &::placeholder {
+          font-weight: 500;
+          font-size: 13px;
+          line-height: 23px;
+          color: #000112;
+          mix-blend-mode: normal;
+          opacity: 0.25;
+        }
+      }
+    }
+    .f-tit {
+      position: relative;
+      &.error {
+        input {
+          border-color: rgb(234, 85, 85);
+        }
+      }
+      input {
+        height: rem(40);
+      }
+      p {
+        position: absolute;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 23px;
+        color: rgb(234, 85, 85);
+        right: 16px;
+        bottom: 8px;
+      }
+    }
+    .f-des {
+      textarea {
+        width: 100%;
+        resize: none;
+        outline: none;
+        height: rem(112);
+      }
+    }
+    .f-sub {
+      > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        position: relative;
+        &.error {
+          input {
+            border-color: rgb(234, 85, 85);
+          }
+        }
+        input {
+          flex: 1;
+          height: rem(40);
+          margin-bottom: rem(4);
+        }
+        svg {
+          cursor: pointer;
+          fill: #828fa3;
+          &:hover {
+            fill: rgb(234, 85, 85);
+          }
+        }
+        p {
+          position: absolute;
+          font-weight: 500;
+          font-size: 13px;
+          line-height: 23px;
+          color: rgb(234 85 85);
+          right: 48px;
+          bottom: 12px;
+        }
+      }
+      button {
+        background-color: #635fc71a;
+        border-radius: rem(20);
+        border: none;
+        padding: rem(8) 0;
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 23px;
+        text-align: center;
+        color: #635fc7;
+      }
+    }
+    button {
+      padding: rem(8) 0;
+      border: none;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 23px;
+      text-align: center;
+      background: #635fc7;
+      border-radius: 20px;
+      color: white;
+    }
+  }
+}

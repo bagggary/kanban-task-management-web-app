@@ -1,0 +1,71 @@
+@use "../util/index2" as *;
+
+.delete {
+  // &.board-dele{
+  // }
+  @include breakpoint-down(xsmall) {
+    min-width: 71.4%;
+    max-width: rem(343);
+    padding: rem(24);
+  }
+  border-radius: rem(6);
+  width: rem(480);
+  min-height: rem(229);
+  position: absolute;
+  background-color: white;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: rem(32);
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+  h1 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 23px;
+    color: #ea5555;
+    margin-bottom: 0;
+  }
+  p {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 23px;
+    color: #828fa3;
+  }
+  .delete-options {
+    display: flex;
+    gap: rem(16);
+    align-items: center;
+    justify-content: space-between;
+    @include breakpoint-down(xsmall) {
+      flex-direction: column;
+    }
+    > button {
+      &:first-child {
+        background: #ea5555;
+        border-radius: 20px;
+        text-align: center;
+        border: none;
+        width: 100%;
+        padding: rem(8.5) 0;
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 23px;
+        color: white;
+      }
+      &:last-child {
+        background: rgba(99, 95, 199, 0.1);
+        border-radius: 20px;
+        text-align: center;
+        border: none;
+        width: 100%;
+        padding: rem(8.5) 0;
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 23px;
+        color: #635fc7;
+      }
+    }
+  }
+}
