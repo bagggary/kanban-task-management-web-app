@@ -32,6 +32,42 @@ nav {
     }
     .ellipsis {
       cursor: pointer;
+      position: relative;
+      &-options {
+        position: absolute;
+        right: 0;
+        top: 58px;
+        padding: rem(16);
+        display: flex;
+        flex-direction: column;
+        gap: rem(16);
+        width: rem(192);
+        box-shadow: 0px 10px 20px rgba(54, 78, 126, 0.25);
+        border-radius: 8px;
+        background-color: white;
+        transition: all 0.2s ease-in-out;
+        &.hide {
+          visibility: hidden;
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        &.show {
+          visibility: visible;
+          opacity: 1;
+          transform: translateY(0);
+        }
+        > div {
+          font-weight: 500;
+          font-size: 13px;
+          line-height: 23px;
+          &:first-child {
+            color: #828fa3;
+          }
+          &:last-child {
+            color: #ea5555;
+          }
+        }
+      }
     }
     .add-task-larger {
       width: rem(164);

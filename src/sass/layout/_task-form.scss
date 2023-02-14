@@ -8,6 +8,19 @@
 //   min-height: 100vh;
 .add-new {
   z-index: 10;
+  &.edit {
+    width: rem(480);
+    min-height: auto;
+    max-height: rem(686);
+    border-radius: rem(6);
+
+    @include breakpoint-down(xsmall) {
+      min-width: 71.4%;
+      max-width: rem(343);
+      padding: rem(24);
+    }
+  }
+
   &.task {
     @include breakpoint-down(xsmall) {
       min-width: 71.4%;
@@ -21,7 +34,8 @@
   }
   &.board {
     width: rem(480);
-    height: rem(429);
+    min-height: auto;
+    max-height: rem(686);
     border-radius: rem(6);
 
     @include breakpoint-down(xsmall) {
@@ -69,6 +83,10 @@
         font-size: 13px;
         line-height: 23px;
         color: #000112;
+        cursor: pointer;
+        &:hover {
+          border-color: #635fc7;
+        }
         &::placeholder {
           font-weight: 500;
           font-size: 13px;
@@ -108,37 +126,41 @@
       }
     }
     .f-sub {
-      > div {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        position: relative;
-        &.error {
+      .sub-styles {
+        max-height: rem(308);
+        overflow: auto;
+        > div {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          position: relative;
+          &.error {
+            input {
+              border-color: rgb(234, 85, 85);
+            }
+          }
           input {
-            border-color: rgb(234, 85, 85);
+            flex: 1;
+            height: rem(40);
+            margin-bottom: rem(4);
           }
-        }
-        input {
-          flex: 1;
-          height: rem(40);
-          margin-bottom: rem(4);
-        }
-        svg {
-          cursor: pointer;
-          fill: #828fa3;
-          &:hover {
-            fill: rgb(234, 85, 85);
+          svg {
+            cursor: pointer;
+            fill: #828fa3;
+            &:hover {
+              fill: rgb(234, 85, 85);
+            }
           }
-        }
-        p {
-          position: absolute;
-          font-weight: 500;
-          font-size: 13px;
-          line-height: 23px;
-          color: rgb(234 85 85);
-          right: 48px;
-          bottom: 12px;
+          p {
+            position: absolute;
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 23px;
+            color: rgb(234 85 85);
+            right: 48px;
+            bottom: 12px;
+          }
         }
       }
       button {
