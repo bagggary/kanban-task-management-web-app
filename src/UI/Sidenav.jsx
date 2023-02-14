@@ -1,24 +1,37 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState , useRef , useEffect } from 'react'
 import BoardsList from './BoardsList'
 import AddBoard from './Forms/AddBoard'
 
-export default function Sidenav({side , toggle , data ,  handleBoard , selectBoard , overlay , setData , updateBoard}) {
-const [board , setBoard ] =  useState(false)
-
+export default function Sidenav({side ,
+     toggle ,
+      data ,
+     handleBoard ,
+     selectBoard ,
+     setFormAppear ,
+     formAppear ,
+     setData ,
+     updateBoard ,
+    }) {
 function boardHandle(){
-    setBoard(true)
-    overlay(true)
+    setFormAppear((prev) => {
+        return {
+            ...prev ,
+           board: true ,
+           overlay : true
+
+        }
+    })
+
 }
-const boardlength = data.boards.length ;
 
   return (
     <>
     <aside className='sidenav transition' style={{transform: side ? 'translateX(0)' : "translateX(-100%)" , opacity : side ? "1" : '0'}}>
           <div className="sidenav__boards">
-                            <h2> ALL BOARDS ({boardlength})</h2>  
+                            <h2> ALL BOARDS ({data && data.length})</h2>  
                                 <ul>
-                                    { data.boards.map((item , index) => {
+                                    {data && data.map((item , index) => {
                                         return   <BoardsList selectedId = {selectBoard} change = {handleBoard} key={index} boardName = {item.name} id = {index}/>
                                     })}
                                 </ul>
@@ -46,7 +59,13 @@ const boardlength = data.boards.length ;
                                     Hide Sidebar
                                  </div>
     </aside>
-   { board && <AddBoard data = {data} setData = {setData} updateBoard = {updateBoard} />}
+   { formAppear.board &&  <AddBoard
+    data = {data}
+    setData = {setData}
+     updateBoard = {updateBoard} 
+     formAppear = {formAppear}
+     setFormAppear = {setFormAppear}
+     />}
     </>
   )
 }
