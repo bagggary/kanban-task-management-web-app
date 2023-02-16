@@ -128,6 +128,9 @@
     }
     .f-sub {
       .sub-styles {
+        &.task {
+          max-height: rem(135);
+        }
         max-height: rem(308);
         overflow: auto;
         > div {
