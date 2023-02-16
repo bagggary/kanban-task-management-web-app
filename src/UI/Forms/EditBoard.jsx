@@ -129,7 +129,7 @@ export default function EditBoard ({formAppear , data , selectBoard , setData , 
                 </div>
                 <button type='button' onClick={addCol}> + Add New Column</button>
             </div>
-            <button type='button' onClick={handleSumbit}>Create New Board</button>
+            <button type='button' onClick={handleSumbit}>Save Changes</button>
         </form> 
     </div>
   )
