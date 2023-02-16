@@ -5,6 +5,7 @@ import mobileLogo from '/src/assets/icons/logo-mobile.svg'
 import boardLogo from '/src/assets/icons/icon-board.svg'
 import AddBoard from './Forms/AddBoard'
 import EditBoard from './Forms/EditBoard'
+import AddTask from './Forms/AddTask'
 
 export default function Navbar({openNav , 
     toggleNav ,
@@ -58,6 +59,15 @@ export default function Navbar({openNav ,
                 editBoard : true ,
                 boardOptions : false ,
                 overlay :  true , 
+            }
+        })
+    }
+    function handleTask (){
+        setFormAppear((prev) => {
+            return {
+                ...prev ,
+                task : true ,
+                overlay : true 
             }
         })
     }
@@ -136,7 +146,7 @@ return (
                 <div className="add-task">
                 <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"><path fill="#FFF" d="M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z"/></svg>
                 </div>
-                <div className="add-task-larger">
+                <div className="add-task-larger" onClick={handleTask}>
                     <span><svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"><path fill="#FFF" d="M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z"/></svg></span> Add New Task
                 </div>
                 <div onClick={HandleBoardOptions} className='ellipsis' ref ={optionsRef}>
@@ -161,6 +171,14 @@ return (
     setData = {setData}
     setFormAppear = {setFormAppear}
     /> }
+    { formAppear.task && <AddTask 
+    selectBoard = {selectBoard} 
+    formAppear = {formAppear} 
+    data = {data}
+    setData = {setData}
+    setFormAppear = {setFormAppear}
+    />
+    }
     </>
 )
 

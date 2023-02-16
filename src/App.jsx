@@ -20,8 +20,8 @@ function App() {
     board : false ,
     editBoard : false ,
     overlay : false ,
-    boardOptions : false
-
+    boardOptions : false,
+    task : false ,
   })
   // const sharedRefs = useRef(null)
   // useEffect(() => {
