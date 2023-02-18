@@ -319,6 +319,42 @@ nav .right .add-task {
 }
 nav .right .ellipsis {
   cursor: pointer;
+  position: relative;
+}
+nav .right .ellipsis-options {
+  position: absolute;
+  right: 0;
+  top: 58px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 12rem;
+  box-shadow: 0px 10px 20px rgba(54, 78, 126, 0.25);
+  border-radius: 8px;
+  background-color: white;
+  transition: all 0.2s ease-in-out;
+}
+nav .right .ellipsis-options.hide {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-20px);
+}
+nav .right .ellipsis-options.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+nav .right .ellipsis-options > div {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 23px;
+}
+nav .right .ellipsis-options > div:first-child {
+  color: #828fa3;
+}
+nav .right .ellipsis-options > div:last-child {
+  color: #ea5555;
 }
 nav .right .add-task-larger {
   width: 10.25rem;
@@ -754,14 +790,8 @@ nav .logo-larger::after {
   fill: #635fc7;
 }
 
-.overlay {
-  position: relative;
-  background-color: red;
-  min-height: 100vh;
-}
-.overlay .add-task-board {
-  width: 30rem;
-  height: 42.1875rem;
+.add-new {
+  z-index: 10;
   position: absolute;
   background-color: white;
   left: 50%;
@@ -772,49 +802,306 @@ nav .logo-larger::after {
   flex-direction: column;
   gap: 1.5rem;
 }
-.overlay .add-task-board h1 {
+.add-new.edit {
+  width: 30rem;
+  min-height: auto;
+  max-height: 42.875rem;
+  border-radius: 0.375rem;
+}
+@media (max-width: 39.996875em) {
+  .add-new.edit {
+    min-width: 71.4%;
+    max-width: 21.4375rem;
+    padding: 1.5rem;
+  }
+}
+.add-new.task {
+  border-radius: 0.375rem;
+  width: 30rem;
+  height: 42.1875rem;
+}
+@media (max-width: 39.996875em) {
+  .add-new.task {
+    min-width: 71.4%;
+    max-width: 21.4375rem;
+    min-height: auto;
+    max-height: 42.875rem;
+    padding: 1.5rem;
+  }
+}
+.add-new.board {
+  width: 30rem;
+  min-height: auto;
+  max-height: 42.875rem;
+  border-radius: 0.375rem;
+}
+@media (max-width: 39.996875em) {
+  .add-new.board {
+    min-width: 71.4%;
+    max-width: 21.4375rem;
+    padding: 1.5rem;
+  }
+}
+.add-new h1 {
   font-weight: 700;
   font-size: 18px;
   line-height: 23px;
   color: #000112;
   margin-bottom: 0;
 }
-.overlay .add-task-board form {
+.add-new form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
-.overlay .add-task-board form > div {
+.add-new form > div {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-.overlay .add-task-board form > div > label {
+.add-new form > div > label {
   font-weight: 700;
   font-size: 12px;
   line-height: 15px;
   color: #828fa3;
 }
-.overlay .add-task-board form > div input {
+.add-new form > div input,
+.add-new form > div textarea {
   border: 1px solid rgba(130, 143, 163, 0.25);
   border-radius: 4px;
+  padding-left: 1rem;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 23px;
+  color: #000112;
+  cursor: pointer;
 }
-.overlay .add-task-board form .f-tit input {
+.add-new form > div input:hover,
+.add-new form > div textarea:hover {
+  border-color: #635fc7;
+}
+.add-new form > div input::placeholder,
+.add-new form > div textarea::placeholder {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 23px;
+  color: #000112;
+  mix-blend-mode: normal;
+  opacity: 0.25;
+}
+.add-new form .f-tit {
+  position: relative;
+}
+.add-new form .f-tit.error input {
+  border-color: rgb(234, 85, 85);
+}
+.add-new form .f-tit input {
   height: 2.5rem;
 }
-.overlay .add-task-board form .f-des input {
-  min-height: 7rem;
+.add-new form .f-tit p {
+  position: absolute;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 23px;
+  color: rgb(234, 85, 85);
+  right: 16px;
+  bottom: 8px;
 }
-.overlay .add-task-board form .f-sub > div {
+.add-new form .f-des textarea {
+  width: 100%;
+  resize: none;
+  outline: none;
+  height: 7rem;
+}
+.add-new form .f-sub .sub-styles {
+  max-height: 19.25rem;
+  overflow: auto;
+}
+.add-new form .f-sub .sub-styles.task {
+  max-height: 8.4375rem;
+}
+.add-new form .f-sub .sub-styles > div {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  position: relative;
 }
-.overlay .add-task-board form .f-sub > div input {
+.add-new form .f-sub .sub-styles > div.error input {
+  border-color: rgb(234, 85, 85);
+}
+.add-new form .f-sub .sub-styles > div input {
   flex: 1;
   height: 2.5rem;
   margin-bottom: 0.25rem;
+}
+.add-new form .f-sub .sub-styles > div svg {
+  cursor: pointer;
+  fill: #828fa3;
+}
+.add-new form .f-sub .sub-styles > div svg:hover {
+  fill: rgb(234, 85, 85);
+}
+.add-new form .f-sub .sub-styles > div p {
+  position: absolute;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 23px;
+  color: rgb(234, 85, 85);
+  right: 48px;
+  bottom: 12px;
+}
+.add-new form .f-sub button {
+  background-color: rgba(99, 95, 199, 0.1019607843);
+  border-radius: 1.25rem;
+  border: none;
+  padding: 0.5rem 0;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 23px;
+  text-align: center;
+  color: #635fc7;
+}
+.add-new form .f-stat {
+  width: 100%;
+  height: 2.5rem;
+  border: 1px solid rgba(130, 143, 163, 0.25);
+  position: relative;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  cursor: pointer;
+  display: flex;
+}
+.add-new form .f-stat .stat-title {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 23px;
+}
+.add-new form .f-stat:hover {
+  border-color: #635fc7;
+}
+.add-new form .f-stat span {
+  position: absolute;
+  right: 3.8%;
+}
+.add-new form .f-stat .stat-dropdown {
+  width: 100%;
+  position: absolute;
+  height: auto;
+  background-color: #ffffff;
+  left: 0;
+  top: 50px;
+  box-shadow: 0px 10px 20px rgba(54, 78, 126, 0.25);
+  border-radius: 8px;
+  padding: 1rem;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.add-new form .f-stat .stat-dropdown.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+.add-new form .f-stat .stat-dropdown ul {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 7.5rem;
+  overflow: auto;
+}
+.add-new form .f-stat .stat-dropdown ul li {
+  list-style: none;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 23px;
+  color: #828fa3;
+}
+.add-new form .f-stat .stat-dropdown ul li:hover {
+  color: black;
+}
+.add-new form button {
+  padding: 0.5rem 0;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 23px;
+  text-align: center;
+  background: #635fc7;
+  border-radius: 20px;
+  color: white;
+}
+
+.delete {
+  border-radius: 0.375rem;
+  width: 30rem;
+  min-height: 14.3125rem;
+  position: absolute;
+  background-color: white;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+@media (max-width: 39.996875em) {
+  .delete {
+    min-width: 71.4%;
+    max-width: 21.4375rem;
+    padding: 1.5rem;
+  }
+}
+.delete h1 {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+  color: #ea5555;
+  margin-bottom: 0;
+}
+.delete p {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 23px;
+  color: #828fa3;
+}
+.delete .delete-options {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+@media (max-width: 39.996875em) {
+  .delete .delete-options {
+    flex-direction: column;
+  }
+}
+.delete .delete-options > button:first-child {
+  background: #ea5555;
+  border-radius: 20px;
+  text-align: center;
+  border: none;
+  width: 100%;
+  padding: 0.53125rem 0;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 23px;
+  color: white;
+}
+.delete .delete-options > button:last-child {
+  background: rgba(99, 95, 199, 0.1);
+  border-radius: 20px;
+  text-align: center;
+  border: none;
+  width: 100%;
+  padding: 0.53125rem 0;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 23px;
+  color: #635fc7;
 }
 
 .transition {
