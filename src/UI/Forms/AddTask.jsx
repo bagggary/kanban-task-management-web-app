@@ -106,33 +106,21 @@ const handleStatusChange = (event) => {
     }));
   };
 // handling submit function to set the main data to data object json
-
-
-
-
 const handleSumbit = (e)=> {
     e.preventDefault();
     const errors = validate();
     if (Object.keys(errors).length === 0) {
         setData((prev) => {
+            let newData = [...prev]
             prev.map((col , index) => {
-                if(selectBoard === index ){
-                    for(let subTask of col.columns) {
-                        if(subTask.name === taskObj.status){
-                            return [
-                                ...prev ,
-                                {name : 'newObject'}
-                            ]
-                            // return [
-                            //     ...prev ,
-                            //     {...col , columns : [...col.columns , {...subTask , tasks : [...subTask.tasks , taskObj]}]}
-                            // ]
-                        }
-                    }
-                }else{
-                    return data
+                if(selectBoard === index){
+                    let updatedColumns = [...col.columns];
+                    const columnIndex = updatedColumns.findIndex(col => col.name === taskObj.status);
+                    updatedColumns[columnIndex] = {...updatedColumns[columnIndex] , tasks : [...updatedColumns[columnIndex].tasks , taskObj]}
+                    newData[selectBoard] = {...prev[selectBoard] , columns : updatedColumns}
                 }
             })
+            return newData
         })
         setFormAppear(prev => {
             return {
@@ -144,7 +132,14 @@ const handleSumbit = (e)=> {
     } else {
         setFormErrors(errors);
     }
-    
+} 
+function removeSub(id){
+    if(sub.length <= 2){
+        return 
+    }
+    const newSubtaskData = [...sub];
+    newSubtaskData.splice(id, 1);
+    setSub(newSubtaskData)
 }
   return (
     <div className="overlay">
@@ -168,7 +163,7 @@ recharge the batteries a little.' onChange={(e) => titleHandle(e)}></textarea>
                         return (
                             <div className={`sub-${index} ${formErrors[`err-${index}`] && `error`}`}>
                          <input type="text" id='sub' placeholder={subtsk.placeholder} onChange = {(e) => handleAddTask(e , index)}/>
-                         <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg"><g  fill-rule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
+                         <svg onClick={(e) => removeSub(index) } width="15" height="15" xmlns="http://www.w3.org/2000/svg" ><g  fill-rule="evenodd"><path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z"/><path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z"/></g></svg>
                          <p> {formErrors[`sub-${index}`] && formErrors[`sub-${index}`]}</p>
                      </div>
                              )
@@ -179,7 +174,7 @@ recharge the batteries a little.' onChange={(e) => titleHandle(e)}></textarea>
             {/* this has to change to cover the status of each board created to do so .  */}
             <div className='f-stat' onClick={toggleShow}>
                 <div className='stat-title' >{status}</div>
-                <span><svg width="10" height="7" xmlns="http://www.w3.org/2000/svg"><path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4"/></svg></span>
+                <span ><svg width="10" height="7" xmlns="http://www.w3.org/2000/svg" ><path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4"/></svg></span>
                 <div className={`stat-dropdown ${show ? 'show' : ''} transition`} >
                     <ul>{dataTasks && dataTasks.map((tsk , index) => {
                         return (
@@ -189,7 +184,7 @@ recharge the batteries a little.' onChange={(e) => titleHandle(e)}></textarea>
                     </ul>
                 </div>
             </div>
-            <button type='button' onClick={handleSumbit}>Create Task</button>
+            <button type='button' onClick={(e) => handleSumbit(e)}>Create Task</button>
         </form>
     </div>
     </div>
