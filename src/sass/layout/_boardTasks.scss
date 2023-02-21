@@ -1,0 +1,62 @@
+@use "../util/index2" as *;
+
+.main-content {
+  display: flex;
+  padding-left: rem(24);
+  padding-top: rem(24);
+  gap: rem(24);
+  > div {
+    width: rem(280);
+    height: auto;
+  }
+}
+.board-column {
+  display: flex;
+  flex-direction: column;
+  &-name {
+    display: flex;
+    gap: rem(12);
+    &-bullet {
+      width: rem(15);
+      height: rem(15);
+      border-radius: 50%;
+    }
+    h3 {
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 2.4px;
+      color: #828fa3;
+      margin-bottom: 0;
+    }
+  }
+}
+.tasks-description {
+  margin-top: rem(24);
+  display: flex;
+  flex-direction: column;
+  gap: rem(20);
+  .task-card {
+    width: rem(280);
+    height: auto;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(54, 78, 126, 0.101545);
+    border-radius: 8px;
+    padding: rem(23) rem(16);
+    display: flex;
+    flex-direction: column;
+    gap: rem(8);
+    h3 {
+      margin-bottom: 0;
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 19px;
+      color: #000112;
+    }
+    p {
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 15px;
+      color: #828fa3;
+    }
+  }
+}
