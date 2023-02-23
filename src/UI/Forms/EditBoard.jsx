@@ -39,7 +39,6 @@ export default function EditBoard ({formAppear , data , selectBoard , setData , 
             }
         });
     }
-
     function addCol(){
         const newBoardCol = {name: "", tasks: []}
         setDataState(prev => {

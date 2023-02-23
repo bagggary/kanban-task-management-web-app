@@ -69,7 +69,6 @@ function addSubTask(){
         }
     })
 }
-
 // adding validation to each input field to ensure that all input fileds are filled and then added to the main data set
 const validate = () => {
     const errors = {};
@@ -85,6 +84,7 @@ const validate = () => {
     })
     return errors;
 };
+
 
 
 function handleStatus(e){
