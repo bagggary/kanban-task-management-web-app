@@ -4,11 +4,8 @@ import './main.css'
 import Sidenav from './UI/Sidenav'
 import useToggle  from "./hooks/useToggle";
 import boardData from './assets/data.json'
-import AddTask from './UI/Forms/AddTask'
-import AddBoard from './UI/Forms/AddBoard'
-import BoardDelete from './UI/BoardDelete'
-import TaskDelete from './UI/TaskDelete'
 import Overlay from './UI/Overlay'
+import BoardTasks from './UI/BoardTasks';
 
 function App() {
 
@@ -22,6 +19,8 @@ function App() {
     overlay : false ,
     boardOptions : false,
     task : false ,
+    sub : false ,
+
   })
   // const sharedRefs = useRef(null)
   // useEffect(() => {
@@ -79,7 +78,11 @@ function App() {
       setData = {setData}
        />
       <div className= {`main-content transition container ${side ? '' : 'content-screen'}`}  >
-        <div>task management</div>
+        {data[selectedId].columns.map((col , index) => {
+          return (
+            <BoardTasks selectedBoard = {selectedBoard}  board = {col}  key={index} id = {index} formAppear = {formAppear} setFormAppear = {setFormAppear}/>
+          )
+        })}
       </div>
       </div>
       {formAppear.overlay && <Overlay />}
