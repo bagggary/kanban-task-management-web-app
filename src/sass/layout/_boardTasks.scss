@@ -36,6 +36,7 @@
   flex-direction: column;
   gap: rem(20);
   .task-card {
+    cursor: pointer;
     width: rem(280);
     height: auto;
     background-color: white;
@@ -59,4 +60,19 @@
       color: #828fa3;
     }
   }
+}
+
+//task Details styles
+
+.detailed-info {
+  position: absolute;
+  background-color: white;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: rem(32);
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+  z-index: 10;
 }
