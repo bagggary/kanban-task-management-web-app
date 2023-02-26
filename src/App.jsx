@@ -6,6 +6,7 @@ import useToggle  from "./hooks/useToggle";
 import boardData from './assets/data.json'
 import Overlay from './UI/Overlay'
 import BoardTasks from './UI/BoardTasks';
+import TaksDetails from './UI/TaksDetails';
 
 function App() {
 
@@ -13,15 +14,17 @@ function App() {
   const [data , setData ] = useState(boardData)
   const [selectedBoard , setSelectedBoard] = useState('')
   const [selectedId ,  setSelectedId] = useState(0)
+  const [selectedTask, setSelectedTask] = useState(null);
   const [formAppear , setFormAppear] = useState({
     board : false ,
     editBoard : false ,
     overlay : false ,
     boardOptions : false,
     task : false ,
-    sub : false ,
+    sub : false,
 
   })
+
   // const sharedRefs = useRef(null)
   // useEffect(() => {
   //   function outsideClick(event) {
@@ -53,6 +56,16 @@ function App() {
     function handleActive(id){
         setSelectedId(id)
     }
+    function taskDetailsHandler(task) {
+      setFormAppear((prev) => {
+        return {
+          ...prev , 
+          sub : true ,
+          overlay : true
+        }
+      })
+      setSelectedTask(task)
+    }
 
   return (
     <>
@@ -80,12 +93,13 @@ function App() {
       <div className= {`main-content transition container ${side ? '' : 'content-screen'}`}  >
         {data[selectedId].columns.map((col , index) => {
           return (
-            <BoardTasks selectedBoard = {selectedBoard}  board = {col}  key={index} id = {index} formAppear = {formAppear} setFormAppear = {setFormAppear}/>
+            <BoardTasks selectedBoard = {selectedBoard}  board = {col}  key={index} id = {index} formAppear = {formAppear} setFormAppear = {setFormAppear} onTaskClick={taskDetailsHandler}/>
           )
         })}
       </div>
       </div>
       {formAppear.overlay && <Overlay />}
+      { formAppear.sub &&  <TaksDetails task = {selectedTask} />}
     </>
   )
 }
