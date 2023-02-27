@@ -62,8 +62,6 @@
   }
 }
 
-//task Details styles
-
 .detailed-info {
   position: absolute;
   background-color: white;
@@ -74,5 +72,86 @@
   display: flex;
   flex-direction: column;
   gap: rem(24);
+  width: rem(480);
+  height: auto;
   z-index: 10;
+  &-title {
+    display: flex;
+    justify-content: space-between;
+    gap: rem(24);
+    h1 {
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 23px;
+    }
+  }
+  p {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 23px;
+    color: #828fa3;
+  }
+  &-subtasks {
+    h2 {
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 15px;
+      color: #828fa3;
+    }
+    &-container {
+      display: flex;
+      flex-direction: column;
+      gap: rem(8);
+      &-sub {
+        display: flex;
+        gap: rem(16);
+        background: #f4f7fd;
+        border-radius: 4px;
+        padding: rem(13) 0 rem(12) rem(12);
+        cursor: pointer;
+        &:hover {
+          background-color: rgb(99 95 199 / 0.25);
+        }
+        input {
+          appearance: none;
+          -webkit-appearance: none;
+          height: 16px;
+          width: 16px;
+          background: white;
+          border-radius: 2px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid rgba(130, 143, 163, 0.248914);
+          cursor: pointer;
+          &:checked {
+            background: #635fc7;
+            + label {
+              text-decoration: line-through;
+              mix-blend-mode: normal;
+              opacity: 0.5;
+            }
+            &::after {
+              display: block;
+            }
+          }
+          &::after {
+            content: "\f00c";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            font-size: rem(11.5);
+            color: white;
+            display: none;
+          }
+        }
+        label {
+          font-weight: 700;
+          font-size: 12px;
+          line-height: 15px;
+          color: #000112;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
