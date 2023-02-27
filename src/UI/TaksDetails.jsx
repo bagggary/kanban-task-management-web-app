@@ -1,5 +1,5 @@
 import React from 'react'
-export default function TaksDetails({ task}) {
+export default function TaksDetails({task}) {
     return (
       <div className='detailed-info'>
         <div className='detailed-info-title'>
@@ -17,19 +17,23 @@ export default function TaksDetails({ task}) {
             </g>
           </svg>
         </div>
-        <p>description paragraph</p>
+        <p>{task.description}</p>
         <div className='detailed-info-subtasks'>
-          {/* {subtask.map((subtask) => (
-            <div className='detailed-info-subtasks-sub' key={subtask.id}>
-              <label htmlFor={subtask.id}>{subtask.title}</label>
+          <h2>subtask(2 of 3)</h2>
+          <div className='detailed-info-subtasks-container'>
+          {task && task.subtasks.map((subtask , i) => (
+            <div className='detailed-info-subtasks-container-sub' key={i}>
               <input
               type='checkbox'
               name='checkbox'
-              id={subtask.id}
-              defaultChecked={subtask.isCompleted}
+              id= {`sub-${i}`}
+              defaultchecked = {subtask.isCompleted}
+              // defaultChecked={subtask.isCompleted}
             />
+              <label htmlFor={`sub-${i}`}> {subtask.title}</label>
           </div>
-        ))} */}
+        ))}
+        </div>
       </div>
       <div className='detailed-info-status'>
         <h1> status</h1>
