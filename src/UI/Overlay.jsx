@@ -11,7 +11,8 @@ export default function Overlay() {
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          zIndex : 9
         }}>
         </div>
   )
