@@ -105,6 +105,7 @@ const handleStatusChange = (event) => {
       status: selectedStatus
     }));
   };
+
 // handling submit function to set the main data to data object json
 const handleSumbit = (e)=> {
     e.preventDefault();
@@ -118,6 +119,7 @@ const handleSumbit = (e)=> {
                     const columnIndex = updatedColumns.findIndex(col => col.name === taskObj.status);
                     updatedColumns[columnIndex] = {...updatedColumns[columnIndex] , tasks : [...updatedColumns[columnIndex].tasks , taskObj]}
                     newData[selectBoard] = {...prev[selectBoard] , columns : updatedColumns}
+                    
                 }
             })
             return newData
