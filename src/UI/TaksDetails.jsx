@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react'
 import useToggle from '../hooks/useToggle';
-export default function TaksDetails({task , data , selectedBoard , setData}) {
+export default function TaksDetails({task , data , selectedBoard , setData , formAppear , setFormAppear}) {
   const [show , toggleShow ] = useToggle(false)
-  const [currentStatus , setCurrentStatus] = useState(task.status)
+  const [currentStatus , setCurrentStatus] = useState(task.status || data[selectedBoard].columns[0].name )
+
+  console.log(task)
 
   function updateStatus(targetStatus){
     const statusColumns = [...data[selectedBoard].columns];
@@ -16,12 +18,10 @@ export default function TaksDetails({task , data , selectedBoard , setData}) {
     const statusTasks = [...statusColumns[colIndex].tasks];
     const statusIndex = statusTasks.findIndex((stat) => stat.title === task.title);
     const removedTask = statusTasks.splice(statusIndex, 1)[0];
+    removedTask.status = targetStatus;
     const newStatusIndex = statusColumns.findIndex((col) => col.name === targetStatus);
-    statusColumns[colIndex].tasks = statusTasks
+    statusColumns[colIndex].tasks = statusTasks;
     statusColumns[newStatusIndex].tasks.push(removedTask);
-    // update the data with the new status columns
-    let columnArray = {...statusColumns}
-    console.log(columnArray)
     setData((prev) => {
       let newData = [...prev]
       newData[selectedBoard] = {...newData[selectedBoard] , columns : statusColumns}
@@ -37,7 +37,37 @@ export default function TaksDetails({task , data , selectedBoard , setData}) {
     // });
   }
 
+  function handleSubtaskChange(index) {
 
+    // const updatedSubtasks = [...task.subtasks];
+    // updatedSubtasks[index].isCompleted = !updatedSubtasks[index].isCompleted;
+    // const updatedTask = {...task, subtasks: updatedSubtasks};
+    // const updatedTasks = data[selectedBoard].columns.flatMap((column) => column.tasks.map((t) => t.id === updatedTask.id ? updatedTask : t));
+    // const updatedColumns = data[selectedBoard].columns.map((column) => ({...column, tasks: updatedTasks.filter((t) => t.status === column.name)}));
+    // const updatedData = {...data, [selectedBoard]: {...data[selectedBoard], columns: updatedColumns}};
+  const updatedTask = { ...task };
+  updatedTask.subtasks[index].isCompleted = !updatedTask.subtasks[index].isCompleted;
+  const taskIndex = data[selectedBoard].columns.findIndex((col) => col.name === task.status);
+  const updatedColumns = [...data[selectedBoard].columns];
+  const taskIndexInColumn = updatedColumns[taskIndex].tasks.findIndex((t) => t.title === task.title);
+  updatedColumns[taskIndexInColumn].tasks[taskIndexInColumn] = updatedTask;
+  // setData({ ...data, [selectedBoard]: { ...data[selectedBoard], columns: updatedColumns } });
+  setData((prev) => {
+    let newData = [...prev]
+    newData[selectedBoard] = {...newData[selectedBoard] , columns : updatedColumns}
+    return newData
+  })
+  }
+
+  function handleTriggerSubOption(){
+    setFormAppear((prev) => {
+      return {
+        ...prev , 
+        subOption : !prev.subOption
+      }
+    })
+
+  }
 
 
 
@@ -54,20 +84,26 @@ export default function TaksDetails({task , data , selectedBoard , setData}) {
   }
     return (
       <div className='detailed-info'>
-        <div className='detailed-info-title'>
+        <div className='detailed-info-title' onClick={handleTriggerSubOption}>
           <h1>{task.title}</h1>
+          <div className="detailed-info-title-icon">
           <svg
             width='5'
             height='20'
             xmlns='http://www.w3.org/2000/svg'
           >
 
-            <g fill='#828FA3' fill-rule='evenodd'>
+            <g fill='#828FA3' fillRule='evenodd'>
               <circle cx='2.308' cy='2.308' r='2.308' />
               <circle cx='2.308' cy='10' r='2.308' />
               <circle cx='2.308' cy='17.692' r='2.308' />
             </g>
           </svg>
+          <div className={`transition detailed-info-title-icon-selection ${formAppear.subOption ? 'show' : 'hide'}`}  >
+                    <div >Edit Board</div>
+                    <div>Delete Board</div>
+                </div>
+          </div>
         </div>
         <p>{task.description}</p>
         <div className='detailed-info-subtasks'>
@@ -79,7 +115,8 @@ export default function TaksDetails({task , data , selectedBoard , setData}) {
               type='checkbox'
               name='checkbox'
               id= {`sub-${i}`}
-              defaultchecked = {subtask.isCompleted}
+              onChange = {() => handleSubtaskChange(i)}
+              defaultChecked = {subtask.isCompleted}
             />
               <label htmlFor={`sub-${i}`}> {subtask.title}</label>
           </div>
@@ -90,11 +127,11 @@ export default function TaksDetails({task , data , selectedBoard , setData}) {
         <h1>Current Status</h1>
         <div className='f-stat' onClick={toggleShow}>
                 <div className='stat-title' >{currentStatus}</div>
-                <span ><svg width="10" height="7" xmlns="http://www.w3.org/2000/svg" ><path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4"/></svg></span>
+                <span ><svg width="10" height="7" xmlns="http://www.w3.org/2000/svg" ><path stroke="#635FC7" strokeWidth="2" fill="none" d="m1 1 4 4 4-4"/></svg></span>
                 <div className={`stat-dropdown ${show ? 'show' : ''} transition`} >
                     <ul>{data && data[selectedBoard].columns.map((stat , index) => {
                         return (
-                            <li key={index} id = {index} onClick = {statusHandler}>{stat.name}</li>
+                            <li key={index} id = {index} onClick = {statusHandler} >{stat.name}</li>
                         )
                     })}
                     </ul>
