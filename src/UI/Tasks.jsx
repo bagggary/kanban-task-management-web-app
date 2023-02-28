@@ -1,7 +1,4 @@
-import React, { useState } from 'react'
-import TaksDetails from './TaksDetails'
-
-
+import React, { useEffect, useState } from 'react'
 
 // export default function Tasks({task , subtask , id , formAppear , setFormAppear} ) {
 
@@ -25,23 +22,12 @@ import TaksDetails from './TaksDetails'
 // }
 
 export default function Tasks({ task, subtask, id , formAppear , onTaskClick}) {
-    const [selectedTaskId, setSelectedTaskId] = useState(null);
-  
+
     const completedTasks = () => {
       const completedSubtasks = subtask.filter((subtask) => subtask.isCompleted);
       return completedSubtasks.length;
     };
-  
-    const handleTaskClick = () => {
-      setSelectedTaskId(id);
-    //   setFormAppear((prev) => {
-    //     return {
-    //         ...prev , 
-    //         sub : true ,
-    //         overlay : true
-    //     }
-    //   })
-    };
+
 
     return (
         <>
