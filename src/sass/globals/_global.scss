@@ -1,4 +1,7 @@
 @use "../util/index2" as *;
+html {
+  scroll-behavior: smooth;
+}
 body {
   font-family: "Plus Jakarta Sans", sans-serif;
   background-color: #e4ebfa;
