@@ -1,10 +1,49 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useState , useRef } from 'react'
 import useToggle from '../hooks/useToggle';
+import EditTask from './Forms/EditTask';
+import Overlay from './Overlay';
 export default function TaksDetails({task , data , selectedBoard , setData , formAppear , setFormAppear}) {
   const [show , toggleShow ] = useToggle(false)
   const [currentStatus , setCurrentStatus] = useState(task.status || data[selectedBoard].columns[0].name )
 
-  console.log(task)
+  const optionsRef = useRef(null)
+  const detailsRef = useRef(null)
+  useEffect (() =>{
+    function outsideClick(e){
+      if(detailsRef.current && !detailsRef.current.contains(e.target)){
+        setFormAppear((prev) => {
+          return {
+            ...prev ,
+            sub : false ,
+            overlay : false 
+            
+          }
+        });
+      }
+    }
+    document.addEventListener('mousedown' , outsideClick);
+    return () => {
+      document.removeEventListener('mousedown' , outsideClick)
+    } ;
+  } , [detailsRef])
+  useEffect(() => {
+      function outsideClick(event) {
+        if (optionsRef.current && !optionsRef.current.contains(event.target) ) {
+          setFormAppear(prev => {
+              return {
+                  ...prev,
+                  subOption : false
+              }
+          });
+        }
+      }
+      document.addEventListener('mousedown', outsideClick);
+      return () => {
+        document.removeEventListener('mousedown', outsideClick);
+      };
+    }, [optionsRef]);
+
+  
 
   function updateStatus(targetStatus){
     const statusColumns = [...data[selectedBoard].columns];
@@ -71,22 +110,33 @@ export default function TaksDetails({task , data , selectedBoard , setData , for
 
 
 
+
   function statusHandler(e){
     if(currentStatus === e.target.textContent){
       return ;
     }
     updateStatus(e.target.textContent)
     setCurrentStatus(e.target.textContent);
-    
     // let newData = updateStatus();
     // setData(newData);
-
   }
+
+  function handleEditTask(){
+    setFormAppear((prev) => {
+      return {
+        ...prev ,
+        editTask : true,
+        sub : false ,
+        subOption : false
+      }
+    })
+  }
+
     return (
-      <div className='detailed-info'>
+      <div className='detailed-info' ref={detailsRef}>
         <div className='detailed-info-title' onClick={handleTriggerSubOption}>
           <h1>{task.title}</h1>
-          <div className="detailed-info-title-icon">
+          <div className="detailed-info-title-icon" ref={optionsRef}>
           <svg
             width='5'
             height='20'
@@ -100,8 +150,8 @@ export default function TaksDetails({task , data , selectedBoard , setData , for
             </g>
           </svg>
           <div className={`transition detailed-info-title-icon-selection ${formAppear.subOption ? 'show' : 'hide'}`}  >
-                    <div >Edit Board</div>
-                    <div>Delete Board</div>
+                    <div onClick={handleEditTask}>Edit Task</div>
+                    <div>Delete Task</div>
                 </div>
           </div>
         </div>
