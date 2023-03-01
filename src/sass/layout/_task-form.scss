@@ -11,7 +11,7 @@
   &.edit {
     width: rem(480);
     min-height: auto;
-    max-height: rem(686);
+    max-height: rem(690);
     border-radius: rem(6);
 
     @include breakpoint-down(xsmall) {
@@ -31,7 +31,7 @@
     }
     border-radius: rem(6);
     width: rem(480);
-    height: rem(675);
+    height: rem(695);
   }
   &.board {
     width: rem(480);
@@ -177,6 +177,15 @@
         line-height: 23px;
         text-align: center;
         color: #635fc7;
+      }
+    }
+    .status {
+      h1 {
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 15px;
+        margin-bottom: 0;
+        color: #828fa3;
       }
     }
     .f-stat {
