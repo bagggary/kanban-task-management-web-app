@@ -1,6 +1,6 @@
 import React, { useState , useEffect , useRef } from 'react'
 
-export default function EditBoard ({formAppear , data , selectBoard , setData , setFormAppear }) {
+export default function EditBoard ({ data , selectBoard , setData , setFormAppear }) {
     const [dataState , setDataState] = useState(null)
     const [formErrors, setFormErrors] = useState({});
     const boardRef = useRef(null)

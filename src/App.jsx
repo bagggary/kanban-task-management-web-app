@@ -7,6 +7,8 @@ import boardData from './assets/data.json'
 import Overlay from './UI/Overlay'
 import BoardTasks from './UI/BoardTasks';
 import TaksDetails from './UI/TaksDetails';
+import EditTask from './UI/Forms/EditTask';
+import TaskDelete from './UI/TaskDelete';
 
 function App() {
 
@@ -21,39 +23,16 @@ function App() {
     overlay : false ,
     boardOptions : false,
     task : false ,
+    deleteBoard : false ,
     sub : false,
+    subOption: false ,
+    editTask : false ,
+    taskDelete : false ,
+    boardDelete : false 
+    })
 
-  })
 
-  // const sharedRefs = useRef(null)
-  // useEffect(() => {
-  //   function outsideClick(event) {
-  //     if (sharedRefs.current && !sharedRefs.current.contains(event.target)) {
-  //       setFormAppear(prev => {
-  //           return {
-  //               ...prev,
-  //               board: false,
-  //               overlay: false
-  //           }
-  //       });
-  //     }
-  //   }
-  //   document.addEventListener('mousedown', outsideClick);
-  //   return () => {
-  //     document.removeEventListener('mousedown', outsideClick);
-  //   };
-  // }, [sharedRefs]);
-
-  // const updateBoard = (obj) => {
-  //   setData(prev => {
-  //     return [
-  //       ...prev.boards ,
-  //       obj 
-  //     ]
-  //   }, obj)
-  // }
-
-    function handleActive(id){
+    function  handleActive(id){
         setSelectedId(id)
     }
     function taskDetailsHandler(task) {
@@ -99,9 +78,62 @@ function App() {
       </div>
       </div>
       {formAppear.overlay && <Overlay />}
-      { formAppear.sub &&  <TaksDetails task = {selectedTask} />}
+      {formAppear.sub &&  <TaksDetails 
+       task = {selectedTask} 
+        selectedBoard = {selectedId}
+        data = {data}
+        setData = {setData}
+        formAppear = {formAppear}
+        setFormAppear = {setFormAppear}
+        />
+      }
+       {formAppear.editTask && <EditTask 
+       formAppear = {formAppear}
+       data = {data}
+       setData = {setData}
+       setformAppear = {setFormAppear}
+       selectedBoard = {selectedId}
+       task = {selectedTask}
+       />}
+       {formAppear.taskDelete && <TaskDelete 
+       setFormAppear = {setFormAppear}
+       formAppear = {formAppear}
+       task  = {selectedTask}
+       data = {data}
+       setData = {setData}
+       selectedBoard ={selectedId}
+/>}
     </>
   )
 }
 
 export default App
+
+
+// const sharedRefs = useRef(null)
+  // useEffect(() => {
+  //   function outsideClick(event) {
+  //     if (sharedRefs.current && !sharedRefs.current.contains(event.target)) {
+  //       setFormAppear(prev => {
+  //           return {
+  //               ...prev,
+  //               board: false,
+  //               overlay: false
+  //           }
+  //       });
+  //     }
+  //   }
+  //   document.addEventListener('mousedown', outsideClick);
+  //   return () => {
+  //     document.removeEventListener('mousedown', outsideClick);
+  //   };
+  // }, [sharedRefs]);
+
+  // const updateBoard = (obj) => {
+  //   setData(prev => {
+  //     return [
+  //       ...prev.boards ,
+  //       obj 
+  //     ]
+  //   }, obj)
+  // }

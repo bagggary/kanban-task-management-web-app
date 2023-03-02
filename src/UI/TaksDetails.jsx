@@ -5,7 +5,6 @@ import Overlay from './Overlay';
 export default function TaksDetails({task , data , selectedBoard , setData , formAppear , setFormAppear}) {
   const [show , toggleShow ] = useToggle(false)
   const [currentStatus , setCurrentStatus] = useState(task.status || data[selectedBoard].columns[0].name )
-
   const optionsRef = useRef(null)
   const detailsRef = useRef(null)
   useEffect (() =>{
@@ -105,7 +104,17 @@ export default function TaksDetails({task , data , selectedBoard , setData , for
         subOption : !prev.subOption
       }
     })
+  }
 
+  function handleDeleteTask(){
+    setFormAppear(prev => {
+      return {
+        ...prev ,
+        subOption : false,
+        sub: false , 
+        taskDelete : true 
+      }
+    })
   }
 
 
@@ -125,9 +134,9 @@ export default function TaksDetails({task , data , selectedBoard , setData , for
     setFormAppear((prev) => {
       return {
         ...prev ,
+        subOption : false,
         editTask : true,
-        sub : false ,
-        subOption : false
+        sub : false 
       }
     })
   }
@@ -151,7 +160,7 @@ export default function TaksDetails({task , data , selectedBoard , setData , for
           </svg>
           <div className={`transition detailed-info-title-icon-selection ${formAppear.subOption ? 'show' : 'hide'}`}  >
                     <div onClick={handleEditTask}>Edit Task</div>
-                    <div>Delete Task</div>
+                    <div onClick={handleDeleteTask}>Delete Task</div>
                 </div>
           </div>
         </div>
