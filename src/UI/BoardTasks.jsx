@@ -4,6 +4,8 @@ import Tasks from './Tasks';
 
 export default function BoardTasks({selectedBoard , board , formAppear , setFormAppear , onTaskClick}) {
 
+  
+
   return (
     <>
     <div className='board-column'>
@@ -17,6 +19,7 @@ export default function BoardTasks({selectedBoard , board , formAppear , setForm
              <Tasks task = {tsk} 
               subtask = {tsk.subtasks}
               id = {index} 
+              key = {index}
               formAppear = {formAppear}
               setFormAppear = {setFormAppear}
               onTaskClick = {onTaskClick}

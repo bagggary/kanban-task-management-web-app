@@ -3,13 +3,8 @@ import React from 'react'
 export default function BoardDelete({data , selectedBoard , setData  , setFormAppear}) {
 
 
-  function deleteBoard () {
 
-    setData((prev) => {
-      const modifiedBoard = [...prev]
-      modifiedBoard.splice(selectedBoard , 1)
-      return modifiedBoard
-    })
+  function modifyAppear(){
     setFormAppear(prev => {
       return {
         ...prev ,
@@ -19,14 +14,17 @@ export default function BoardDelete({data , selectedBoard , setData  , setFormAp
     })
   }
 
-  function cancelDeletion(){
-    setFormAppear(prev => {
-      return {
-        ...prev ,
-        deleteBoard : false,
-        overlay :  false
-      }
+  function deleteBoard () {
+    setData((prev) => {
+      const modifiedBoard = [...prev]
+      modifiedBoard.splice(selectedBoard , 1)
+      return modifiedBoard
     })
+    modifyAppear()
+  }
+
+  function cancelDeletion(){
+    modifyAppear()
 
   }
   return (
