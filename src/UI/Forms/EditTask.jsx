@@ -4,7 +4,7 @@ export default function EditTask({task , selectedBoard , setformAppear , setData
   const [editTask , setEditTask] = useState(task)
   const [formErrors, setFormErrors] = useState({});
   const [sub , setSub] = useState(editTask.subtasks)
-
+  console.log('')
   const editRef = useRef(null)
   useEffect(() => {
       function outsideClick(event) {
@@ -14,6 +14,7 @@ export default function EditTask({task , selectedBoard , setformAppear , setData
                   ...prev,
                   editTask: false,
                   overlay: false ,
+                  subOption : false 
               }
           });
         }
