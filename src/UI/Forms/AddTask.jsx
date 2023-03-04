@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from 'react'
+import React, { useState , useEffect, useRef } from 'react'
 import useToggle from '../../hooks/useToggle'
 
 export default function AddTask({ selectBoard , formAppear , data , setData , setFormAppear }) {
@@ -6,19 +6,45 @@ export default function AddTask({ selectBoard , formAppear , data , setData , se
     const [show , toggleShow ] = useToggle(false)
     const [dataTasks , setDataTasks] = useState([])
     const [formErrors, setFormErrors] = useState({});
+    const taskRef = useRef(null)
+    const [status , setStatus] = useState(data[selectBoard].columns[0].name)
     const [taskObj , setTaskObj] = useState( {
         title : '' ,
         description : '' ,
-        status : '' ,
+        status : status,
         subtasks : [
             {title : "" , isCompletd : false} ,
             {title : "" , isCompletd : false}
         ] ,
     })
+
+    console.log(taskObj)
     const [sub , setSub] = useState([
         {title : '' , placeholder : 'e.g. Make coffee'},
         {title : '' , placeholder : 'e.g. Drink coffee & smile'}
     ])
+
+
+    useEffect(()=>{
+        function outsideClick(e){
+            if(taskRef.current && !taskRef.current.contains(e.target)){
+                setFormAppear(  prev => {
+                    return {
+                        ...prev , 
+                        task : false,
+                        overlay : false
+                    }
+                }) ;
+            }
+        }
+        document.addEventListener("mousedown" , outsideClick)
+        return () => {
+            document.removeEventListener('mousedown' , outsideClick)
+        }
+    } , [taskRef])
+
+
+
     useEffect(()=> {
         setDataTasks(data[selectBoard].columns)
         setTaskObj((prev) => {
@@ -29,7 +55,6 @@ export default function AddTask({ selectBoard , formAppear , data , setData , se
         })
     } , [])
     
-    const [status , setStatus] = useState('Todo')
     function titleHandle(e) {
         const {name , value} = e.target
         setTaskObj((prev) => {
@@ -97,6 +122,7 @@ function handleStatus(e){
     })
 }
 
+status
 
 const handleStatusChange = (event) => {
     const selectedStatus = event.target.textContent;
@@ -119,7 +145,6 @@ const handleSumbit = (e)=> {
                     const columnIndex = updatedColumns.findIndex(col => col.name === taskObj.status);
                     updatedColumns[columnIndex] = {...updatedColumns[columnIndex] , tasks : [...updatedColumns[columnIndex].tasks , taskObj]}
                     newData[selectBoard] = {...prev[selectBoard] , columns : updatedColumns}
-                    
                 }
             })
             return newData
@@ -144,7 +169,7 @@ function removeSub(id){
     setSub(newSubtaskData)
 }
   return (
-    <div className="overlay">
+    <div className="overlay" ref={taskRef}>
          <div className='add-new task'>
         <h1>Add New Task</h1>
         <form>
@@ -175,7 +200,7 @@ recharge the batteries a little.' onChange={(e) => titleHandle(e)}></textarea>
             </div>
             {/* this has to change to cover the status of each board created to do so .  */}
             <div className='f-stat' onClick={toggleShow}>
-                <div className='stat-title' >{status}</div>
+                <div className='stat-title' >{taskObj.status}</div>
                 <span ><svg width="10" height="7" xmlns="http://www.w3.org/2000/svg" ><path stroke="#635FC7" stroke-width="2" fill="none" d="m1 1 4 4 4-4"/></svg></span>
                 <div className={`stat-dropdown ${show ? 'show' : ''} transition`} >
                     <ul>{dataTasks && dataTasks.map((tsk , index) => {
