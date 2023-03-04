@@ -6,6 +6,7 @@ import boardLogo from '/src/assets/icons/icon-board.svg'
 import AddBoard from './Forms/AddBoard'
 import EditBoard from './Forms/EditBoard'
 import AddTask from './Forms/AddTask'
+import BoardDelete from './BoardDelete'
 
 export default function Navbar({openNav , 
     toggleNav ,
@@ -60,8 +61,16 @@ export default function Navbar({openNav ,
             return {
                 ...prev , 
                 editBoard : true ,
-                boardOptions : false ,
-                overlay :  true , 
+                overlay :  true 
+            }
+        })
+    }
+    function handleDeleteBoard (){
+        setFormAppear((prev) => {
+            return {
+                ...prev , 
+                deleteBoard : true ,
+                overlay :  true 
             }
         })
     }
@@ -156,7 +165,7 @@ return (
                 <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fillRule="evenodd"><circle cx="2.308" cy="2.308" r="2.308"/><circle cx="2.308" cy="10" r="2.308"/><circle cx="2.308" cy="17.692" r="2.308"/></g></svg>
                  <div className={`ellipsis-options ${formAppear.boardOptions ? 'show' : 'hide'}`}  >
                     <div onClick={handleEditBoard}>Edit Board</div>
-                    <div>Delete Board</div>
+                    <div onClick={handleDeleteBoard}>Delete Board</div>
                 </div>
                 </div>
               </div>
@@ -174,6 +183,14 @@ return (
     setData = {setData}
     setFormAppear = {setFormAppear}
     /> }
+    {
+        formAppear.deleteBoard && <BoardDelete 
+        selectBoard = {selectBoard}
+        data = {data}
+        setData = {setData}
+        setFormAppear = {setFormAppear}
+        />
+    }
     { formAppear.task && <AddTask 
     selectBoard = {selectBoard} 
     formAppear = {formAppear} 
