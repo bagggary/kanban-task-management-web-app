@@ -75,6 +75,7 @@
   width: rem(480);
   height: auto;
   z-index: 10;
+  border-radius: rem(6);
   &-title {
     display: flex;
     justify-content: space-between;
@@ -83,6 +84,46 @@
       font-weight: 700;
       font-size: 18px;
       line-height: 23px;
+    }
+    &-icon {
+      position: relative;
+      cursor: pointer;
+      &-selection {
+        position: absolute;
+        width: rem(192);
+        height: rem(94);
+        padding: rem(16);
+        display: flex;
+        flex-direction: column;
+        gap: rem(16);
+        top: rem(32);
+        right: rem(-90);
+        background: #ffffff;
+        box-shadow: 0px 10px 20px rgba(54, 78, 126, 0.25);
+        border-radius: 8px;
+        &.hide {
+          visibility: hidden;
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        &.show {
+          visibility: visible;
+          opacity: 1;
+          transform: translateY(0);
+        }
+        > div {
+          font-weight: 500;
+          font-size: 13px;
+          line-height: 23px;
+          cursor: pointer;
+          &:first-child {
+            color: #828fa3;
+          }
+          &:last-child {
+            color: #ea5555;
+          }
+        }
+      }
     }
   }
   p {
@@ -150,6 +191,75 @@
           line-height: 15px;
           color: #000112;
           cursor: pointer;
+        }
+      }
+    }
+  }
+  &-status {
+    h1 {
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 15px;
+      color: #828fa3;
+    }
+    .f-stat {
+      width: 100%;
+      height: rem(40);
+      border: 1px solid rgba(130, 143, 163, 0.25);
+      position: relative;
+      padding-top: rem(8);
+      padding-left: rem(16);
+      cursor: pointer;
+      display: flex;
+      .stat-title {
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 23px;
+      }
+      &:hover {
+        border-color: #635fc7;
+      }
+      span {
+        position: absolute;
+        right: 3.8%;
+      }
+      .stat-dropdown {
+        width: 100%;
+        position: absolute;
+        height: auto;
+        background-color: #ffffff;
+        left: 0;
+        top: 50px;
+        box-shadow: 0px 10px 20px rgba(54, 78, 126, 0.25);
+        border-radius: 8px;
+        padding: rem(16);
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-20px);
+        &.show {
+          visibility: visible;
+          opacity: 1;
+          transform: translateY(0);
+        }
+        ul {
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: rem(8);
+          max-height: rem(120);
+          overflow: auto;
+
+          li {
+            list-style: none;
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 23px;
+            color: #828fa3;
+            &:hover {
+              color: black;
+            }
+          }
         }
       }
     }
