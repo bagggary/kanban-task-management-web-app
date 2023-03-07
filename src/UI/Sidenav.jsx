@@ -2,6 +2,7 @@ import React from 'react'
 import { useState , useRef , useEffect } from 'react'
 import BoardsList from './BoardsList'
 import AddBoard from './Forms/AddBoard'
+import { useTheme } from './ThemeContext'
 
 export default function Sidenav({side ,
      toggle ,
@@ -13,8 +14,7 @@ export default function Sidenav({side ,
      setData ,
      updateBoard ,
     }) {
-
-        
+        const { theme, toggleTheme } = useTheme();
 
 function boardHandle(){
     setFormAppear((prev) => {
@@ -26,6 +26,10 @@ function boardHandle(){
         }
     })
 
+}
+
+function handleToggle(){
+    toggleTheme()
 }
 
   return (
@@ -48,7 +52,7 @@ function boardHandle(){
                                         <svg width="19" height="19" xmlns="http://www.w3.org/2000/svg"><path d="M9.167 15.833a.833.833 0 0 1 .833.834v.833a.833.833 0 0 1-1.667 0v-.833a.833.833 0 0 1 .834-.834ZM3.75 13.75a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 0 1-1.18-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm10.833 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.179 1.178l-1.25-1.25a.833.833 0 0 1 .59-1.422ZM9.167 5a4.167 4.167 0 1 1 0 8.334 4.167 4.167 0 0 1 0-8.334Zm-7.5 3.333a.833.833 0 0 1 0 1.667H.833a.833.833 0 1 1 0-1.667h.834Zm15.833 0a.833.833 0 0 1 0 1.667h-.833a.833.833 0 0 1 0-1.667h.833Zm-1.667-6.666a.833.833 0 0 1 .59 1.422l-1.25 1.25a.833.833 0 1 1-1.179-1.178l1.25-1.25a.833.833 0 0 1 .59-.244Zm-13.333 0c.221 0 .433.088.59.244l1.25 1.25a.833.833 0 0 1-1.18 1.178L1.91 3.09a.833.833 0 0 1 .59-1.422ZM9.167 0A.833.833 0 0 1 10 .833v.834a.833.833 0 1 1-1.667 0V.833A.833.833 0 0 1 9.167 0Z" /></svg>
                                         </div>
                                         <div className="toggle">
-                                            <input type="checkbox" id="toggle-desktop" />
+                                            <input type="checkbox" id="toggle-desktop" checked={theme === 'dark'} onChange = {handleToggle}/>
                                             <label htmlFor="toggle-desktop"></label>
                                         </div>
                                         <div className="dark-icon">

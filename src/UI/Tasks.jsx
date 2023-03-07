@@ -28,14 +28,11 @@ export default function Tasks({ task, subtask, id , formAppear , onTaskClick}) {
       return completedSubtasks.length;
     };
 
-
     return (
-        <>
-        <div className='task-card' onClick={() => onTaskClick(task)}>
-          <h3>{task.title}</h3>
-          <p>{`${completedTasks()} of ${subtask.length} subtasks`}</p>
-        </div>
-        </>
+          <div className='task-card' onClick={() => onTaskClick(task)}>
+            <h3>{task.title}</h3>
+            <p>{`${completedTasks()} of ${subtask.length} subtasks`}</p>
+          </div>
     );
   }
 

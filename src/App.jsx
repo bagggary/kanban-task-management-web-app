@@ -46,6 +46,7 @@ function App() {
       setSelectedTask(task)
     }
 
+
   return (
     <>
       <Navbar 
@@ -72,10 +73,15 @@ function App() {
       <div className= {`main-content transition container ${side ? '' : 'content-screen'}`}  >
         {data[selectedId].columns.map((col , index) => {
           return (
-            <BoardTasks selectedBoard = {selectedBoard}  board = {col}  key={index} id = {index} formAppear = {formAppear} setFormAppear = {setFormAppear} onTaskClick={taskDetailsHandler}/>
+            <BoardTasks selectedBoard = {selectedBoard}  board = {col}  key={index} id = {index} formAppear = {formAppear} setFormAppear = {setFormAppear} onTaskClick={taskDetailsHandler} boardSubtask = {col.tasks}/>
           )
         })}
+        <div className='new-column'> 
+        
+        <p>+ New Column</p>
+          </div>
       </div>
+      
       </div>
       {formAppear.overlay && <Overlay />}
       {formAppear.sub &&  <TaksDetails 
