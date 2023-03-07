@@ -46,7 +46,7 @@
     }
   }
   position: absolute;
-  background-color: white;
+  background-color: var(--bg-card);
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -58,7 +58,7 @@
     font-weight: 700;
     font-size: 18px;
     line-height: 23px;
-    color: #000112;
+    color: var(--font-color);
     margin-bottom: 0;
   }
   form {
@@ -73,7 +73,7 @@
         font-weight: 700;
         font-size: 12px;
         line-height: 15px;
-        color: #828fa3;
+        color: var(--font-color-details);
       }
       input,
       textarea {
@@ -83,16 +83,17 @@
         font-weight: 500;
         font-size: 13px;
         line-height: 23px;
-        color: #000112;
+        background-color: var(--bg-card);
+        color: var(--font-color);
         cursor: pointer;
         &:hover {
-          border-color: #635fc7;
+          border-color: var(--primary-color);
         }
         &::placeholder {
           font-weight: 500;
           font-size: 13px;
           line-height: 23px;
-          color: #000112;
+          color: var(--font-color);
           mix-blend-mode: normal;
           opacity: 0.25;
         }
@@ -151,7 +152,7 @@
           }
           svg {
             cursor: pointer;
-            fill: #828fa3;
+            fill: var(--font-color-details);
             &:hover {
               fill: rgb(234, 85, 85);
             }
@@ -168,7 +169,7 @@
         }
       }
       button {
-        background-color: #635fc71a;
+        background-color: var(--button);
         border-radius: rem(20);
         border: none;
         padding: rem(8) 0;
@@ -176,7 +177,7 @@
         font-size: 13px;
         line-height: 23px;
         text-align: center;
-        color: #635fc7;
+        color: var(--primary-color);
       }
     }
     .status {
@@ -185,7 +186,7 @@
         font-size: 12px;
         line-height: 15px;
         margin-bottom: 0;
-        color: #828fa3;
+        color: var(--font-color-details);
       }
     }
     .f-stat {
@@ -201,9 +202,10 @@
         font-weight: 500;
         font-size: 13px;
         line-height: 23px;
+        color: var(--font-color);
       }
       &:hover {
-        border-color: #635fc7;
+        border-color: var(--primary-color);
       }
       span {
         position: absolute;
@@ -213,7 +215,7 @@
         width: 100%;
         position: absolute;
         height: auto;
-        background-color: #ffffff;
+        background-color: var(--dropdown);
         left: 0;
         top: 50px;
         box-shadow: 0px 10px 20px rgba(54, 78, 126, 0.25);
@@ -256,7 +258,7 @@
       font-size: 13px;
       line-height: 23px;
       text-align: center;
-      background: #635fc7;
+      background: var(--primary-color);
       border-radius: 20px;
       color: white;
     }

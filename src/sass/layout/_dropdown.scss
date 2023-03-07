@@ -1,15 +1,15 @@
 @use "../util/index2" as *;
 .dropdown {
-  position: sticky;
   &__name {
     font-weight: 700;
     font-size: 18px;
     line-height: 23px;
   }
   &__options {
+    z-index: 12;
     top: calc(rem(46) + rem(16));
     position: absolute;
-    background-color: black;
+    background-color: var(--bg-card);
     border-radius: rem(8);
     width: rem(264);
     height: rem(322);
@@ -20,10 +20,12 @@
     transform: translateY(-20px);
     transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
     box-shadow: 0px 10px 20px rgba(54, 78, 126, 0.25);
+    visibility: hidden;
     &.open {
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
+      visibility: visible;
     }
     &__boards {
       padding: rem(16) rem(24) 0 0;
@@ -31,7 +33,7 @@
     h2 {
       font-size: rem(12);
       font-weight: 700;
-      color: gray;
+      color: var(--font-color-details);
       letter-spacing: 2.4px;
       padding: 0 0 0 rem(24);
       margin-bottom: 0;
@@ -43,7 +45,7 @@
       .active {
         border-top-right-radius: 100px;
         border-bottom-right-radius: 100px;
-        background-color: #635fc7;
+        background-color: var(--primary-color);
         color: white;
         svg {
           fill: white;
@@ -72,14 +74,14 @@
     fill: white;
     div {
       margin-left: rem(16);
-      color: #635fc7;
+      color: var(--primary-color);
       font-weight: 700;
       font-size: 15px;
     }
     svg {
       width: 16px;
       height: 16px;
-      fill: #635fc7;
+      fill: var(--primary-color);
     }
   }
 }

@@ -2,12 +2,36 @@
 
 .main-content {
   display: flex;
-  padding-left: rem(24);
-  padding-top: rem(24);
+  padding: rem(24);
   gap: rem(24);
+  max-height: calc(100vh - rem(101.28));
+  min-height: calc(100vh - rem(101.28));
   > div {
     width: rem(280);
     height: auto;
+    flex-shrink: 0;
+  }
+  .new-column {
+    margin-top: rem(39);
+    width: rem(280);
+    min-height: rem(800);
+    cursor: pointer;
+    background: var(--linargradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      p {
+        color: var(--primary-color);
+      }
+    }
+    p {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 30px;
+      text-align: center;
+      color: var(--font-color-details);
+    }
   }
 }
 .board-column {
@@ -25,7 +49,7 @@
       font-weight: 700;
       font-size: 0.75rem;
       letter-spacing: 2.4px;
-      color: #828fa3;
+      color: var(--font-color-details);
       margin-bottom: 0;
     }
   }
@@ -35,11 +59,12 @@
   display: flex;
   flex-direction: column;
   gap: rem(20);
+  min-height: 100px;
   .task-card {
     cursor: pointer;
     width: rem(280);
     height: auto;
-    background-color: white;
+    background-color: var(--bg-card);
     box-shadow: 0px 4px 6px rgba(54, 78, 126, 0.101545);
     border-radius: 8px;
     padding: rem(23) rem(16);
@@ -51,20 +76,20 @@
       font-weight: 700;
       font-size: 15px;
       line-height: 19px;
-      color: #000112;
+      color: var(--font-color);
     }
     p {
       font-weight: 700;
       font-size: 12px;
       line-height: 15px;
-      color: #828fa3;
+      color: var(--font-color-details);
     }
   }
 }
 
 .detailed-info {
   position: absolute;
-  background-color: white;
+  background-color: var(--bg-card);
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -80,6 +105,7 @@
     display: flex;
     justify-content: space-between;
     gap: rem(24);
+    color: var(--font-color);
     h1 {
       font-weight: 700;
       font-size: 18px;
@@ -98,7 +124,7 @@
         gap: rem(16);
         top: rem(32);
         right: rem(-90);
-        background: #ffffff;
+        background: var(--bg-card);
         box-shadow: 0px 10px 20px rgba(54, 78, 126, 0.25);
         border-radius: 8px;
         &.hide {
@@ -117,7 +143,7 @@
           line-height: 23px;
           cursor: pointer;
           &:first-child {
-            color: #828fa3;
+            color: var(--font-color-details);
           }
           &:last-child {
             color: #ea5555;
@@ -130,14 +156,14 @@
     font-weight: 500;
     font-size: 13px;
     line-height: 23px;
-    color: #828fa3;
+    color: var(--font-color-details);
   }
   &-subtasks {
     h2 {
       font-weight: 700;
       font-size: 12px;
       line-height: 15px;
-      color: #828fa3;
+      color: var(--font-color-details);
     }
     &-container {
       display: flex;
@@ -146,7 +172,7 @@
       &-sub {
         display: flex;
         gap: rem(16);
-        background: #f4f7fd;
+        background: var(--sub);
         border-radius: 4px;
         padding: rem(13) 0 rem(12) rem(12);
         cursor: pointer;
@@ -158,7 +184,7 @@
           -webkit-appearance: none;
           height: 16px;
           width: 16px;
-          background: white;
+          background: var(--bg-card);
           border-radius: 2px;
           display: flex;
           align-items: center;
@@ -166,7 +192,7 @@
           border: 1px solid rgba(130, 143, 163, 0.248914);
           cursor: pointer;
           &:checked {
-            background: #635fc7;
+            background: var(--primary-color);
             + label {
               text-decoration: line-through;
               mix-blend-mode: normal;
@@ -189,7 +215,7 @@
           font-weight: 700;
           font-size: 12px;
           line-height: 15px;
-          color: #000112;
+          color: var(--font-color);
           cursor: pointer;
         }
       }
@@ -200,7 +226,7 @@
       font-weight: 700;
       font-size: 12px;
       line-height: 15px;
-      color: #828fa3;
+      color: var(--font-color-details);
     }
     .f-stat {
       width: 100%;
@@ -215,9 +241,10 @@
         font-weight: 500;
         font-size: 13px;
         line-height: 23px;
+        color: var(--font-color);
       }
       &:hover {
-        border-color: #635fc7;
+        border-color: var(--primary-color);
       }
       span {
         position: absolute;
@@ -227,7 +254,7 @@
         width: 100%;
         position: absolute;
         height: auto;
-        background-color: #ffffff;
+        background-color: var(--bg-card);
         left: 0;
         top: 50px;
         box-shadow: 0px 10px 20px rgba(54, 78, 126, 0.25);
@@ -255,7 +282,7 @@
             font-weight: 500;
             font-size: 13px;
             line-height: 23px;
-            color: #828fa3;
+            color: var(--font-color-details);
             &:hover {
               color: black;
             }

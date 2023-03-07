@@ -4,7 +4,7 @@
   margin: rem(16) auto;
   padding: rem(14) rem(57);
   justify-content: space-between;
-  background-color: #20212c;
+  background-color: var(--sub);
   border-radius: rem(6);
   width: rem(235);
   height: rem(48);
@@ -16,7 +16,7 @@
       }
     }
     label {
-      background-color: #635fc7;
+      background-color: var(--primary-color);
       border-radius: 12px;
       cursor: pointer;
       display: inline-block;

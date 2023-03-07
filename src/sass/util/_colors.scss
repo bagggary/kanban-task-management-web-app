@@ -1,1 +1,32 @@
 // Primary Colors
+$primary-light: #635fc7;
+$secondary-light: #a8a4ff;
+$font-light: #000112;
+$font-color-details-light: #828fa3;
+$bg-color-light: #e4ebfa;
+$bg-card-color-light: #ffff;
+$subtask-bg-light: #f4f7fd;
+$button-color-light: rgba(99, 95, 199, 0.1);
+$dropdown-color-light: #ffffff;
+$linear-light: linear-gradient(
+  180deg,
+  #e9effa 0%,
+  rgba(233, 239, 250, 0.5) 100%
+);
+
+//dark
+
+$primary-dark: #635fc7;
+$secondary-dark: #a8a4ff;
+$font-dark: #ffffff;
+$font-color-details-dark: #828fa3;
+$bg-color-dark: #20212c;
+$bg-card-color-dark: #2b2c37;
+$subtask-bg-dark: #20212c;
+$button-color-dark: #ffffff;
+$dropdown-color-dark: #20212c;
+$linear-dark: linear-gradient(
+  180deg,
+  rgba(43, 44, 55, 0.25) 0%,
+  rgba(43, 44, 55, 0.125) 100%
+);

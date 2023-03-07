@@ -1,3 +1,4 @@
+@use "../util/index2" as *;
 html {
   box-sizing: border-box;
   font-size: 100%;
@@ -27,4 +28,30 @@ a,
 a:visited,
 a:active {
   text-decoration: none;
+}
+
+:root {
+  --primary-color: #{$primary-light};
+  --secondary-color: #{$secondary-light};
+  --font-color: #{$font-light};
+  --font-color-details: #{$font-color-details-light};
+  --bg-color: #{$bg-color-light};
+  --bg-card: #{$bg-card-color-light};
+  --sub: #{$subtask-bg-light};
+  --button: #{$button-color-light};
+  --dropdown: #{$dropdown-color-light};
+  --linargradient: #{$linear-light};
+}
+
+[data-theme="dark"] {
+  --primary-color: #{$primary-dark};
+  --secondary-color: #{$secondary-dark};
+  --font-color: #{$font-dark};
+  --font-color-details: #{$font-color-details-dark};
+  --bg-color: #{$bg-color-dark};
+  --bg-card: #{$bg-card-color-dark};
+  --sub: #{$subtask-bg-dark};
+  --button: #{$button-color-dark};
+  --dropdown: #{$dropdown-color-dark};
+  --linargradient: #{$linear-dark};
 }

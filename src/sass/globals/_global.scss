@@ -4,8 +4,8 @@ html {
 }
 body {
   font-family: "Plus Jakarta Sans", sans-serif;
-  background-color: #e4ebfa;
+  background-color: var(--bg-color);
   min-height: 100vh;
-  overflow-y: hidden;
+  overflow-y: hidden; /* Hide vertical scrollbar */
   overflow-x: hidden;
 }

@@ -1,5 +1,6 @@
 @use "../util/index2" as *;
 .sidenav {
+  z-index: 1;
   position: absolute;
   @include breakpoint-down(small) {
     display: none;
@@ -9,7 +10,7 @@
   }
   width: rem(300);
   height: calc(100vh - rem(101.27));
-  background-color: white;
+  background-color: var(--bg-card);
   &__boards {
     @include breakpoint-down(medium) {
       padding: rem(15) rem(20) 0 0;
@@ -21,7 +22,7 @@
       line-height: 15px;
       letter-spacing: 2.4px;
       padding-left: rem(32);
-      color: #828fa3;
+      color: var(--font-color-details);
     }
     ul {
       padding: unset;
@@ -30,7 +31,7 @@
       .active {
         border-top-right-radius: 100px;
         border-bottom-right-radius: 100px;
-        background-color: #635fc7;
+        background-color: var(--primary-color);
         color: white;
         svg {
           fill: white;
@@ -41,6 +42,16 @@
         list-style: none;
         display: flex;
         align-items: center;
+        color: var(--font-color);
+        border-top-right-radius: 100px;
+        border-bottom-right-radius: 100px;
+        &:hover:not(.active) {
+          color: var(--primary-color);
+          background-color: var(--button);
+          svg {
+            fill: var(--primary-color);
+          }
+        }
         @include breakpoint-down(medium) {
           padding: rem(14) 0 rem(15) rem(24);
         }
@@ -65,7 +76,7 @@
       fill: white;
       div {
         margin-left: rem(16);
-        color: #635fc7;
+        color: var(--primary-color);
         font-weight: 700;
         font-size: 15px;
       }
@@ -84,7 +95,7 @@
     padding: rem(14) rem(57);
     margin: 0 auto;
     justify-content: space-between;
-    background-color: #f4f7fd;
+    background-color: var(--sub);
     border-radius: rem(6);
     @include breakpoint-down(medium) {
       left: rem(13);
@@ -100,7 +111,7 @@
         }
       }
       label {
-        background-color: #635fc7;
+        background-color: var(--primary-color);
         border-radius: 12px;
         cursor: pointer;
         display: inline-block;
@@ -134,10 +145,10 @@
     cursor: pointer;
     position: absolute;
     bottom: 32px;
-    color: #828fa3;
+    color: var(--font-color-details);
     span {
       margin-right: rem(10);
-      fill: #828fa3;
+      fill: var(--font-color-details);
     }
     @include breakpoint-down(medium) {
       width: rem(240);
@@ -151,162 +162,11 @@
     border-bottom-right-radius: 25px;
     border-top-right-radius: 25px;
     &:hover {
-      background-color: #635fc71a;
-      color: #635fc7;
+      background-color: var(--button);
+      color: var(--primary-color);
       span {
-        fill: #635fc7;
+        fill: var(--primary-color);
       }
     }
   }
 }
-
-// .side-nav-container {
-//   position: fixed;
-//   left: -250px;
-//   width: 250px;
-//   height: 100%;
-//   background: #042331;
-//   transition: all 0.5s ease;
-// }
-// .side-nav-container-NX {
-//   width: 85px;
-// }
-
-// .nav-upper,
-// .nav-heading,
-// .nav-menu,
-// .menu-item,
-// .nav-footer {
-//   /* border: 2px solid white; */
-//   display: grid;
-// }
-
-// .nav-heading {
-//   grid-template-columns: 2fr 1fr;
-//   grid-template-rows: 1fr;
-//   height: 75px;
-// }
-
-// .nav-brand {
-//   display: flex;
-//   color: black;
-// }
-// .nav-brand img {
-//   width: 40px;
-//   padding: 0 10px;
-// }
-
-// .hamburger {
-//   background: none;
-//   border: none;
-//   cursor: pointer;
-//   margin: auto;
-// }
-
-// .hamburger span {
-//   display: block;
-//   margin-top: 5px;
-//   background-color: black;
-//   border-radius: 15px;
-//   height: 5px;
-//   width: 35px;
-
-//   transition: 0.4s;
-// }
-
-// .hamburger:hover span {
-//   background-color: green;
-// }
-
-// .hamburger-in:hover span:nth-child(1) {
-//   width: 25px;
-//   transform: translateY(4px) rotate(-25deg);
-// }
-// .hamburger-in:hover span:nth-child(2) {
-//   width: 40px;
-// }
-// .hamburger-in:hover span:nth-child(3) {
-//   width: 25px;
-//   transform: translateY(-4px) rotate(25deg);
-// }
-// /* ///////////////////// */
-// /* ///////////////////// */
-// /* ///////////////////// */
-// /* ///////////////////// */
-// .hamburger-out {
-//   margin-left: 24px;
-// }
-// .hamburger-out:hover span:nth-child(1) {
-//   width: 25px;
-//   transform: translate(14px, 4px) rotate(-155deg);
-// }
-// .hamburger-out:hover span:nth-child(2) {
-//   width: 40px;
-// }
-// .hamburger-out:hover span:nth-child(3) {
-//   width: 25px;
-//   transform: translate(14px, -4px) rotate(155deg);
-// }
-
-// .nav-menu {
-//   grid-template-rows: repeat(7, 1fr);
-//   margin-top: 50px;
-// }
-
-// .menu-item {
-//   height: 57px;
-//   display: flex;
-//   color: white;
-//   text-decoration: none;
-//   text-transform: uppercase;
-//   margin: auto 20px;
-//   border-radius: 10px;
-// }
-
-// .menu-item-NX {
-//   margin: auto;
-// }
-// .menu-item:hover {
-//   background-color: greenyellow;
-// }
-// .menu-item img {
-//   width: 30px;
-//   padding: 0 20px;
-// }
-
-// .nav-footer {
-//   width: 100%;
-//   height: 87px;
-//   position: absolute;
-//   bottom: 0;
-//   grid-template-rows: 1fr;
-//   grid-template-columns: 2fr 1fr;
-// }
-
-// .nav-details {
-//   display: flex;
-// }
-// .nav-details img {
-//   width: 50px;
-//   padding: 0 20px;
-// }
-
-// .nav-footer-user-name {
-//   font-size: 18px;
-//   font-weight: 900;
-// }
-
-// .nav-footer-user-position {
-//   margin-top: -15px;
-//   color: black;
-// }
-// .logout-icon {
-//   width: 30px;
-//   margin: auto;
-//   border-radius: 90px;
-//   padding: 20px;
-//   margin-left: 5px;
-// }
-// .logout-icon:hover {
-//   background-color: red;
-// }
