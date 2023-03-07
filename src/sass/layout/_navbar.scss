@@ -181,4 +181,7 @@ nav {
   &:hover {
     background-color: var(--secondary-color);
   }
+  @include breakpoint-down(xsmall) {
+    display: none;
+  }
 }
