@@ -46,6 +46,16 @@ function App() {
       setSelectedTask(task)
     }
 
+    function handleNewColumn(){
+      setFormAppear((prev) => {
+        return {
+          ...prev , 
+          editBoard : true ,
+          overlay : true 
+        }
+      })
+    }
+
 
   return (
     <>
@@ -58,6 +68,7 @@ function App() {
       formAppear = {formAppear}
       setFormAppear = {setFormAppear}
       setData = {setData}
+      setSelectedBoard = {setSelectedId}
            />
       <div className='content'>
       <Sidenav 
@@ -76,7 +87,7 @@ function App() {
             <BoardTasks selectedBoard = {selectedBoard}  board = {col}  key={index} id = {index} formAppear = {formAppear} setFormAppear = {setFormAppear} onTaskClick={taskDetailsHandler} boardSubtask = {col.tasks}/>
           )
         })}
-        <div className='new-column'> 
+        <div className='new-column' onClick={handleNewColumn}> 
         
         <p>+ New Column</p>
           </div>
@@ -116,30 +127,3 @@ function App() {
 export default App
 
 
-// const sharedRefs = useRef(null)
-  // useEffect(() => {
-  //   function outsideClick(event) {
-  //     if (sharedRefs.current && !sharedRefs.current.contains(event.target)) {
-  //       setFormAppear(prev => {
-  //           return {
-  //               ...prev,
-  //               board: false,
-  //               overlay: false
-  //           }
-  //       });
-  //     }
-  //   }
-  //   document.addEventListener('mousedown', outsideClick);
-  //   return () => {
-  //     document.removeEventListener('mousedown', outsideClick);
-  //   };
-  // }, [sharedRefs]);
-
-  // const updateBoard = (obj) => {
-  //   setData(prev => {
-  //     return [
-  //       ...prev.boards ,
-  //       obj 
-  //     ]
-  //   }, obj)
-  // }

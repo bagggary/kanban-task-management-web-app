@@ -2,8 +2,6 @@ import React  , {useState , useRef , useEffect}from 'react'
 import darkLogo from '/src/assets/icons/logo-dark.svg'
 import lightLogo from '/src/assets/icons/logo-light.svg'
 import mobileLogo from '/src/assets/icons/logo-mobile.svg'
-import boardLogo from '/src/assets/icons/icon-board.svg'
-import AddBoard from './Forms/AddBoard'
 import EditBoard from './Forms/EditBoard'
 import AddTask from './Forms/AddTask'
 import BoardDelete from './BoardDelete'
@@ -16,7 +14,8 @@ export default function Navbar({openNav ,
     data ,
     formAppear ,
     setFormAppear ,
-    setData
+    setData ,
+    setSelectedBoard
 })
     {
     const [open , setOpen ] = useState(false) ; 
@@ -38,16 +37,10 @@ export default function Navbar({openNav ,
           document.removeEventListener('mousedown', outsideClick);
         };
       }, [optionsRef]);
-    // const [boardObj , setBoardObj] = useState( { name: "" , columns : [
-    //     {name: "", tasks: []}
-    //      ,{name: "", tasks: []}
-    // ]})
     function handleDropdown(){
         setOpen(prev => !prev)
     }
 
-    function errorHandler(e){
-    }
     function boardHandle(){
         setFormAppear((prev) => {
             return {
@@ -57,6 +50,7 @@ export default function Navbar({openNav ,
     
             }
         })
+        setOpen(false) 
     }
     function handleEditBoard (){
         setFormAppear((prev) => {
@@ -93,6 +87,15 @@ export default function Navbar({openNav ,
                 }
             })
         }
+        function handleAddingTask(){
+            setFormAppear(prev => {
+                return {
+                    ...prev , 
+                    task : true ,
+                    overlay: true 
+                }
+            })
+        }
         const handleToggle = () => {
             toggleTheme();
           };
@@ -126,7 +129,7 @@ return (
                             </div>
                             <div className={` dropdown__options ${open ? 'open' : ''}` } >
                                 <div className="dropdown__options__boards">
-                            <h2> ALL BOARDS (3)</h2>  
+                            <h2> ALL BOARDS ({data[selectBoard].columns.length})</h2>  
                                 <ul>
                                     { data && data.map((board , index) => {
                                         return (            
@@ -159,7 +162,7 @@ return (
                         </div>
               </div>
               <div className="right">
-                <div className="add-task">
+                <div className="add-task" onClick={handleAddingTask}>
                 <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg"><path fill="#FFF" d="M7.368 12V7.344H12V4.632H7.368V0H4.656v4.632H0v2.712h4.656V12z"/></svg>
                 </div>
                 <div className="add-task-larger" onClick={handleTask}>
@@ -193,6 +196,7 @@ return (
         data = {data}
         setData = {setData}
         setFormAppear = {setFormAppear}
+        setSelectedBoard = {setSelectedBoard}
         />
     }
     { formAppear.task && <AddTask 

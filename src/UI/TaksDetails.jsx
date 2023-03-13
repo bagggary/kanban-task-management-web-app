@@ -1,7 +1,5 @@
 import React, { useEffect, useState , useRef } from 'react'
 import useToggle from '../hooks/useToggle';
-import EditTask from './Forms/EditTask';
-import Overlay from './Overlay';
 export default function TaksDetails({task , data , selectedBoard , setData , formAppear , setFormAppear}) {
   const [show , toggleShow ] = useToggle(false)
   const [currentStatus , setCurrentStatus] = useState(task.status || data[selectedBoard].columns[0].name )
@@ -65,31 +63,15 @@ export default function TaksDetails({task , data , selectedBoard , setData , for
       newData[selectedBoard] = {...newData[selectedBoard] , columns : statusColumns}
       return newData
     })
-    // setData({
-    //   ...data,
-    //   [selectedBoard]: {
-    //     ...data[selectedBoard],
-    //     columns: statusColumns,
-    //   },
-    //   // adding different approach to deliver to the main element that are consist to get it done by the end of what is called the updatedTask however there are different approach to trigger this
-    // });
   }
 
   function handleSubtaskChange(index) {
-
-    // const updatedSubtasks = [...task.subtasks];
-    // updatedSubtasks[index].isCompleted = !updatedSubtasks[index].isCompleted;
-    // const updatedTask = {...task, subtasks: updatedSubtasks};
-    // const updatedTasks = data[selectedBoard].columns.flatMap((column) => column.tasks.map((t) => t.id === updatedTask.id ? updatedTask : t));
-    // const updatedColumns = data[selectedBoard].columns.map((column) => ({...column, tasks: updatedTasks.filter((t) => t.status === column.name)}));
-    // const updatedData = {...data, [selectedBoard]: {...data[selectedBoard], columns: updatedColumns}};
   const updatedTask = { ...task };
   updatedTask.subtasks[index].isCompleted = !updatedTask.subtasks[index].isCompleted;
   const taskIndex = data[selectedBoard].columns.findIndex((col) => col.name === task.status);
   const updatedColumns = [...data[selectedBoard].columns];
   const taskIndexInColumn = updatedColumns[taskIndex].tasks.findIndex((t) => t.title === task.title);
   updatedColumns[taskIndexInColumn].tasks[taskIndexInColumn] = updatedTask;
-  // setData({ ...data, [selectedBoard]: { ...data[selectedBoard], columns: updatedColumns } });
   setData((prev) => {
     let newData = [...prev]
     newData[selectedBoard] = {...newData[selectedBoard] , columns : updatedColumns}
@@ -126,8 +108,6 @@ export default function TaksDetails({task , data , selectedBoard , setData , for
     }
     updateStatus(e.target.textContent)
     setCurrentStatus(e.target.textContent);
-    // let newData = updateStatus();
-    // setData(newData);
   }
 
   function handleEditTask(){
@@ -199,77 +179,3 @@ export default function TaksDetails({task , data , selectedBoard , setData , for
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-// export default function TaksDetails({task , subtask }) {
-
-//   return (
-//     <div className='detailed-info'>
-//         <div className='detailed-info-title'>
-//             <h1>{task}</h1>
-//             <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg"><g fill="#828FA3" fill-rule="evenodd"><circle cx="2.308" cy="2.308" r="2.308"/><circle cx="2.308" cy="10" r="2.308"/><circle cx="2.308" cy="17.692" r="2.308"/></g></svg>
-//         </div>
-//         <p>description paragraph</p>
-//         <div className='detailed-info-subtasks'>
-//             <div className='detailed-info-subtasks-sub'>
-//                 <label htmlFor="sub">subtask</label>
-//                 <input type="checkbox" name="checkbox" id="sub" />
-//             </div>
-//         </div>
-//         <div className='detailed-info-status'>
-//             <h1> status</h1>
-//             <div className="detailed-info-status-dropdown">
-//                 status dropdown selection menu
-//             </div>
-//         </div>
-//     </div>
-//   )
-
-// }
-
-
-
-// first draft of creating the status updated to update the status 
-
- // let statusColumns = [...data[selectedBoard].columns]
-    // let colIndex ;
-    //  statusColumns.map((col , index) =>{
-    // if(col.name === task.status){
-    //   colIndex = index
-    //   console.log(statusColumns[colIndex])
-    // } 
-    // return ;
-    // })
-    // const statusTasks = [...statusColumns[colIndex].tasks]
-    // const statusIndex =  statusTasks.findIndex((stat) => stat.title === task.title)
-    // let  removedTask =  statusTasks.splice(statusIndex , 1)
-    // // change the status of the removed task , then changed to the new column name differnetiate between different approach to deliver various compoent
-    // console.log(removedTask)
-    // let statusColumns = [...data[selectedBoard].columns];
-    // let currentColumnIndex = statusColumns.findIndex(
-    //   (col) => col.name === task.status
-    // );
-    // let currentTasks = [...statusColumns[currentColumnIndex].tasks];
-    // let currentTaskIndex = currentTasks.findIndex(
-    //   (t) => t.title === task.title
-    // );
-    // let newStatus = currentStatus;
-    // let newColumnIndex = statusColumns.findIndex(
-    //   (col) => col.name === newStatus
-    // );
-    // let newTasks = [...statusColumns[newColumnIndex].tasks];
-    // currentTasks.splice(currentTaskIndex, 1);
-    // newTasks.push(task);
-    // statusColumns[currentColumnIndex].tasks = currentTasks;
-    // statusColumns[newColumnIndex].tasks = newTasks;
-    // let newData = { ...data };
-    // newData[selectedBoard].columns = statusColumns;
-    // return newData

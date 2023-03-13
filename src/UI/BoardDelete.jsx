@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function BoardDelete({data , selectedBoard , setData  , setFormAppear}) {
+export default function BoardDelete({  data, selectBoard , setData  , setFormAppear , setSelectedBoard}) {
 
 
 
@@ -15,11 +15,18 @@ export default function BoardDelete({data , selectedBoard , setData  , setFormAp
   }
 
   function deleteBoard () {
+    if(data.length - 1 <= 0){
+      return 
+    }
     setData((prev) => {
       const modifiedBoard = [...prev]
-      modifiedBoard.splice(selectedBoard , 1)
+      modifiedBoard.splice(selectBoard , 1)
       return modifiedBoard
     })
+    if(selectBoard == data.length - 1){
+      setSelectedBoard(data.length - 2)
+    } 
+
     modifyAppear()
   }
 
@@ -31,7 +38,7 @@ export default function BoardDelete({data , selectedBoard , setData  , setFormAp
     <div className="overlay">
         <div className='delete board-dele'>
             <h1>Delete this board?</h1>
-            <p>Are you sure you want to delete the '<span>Platform Launch</span>' board? This action will remove all columns and tasks and cannot be reversed.</p>
+            <p>Are you sure you want to delete the '<span>{data[selectBoard].name}</span>' board? This action will remove all columns and tasks and cannot be reversed.</p>
             <div className='delete-options'>
                 <button onClick = {deleteBoard}>Delete</button>
                 <button onClick={cancelDeletion}>Cancel</button>

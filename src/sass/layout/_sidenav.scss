@@ -2,7 +2,7 @@
 .sidenav {
   z-index: 1;
   position: absolute;
-  @include breakpoint-down(small) {
+  @include breakpoint-down(xsmall) {
     display: none;
   }
   @include breakpoint-down(medium) {

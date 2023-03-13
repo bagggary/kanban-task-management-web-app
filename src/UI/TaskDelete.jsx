@@ -13,9 +13,6 @@ export default function TaskDelete({task , data , setFormAppear , selectedBoard 
     const taskIndex = taskLocation.findIndex(tsk => tsk.title === task.title)
     taskLocation.splice(taskIndex , 1)
     columnsFilter[colIndex].tasks = taskLocation
-    // const modifiedData = [...data]
-    // modifiedData[selectedBoard] = {...modifiedData[selectedBoard] , columns :columnsFilter}
-    // console.log(modifiedData)
 
     setData(prev => {
       let modifiedData = [...prev]
