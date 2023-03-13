@@ -50,15 +50,15 @@ Users should be able to:
 
 ## kanban light theme
 
-![](../src/assets/screenshot/Kanban-light.png)
+![](./src/assets/screenshot/Kanban-light.png)
 
 ## kanban dark theme
 
-![](../src/assets/screenshot/Kanban-dark.png)
+![](./src/assets/screenshot/Kanban-dark.png)
 
 ## kanban mobile version layout
 
-![](../src/assets/screenshot/Kanban-mobile.png)
+![](./src/assets/screenshot/Kanban-mobile.png)
 
 ## My process
 
