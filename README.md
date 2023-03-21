@@ -91,22 +91,6 @@ This project helped me improve my skills in working with React-controlled forms,
 
 The only problem i had to deal with is the deep nested objects and arrays , heres a snippet to update nested array in nested object , i dont know if this is best practice dealing with nested object , but it works 🤷
 
-```js
-const proudOfThisFunc = () => {
-  const updatedTask = { ...task };
-  updatedTask.subtasks[index].isCompleted =
-    !updatedTask.subtasks[index].isCompleted;
-  const taskIndex = data[selectedBoard].columns.findIndex(
-    (col) => col.name === task.status
-  );
-  const updatedColumns = [...data[selectedBoard].columns];
-  const taskIndexInColumn = updatedColumns[taskIndex].tasks.findIndex(
-    (t) => t.title === task.title
-  );
-  updatedColumns[taskIndexInColumn].tasks[taskIndexInColumn] = updatedTask;
-};
-```
-
 ### Continued development
 
 for this project :
