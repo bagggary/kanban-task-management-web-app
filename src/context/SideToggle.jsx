@@ -8,7 +8,7 @@ export const useSideContext = () => {
 };
 
 export const SideProvider = ({ children }) => {
-  const [side, toggle] = useToggle(false);
+  const [side, toggle] = useToggle(true);
 
   return (
     <SideContext.Provider value={{ side, toggle }}>
