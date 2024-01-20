@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "./UI/Navbar";
 import "./main.css";
 import Sidenav from "./UI/Sidenav";
@@ -8,10 +8,14 @@ import BoardTasks from "./UI/BoardTasks";
 import TaksDetails from "./UI/TaksDetails";
 import EditTask from "./UI/Forms/EditTask";
 import TaskDelete from "./UI/TaskDelete";
+import { useSideContext } from "./context/SideToggle";
+import { useDataContext } from "./context/DataContext";
+import { useIdContext } from "./context/IdContext";
 
 function App() {
-  const [side, toggle, setSide] = useToggle(true);
-  const [data, setData] = useState(boardData);
+  const { side } = useSideContext();
+  const { data, setData } = useDataContext();
+  const { id, setId } = useIdContext();
   const [selectedBoard, setSelectedBoard] = useState("");
   const [selectedId, setSelectedId] = useState(0);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -27,6 +31,8 @@ function App() {
     taskDelete: false,
     boardDelete: false,
   });
+
+  const board = id && data.filter((boardData, _) => boardData.id === id)[0];
 
   function handleActive(id) {
     setSelectedId(id);
@@ -53,39 +59,31 @@ function App() {
   return (
     <>
       <Navbar
-        openNav={side}
-        toggleNav={toggle}
-        data={data}
         handleBoard={(e) => handleActive(e.target.id)}
         selectBoard={selectedId}
         formAppear={formAppear}
         setFormAppear={setFormAppear}
-        setData={setData}
         setSelectedBoard={setSelectedId}
       />
+      {/* This is the main content where's all task and columns appear */}
       <div className="content">
         <Sidenav
           handleBoard={(e) => handleActive(e.target.id)}
-          side={side}
-          toggle={toggle}
-          data={data}
           selectBoard={selectedId}
-          formAppear={formAppear}
-          setFormAppear={setFormAppear}
-          setData={setData}
         />
         <div
           className={`main-content transition container ${
             side ? "" : "content-screen"
           }`}
         >
-          {data[selectedId].columns.map((col, index) => {
+          {board.columns.map((col, index) => {
             return (
               <BoardTasks
                 selectedBoard={selectedBoard}
                 board={col}
-                key={index}
-                id={index}
+                key={col.id}
+                id={col.id}
+                index={index}
                 formAppear={formAppear}
                 setFormAppear={setFormAppear}
                 onTaskClick={taskDetailsHandler}
