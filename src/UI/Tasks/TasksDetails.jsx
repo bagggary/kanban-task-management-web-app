@@ -5,13 +5,7 @@ import TaskDelete from "../Modal/TaskModal/TaskDelete";
 import { useDataContext } from "../../context/DataContext";
 import { useIdContext } from "../../context/IdContext";
 import { createPortal } from "react-dom";
-export default function TaksDetails({
-  task,
-  selectedBoard,
-  isOpen,
-  onClose,
-  columnId,
-}) {
+export default function TaksDetails({ task, isOpen, onClose, columnId }) {
   const [show, toggleShow] = useToggle(false);
   const [editTask, setEditTask] = useState(false);
   const [subOption, setSubOption] = useState(false);
@@ -71,9 +65,11 @@ export default function TaksDetails({
     statusColumns[colIndex].tasks = statusTasks;
     statusColumns[newStatusIndex].tasks.push(removedTask);
     setData((prev) => {
+      const currentColumnIndex =
+        data && data.findIndex((boardIndex) => boardIndex.id === id);
       let newData = [...prev];
-      newData[selectedBoard] = {
-        ...newData[selectedBoard],
+      newData[currentColumnIndex] = {
+        ...newData[currentColumnIndex],
         columns: statusColumns,
       };
       return newData;
@@ -104,34 +100,12 @@ export default function TaksDetails({
     });
   }
 
-  function handleDeleteTask() {
-    setFormAppear((prev) => {
-      return {
-        ...prev,
-        subOption: false,
-        sub: false,
-        taskDelete: true,
-      };
-    });
-  }
-
   function statusHandler(e) {
     if (currentStatus === e.target.textContent) {
       return;
     }
     updateStatus(e.target.textContent);
     setCurrentStatus(e.target.textContent);
-  }
-
-  function handleEditTask() {
-    setFormAppear((prev) => {
-      return {
-        ...prev,
-        subOption: false,
-        editTask: true,
-        sub: false,
-      };
-    });
   }
 
   return createPortal(
@@ -152,14 +126,27 @@ export default function TaksDetails({
                 subOption ? "show" : "hide"
               }`}
             >
-              <div onClick={() => setEditTask(true)}>Edit Task</div>
-              <div onClick={() => setDeleteTask(true)}>Delete Task</div>
+              <div
+                onClick={() => {
+                  setEditTask(true);
+                  onClose();
+                }}
+              >
+                Edit Task
+              </div>
+              <div
+                onClick={() => {
+                  setDeleteTask(true);
+                  onClose();
+                }}
+              >
+                Delete Task
+              </div>
             </div>
           </div>
         </div>
         <p>{task.description}</p>
         <div className="detailed-info-subtasks">
-          <h2>Subtask(2 of 3)</h2>
           <div className="detailed-info-subtasks-container">
             {task &&
               task.subtasks.map((subtask, i) => (
@@ -167,7 +154,7 @@ export default function TaksDetails({
                   <input
                     type="checkbox"
                     name="checkbox"
-                    id={`sub-${i}`}
+                    id={subtask.id}
                     onChange={() => handleSubtaskChange(i)}
                     defaultChecked={subtask.isCompleted}
                   />
@@ -206,19 +193,13 @@ export default function TaksDetails({
         </div>
         <EditTask
           task={task}
-          data={data}
           isOpen={editTask}
           onClose={() => setEditTask(false)}
-          setData={setData}
-          selectedBoard={selectedBoard}
         />
         <TaskDelete
           task={task}
-          data={data}
           isOpen={deleteTask}
           onClose={() => setDeleteTask(false)}
-          setData={setData}
-          selectedBoard={selectedBoard}
         />
       </div>
     </div>,

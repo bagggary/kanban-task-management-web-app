@@ -3,19 +3,21 @@ import Tasks from "../Tasks/Tasks";
 import { useDataContext } from "../../context/DataContext";
 import { useIdContext } from "../../context/IdContext";
 
-export default function BoardTasks({
-  board,
-  formAppear,
-  setFormAppear,
-  onTaskClick,
-  boardSubtask,
-  id,
+export default function BoardStatus({
+  column,
+  // formAppear,
+  // setFormAppear,
+  // onTaskClick,
+  // boardSubtask,
+  boardId,
 }) {
-  const [bulletColor, setBulletColor] = useState(getRandomColor(id));
+  const [bulletColor, _] = useState(getRandomColor(boardId));
   const { id } = useIdContext();
   const { data } = useDataContext();
 
-  const board = data && data.filter((dataBoard) => dataBoard.id === id)[0];
+  // const board = data && data.filter((dataBoard) => dataBoard.id === id)[0];
+
+  // const boardSub = data && data.filter((dataBoard) => dataBoard.id === id);
 
   function getRandomColor(index) {
     const colors = [
@@ -43,19 +45,17 @@ export default function BoardTasks({
             className="board-column-name-bullet"
             style={{ backgroundColor: bulletColor }}
           ></div>
-          <h3> {`${board.name.toUpperCase()} (${boardSubtask.length})`} </h3>
+          <h3> {`${column.name.toUpperCase()} (${column.tasks.length})`} </h3>
         </div>
         <div className="tasks-description">
-          {board.tasks.map((tsk, _) => {
+          {column.tasks.map((tsk, _) => {
             return (
               <Tasks
-                // task={tsk}
-                // subtask={tsk.subtasks}
+                task={tsk}
+                columnId={column.id}
+                subtasks={tsk.subtasks}
                 id={tsk.id}
                 key={tsk.id}
-                // formAppear={formAppear}
-                // setFormAppear={setFormAppear}
-                // onTaskClick={onTaskClick}
               />
             );
           })}

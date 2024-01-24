@@ -1,26 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useRef } from "react";
-import { createPortal } from "react-dom";
 
-export default function ({ setData, isOpen, onClose }) {
-  const [boardObj, setBoardObj] = useState({
-    name: "",
-    columns: [
-      { name: "", tasks: [] },
-      { name: "", tasks: [] },
-    ],
-  });
-  const [colFields, setColFields] = useState([
-    { value: "", error: "" },
-    { value: "", error: "" },
-  ]);
+export default function EditBoard({
+  data,
+  selectBoard,
+  setData,
+  isOpen,
+  onClose,
+  setFormAppear,
+}) {
+  const [dataState, setDataState] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   useEffect(() => {
-    function outsideClick(e) {
-      //   if (boardRef.current && !boardRef.current.contains(e.target)) {
-      //     onClose();
-      //   }
-      if (e.target.className === "overlay show") {
+    function outsideClick(event) {
+      if (event.target.className === "overlay show") {
         onClose();
       }
     }
@@ -30,20 +22,57 @@ export default function ({ setData, isOpen, onClose }) {
     };
   }, [onClose]);
 
-  function titleHandle(e) {
-    const { name, value } = e.target;
-    setBoardObj((prev) => {
+  useEffect(() => {
+    setDataState(data[selectBoard]);
+  }, [data]);
+
+  function removeSub(id) {
+    if (dataState.columns.length <= 2) {
+      return;
+    }
+    const newColumnsData = [...dataState.columns];
+    newColumnsData.splice(id, 1);
+    setDataState((prev) => {
       return {
         ...prev,
-        [name]: value,
+        columns: newColumnsData,
       };
     });
   }
+  function addCol() {
+    const newBoardCol = { name: "", tasks: [] };
+    setDataState((prev) => {
+      return {
+        ...prev,
+        columns: [...prev.columns, newBoardCol],
+      };
+    });
+  }
+  const handleSumbit = (e) => {
+    e.preventDefault();
+    const errors = validate();
+    if (Object.keys(errors).length === 0) {
+      setData((prev) => {
+        const newDataState = [...prev];
+        newDataState[selectBoard] = dataState;
+        return newDataState;
+      });
+      setFormAppear((prev) => {
+        return {
+          ...prev,
+          overlay: false,
+          editBoard: false,
+        };
+      });
+    } else {
+      setFormErrors(errors);
+    }
+  };
 
   const handleAddBoard = (e, index) => {
-    const columns = [...boardObj.columns];
+    const columns = [...dataState.columns];
     columns[index].name = e.target.value;
-    setBoardObj((prev) => {
+    setDataState((prev) => {
       return {
         ...prev,
         columns,
@@ -51,26 +80,13 @@ export default function ({ setData, isOpen, onClose }) {
     });
   };
 
-  const handleSumbit = (e) => {
-    e.preventDefault();
-    const errors = validate();
-    if (Object.keys(errors).length === 0) {
-      setData((prev) => {
-        return [...prev, boardObj];
-      });
-      onClose();
-    } else {
-      setFormErrors(errors);
-    }
-  };
-
   const validate = () => {
     const errors = {};
-    if (!boardObj.name) {
-      errors.name = "Can't be empty";
+    if (!dataState.name) {
+      errors.name = "can't be empty";
       errors.nameError = true;
     }
-    boardObj.columns.forEach((col, index) => {
+    dataState.columns.forEach((col, index) => {
       if (!col.name) {
         errors[`col-${index}`] = "Can't be empty";
         errors[`err-${index}`] = true;
@@ -78,52 +94,37 @@ export default function ({ setData, isOpen, onClose }) {
     });
     return errors;
   };
-
-  function revomveCol() {
-    if (colFields.length <= 2) {
-      return;
-    } else {
-      setColFields((prevState) => {
-        const updatedFields = [...prevState];
-        updatedFields.pop();
-        return [...updatedFields];
-      });
-    }
-  }
-  function addCol() {
-    const newCol = { value: "", error: "" };
-    const newBoardCol = { name: "", tasks: [] };
-    setColFields((prev) => {
-      return [...prev, newCol];
-    });
-    setBoardObj((prev) => {
+  function titleHandle(e) {
+    setDataState((prev) => {
       return {
         ...prev,
-        columns: [...prev.columns, newBoardCol],
+        name: e.target.value,
       };
     });
   }
-  return createPortal(
+
+  return (
     <div className={`overlay ${isOpen && "show"}`}>
-      <div className="add-new board transition">
-        <h1>Add New Board</h1>
+      <div className="add-new edit transition">
+        <h1>Edit Board</h1>
         <form>
-          <div className={`f-tit ${formErrors.nameError && `error`}`}>
-            <label htmlFor="title">Title</label>
+          <div className={`f-tit ${formErrors.name && `error`}`}>
+            <label htmlFor="title">BoardName</label>
             <input
               type="text"
               name="name"
               id="title"
               placeholder="e.g. Take coffee break"
+              value={dataState && dataState.name}
               onChange={titleHandle}
             />
             <p>{formErrors.name && formErrors.name}</p>
           </div>
           <div className="f-sub">
-            <label>Columns</label>
+            <label>BoardColumns</label>
             <div className="sub-styles">
-              {colFields &&
-                colFields.map((_, index) => {
+              {dataState &&
+                dataState.columns.map((col, index) => {
                   return (
                     <div
                       key={index}
@@ -136,10 +137,11 @@ export default function ({ setData, isOpen, onClose }) {
                         type="text"
                         id={index}
                         placeholder={`e.g. Col-${index + 1} `}
+                        value={col.name}
                         onChange={(e) => handleAddBoard(e, index)}
                       />
                       <svg
-                        onClick={revomveCol}
+                        onClick={(e) => removeSub(index)}
                         width="15"
                         height="15"
                         xmlns="http://www.w3.org/2000/svg"
@@ -163,13 +165,11 @@ export default function ({ setData, isOpen, onClose }) {
               + Add New Column
             </button>
           </div>
-
           <button type="button" onClick={handleSumbit}>
-            Create New Board
+            Save Changes
           </button>
         </form>
       </div>
-    </div>,
-    document.querySelector("#modal-container")
+    </div>
   );
 }

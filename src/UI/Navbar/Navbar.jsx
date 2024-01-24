@@ -2,14 +2,14 @@ import React, { useState, useRef, useEffect, useId } from "react";
 import darkLogo from "/src/assets/icons/logo-dark.svg";
 import lightLogo from "/src/assets/icons/logo-light.svg";
 import mobileLogo from "/src/assets/icons/logo-mobile.svg";
-import EditBoard from "./Forms/EditBoard";
-import AddTask from "./Forms/AddTask";
-import BoardDelete from "./BoardDelete";
-import { useTheme } from "./ThemeContext";
-import TaksDetails from "./TaksDetails";
-import { useDataContext } from "../context/DataContext";
-import { useSideContext } from "../context/SideToggle";
-import { useIdContext } from "../context/IdContext";
+import EditBoard from "../Modal/BoardModal/EditBoard";
+import AddTask from "../Modal/TaskModal/AddTask";
+import BoardDelete from "../Modal/BoardModal/BoardDelete";
+import { useTheme } from "../../context/ThemeContext";
+import TaksDetails from "../Tasks/TasksDetails";
+import { useDataContext } from "../../context/DataContext";
+import { useSideContext } from "../../context/SideToggle";
+import { useIdContext } from "../../context/IdContext";
 
 export default function Navbar({
   handleBoard,

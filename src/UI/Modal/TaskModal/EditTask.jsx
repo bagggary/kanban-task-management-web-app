@@ -1,34 +1,29 @@
-import React, { useState, useRef, useEffect } from "react";
-export default function EditTask({
-  task,
-  selectedBoard,
-  setformAppear,
-  setData,
-  data,
-  formAppear,
-}) {
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { useDataContext } from "../../../context/DataContext";
+import { useIdContext } from "../../../context/IdContext";
+export default function EditTask({ task, onClose, isOpen }) {
   const [editTask, setEditTask] = useState(task);
   const [formErrors, setFormErrors] = useState({});
   const [sub, setSub] = useState(editTask.subtasks);
-  const editRef = useRef(null);
+  const { data, setData } = useDataContext();
+  const { id } = useIdContext();
+
+  const currentColumnIndex =
+    data && data.findIndex((boardIndex) => boardIndex.id === id);
+
   useEffect(() => {
-    function outsideClick(event) {
-      if (editRef.current && !editRef.current.contains(event.target)) {
-        setformAppear((prev) => {
-          return {
-            ...prev,
-            editTask: false,
-            overlay: false,
-            subOption: false,
-          };
-        });
+    const clickOutside = (event) => {
+      if (event.target.className == "overlay show") {
+        // onClose();
+        console.log("clicked outside");
       }
-    }
-    document.addEventListener("mousedown", outsideClick);
-    return () => {
-      document.removeEventListener("mousedown", outsideClick);
+      document.addEventListener("click", clickOutside);
     };
-  }, [editRef]);
+    return () => {
+      document.removeEventListener("click", clickOutside);
+    };
+  }, [onClose]);
 
   const handleChanges = (e) => {
     e.preventDefault();
@@ -37,7 +32,7 @@ export default function EditTask({
       setData((prev) => {
         let newData = [...prev];
         prev.map((col, index) => {
-          if (selectedBoard === index) {
+          if (currentColumnIndex === index) {
             let updatedColumns = [...col.columns];
             const columnIndex = updatedColumns.findIndex(
               (col) => col.name === editTask.status
@@ -51,22 +46,15 @@ export default function EditTask({
               ...updatedColumns[columnIndex],
               tasks: editedTask,
             };
-            newData[selectedBoard] = {
-              ...prev[selectedBoard],
+            newData[currentColumnIndex] = {
+              ...prev[currentColumnIndex],
               columns: updatedColumns,
             };
           }
         });
         return newData;
       });
-      setformAppear((prev) => {
-        return {
-          ...prev,
-          editTask: false,
-          overlay: false,
-          subOption: false,
-        };
-      });
+      onClose();
     } else {
       setFormErrors(errors);
     }
@@ -139,8 +127,8 @@ export default function EditTask({
     return errors;
   };
 
-  return (
-    <div className="overlay" ref={editRef}>
+  return createPortal(
+    <div className={`overlay ${isOpen && "show"}`}>
       <div className="add-new task">
         <h1>Edit Task</h1>
         <form>
@@ -220,6 +208,7 @@ recharge the batteries a little."
           </button>
         </form>
       </div>
-    </div>
+    </div>,
+    document.querySelector("#modal-container")
   );
 }

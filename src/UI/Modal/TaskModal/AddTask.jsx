@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import useToggle from "../../hooks/useToggle";
+import useToggle from "../../../hooks/useToggle";
 import { createPortal } from "react-dom";
 
 export default function AddTask({
@@ -76,13 +76,15 @@ export default function AddTask({
   }, [onClose]);
 
   useEffect(() => {
-    setDataTasks(data[selectBoard].columns);
-    setTaskObj((prev) => {
-      return {
-        ...prev,
-        status: data[selectBoard].columns[0].name,
-      };
-    });
+    // setDataTasks(data[selectBoard].columns);
+    console.log(data[selectBoard]);
+    // setTaskObj((prev) => {
+    //   return {
+    //     ...prev,
+    //     status: data[selectBoard].columns[0].name,
+    //   };
+    // });
+    // console.log(dataTasks);
   }, []);
 
   function titleHandle(e) {

@@ -1,17 +1,19 @@
 import React from "react";
 import { useState, useRef, useEffect } from "react";
-import BoardsList from "./BoardsList";
-import AddBoard from "./Forms/AddBoard";
-import { useTheme } from "./ThemeContext";
-import { useDataContext } from "../context/DataContext";
-import useToggle from "../hooks/useToggle";
-import { useSideContext } from "../context/SideToggle";
+import BoardsList from "../Boards/BoardsList";
+import AddBoard from "../Modal/BoardModal/AddBoard";
+import { useTheme } from "../../context/ThemeContext";
+import { useDataContext } from "../../context/DataContext";
+import useToggle from "../../hooks/useToggle";
+import { useSideContext } from "../../context/SideToggle";
+import { useIdContext } from "../../context/IdContext";
 
-export default function Sidenav({ handleBoard, selectBoard }) {
+export default function Sidenav({}) {
   const { theme, toggleTheme } = useTheme();
   const [isAddBoardOpen, setIsAddBoardOpen] = useState(false);
   const { data, setData } = useDataContext();
   const { side, toggle } = useSideContext();
+  const { id, setId } = useIdContext();
   function handleToggle() {
     toggleTheme();
   }
