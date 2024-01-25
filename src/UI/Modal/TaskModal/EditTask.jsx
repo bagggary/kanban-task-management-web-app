@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useDataContext } from "../../../context/DataContext";
 import { useIdContext } from "../../../context/IdContext";
@@ -13,18 +13,17 @@ export default function EditTask({ task, onClose, isOpen }) {
     data && data.findIndex((boardIndex) => boardIndex.id === id);
 
   useEffect(() => {
-    const clickOutside = (event) => {
-      if (event.target.className == "overlay show") {
-        // onClose();
-        console.log("clicked outside");
+    const clickOutside = (e) => {
+      // if (taskEditRef.current && !taskEditRef.current.contains(event.trager)) {
+      if (e.target.className === "overlay show") {
+        onClose();
       }
-      document.addEventListener("click", clickOutside);
     };
+    document.addEventListener("click", clickOutside);
     return () => {
       document.removeEventListener("click", clickOutside);
     };
   }, [onClose]);
-
   const handleChanges = (e) => {
     e.preventDefault();
     const errors = validate();
