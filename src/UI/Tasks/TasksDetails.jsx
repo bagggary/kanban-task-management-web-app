@@ -1,19 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, Fragment } from "react";
 import useToggle from "../../hooks/useToggle";
-import EditTask from "../Modal/TaskModal/EditTask";
-import TaskDelete from "../Modal/TaskModal/TaskDelete";
 import { useDataContext } from "../../context/DataContext";
 import { useIdContext } from "../../context/IdContext";
 import { createPortal } from "react-dom";
-export default function TaksDetails({ task, isOpen, onClose, columnId }) {
+export default function TaksDetails({
+  task,
+  isOpen,
+  onClose,
+  columnId,
+  onOpenEdit,
+  onOpenDelete,
+}) {
   const [show, toggleShow] = useToggle(false);
-  const [editTask, setEditTask] = useState(false);
   const [subOption, setSubOption] = useState(false);
-  const [deleteTask, setDeleteTask] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(task.status);
   const { data, setData } = useDataContext();
   const { id } = useIdContext();
   const optionsRef = useRef(null);
+  const detailsRef = useRef(null);
 
   const board = data && data.filter((boardData) => boardData.id === id)[0];
   const currentColumn =
@@ -26,6 +30,7 @@ export default function TaksDetails({ task, isOpen, onClose, columnId }) {
         onClose();
       }
     }
+
     document.addEventListener("click", outsideClick);
     return () => {
       document.removeEventListener("click", outsideClick);
@@ -109,7 +114,7 @@ export default function TaksDetails({ task, isOpen, onClose, columnId }) {
   }
 
   return createPortal(
-    <div className={`overlay ${isOpen && "show"}`}>
+    <div className={`overlay ${isOpen && "show"}`} ref={detailsRef}>
       <div className="detailed-info">
         <div className="detailed-info-title" onClick={() => setSubOption(true)}>
           <h1>{task.title}</h1>
@@ -128,7 +133,7 @@ export default function TaksDetails({ task, isOpen, onClose, columnId }) {
             >
               <div
                 onClick={() => {
-                  setEditTask(true);
+                  onOpenEdit();
                   onClose();
                 }}
               >
@@ -136,7 +141,7 @@ export default function TaksDetails({ task, isOpen, onClose, columnId }) {
               </div>
               <div
                 onClick={() => {
-                  setDeleteTask(true);
+                  onOpenDelete();
                   onClose();
                 }}
               >
@@ -191,16 +196,6 @@ export default function TaksDetails({ task, isOpen, onClose, columnId }) {
             </div>
           </div>
         </div>
-        <EditTask
-          task={task}
-          isOpen={editTask}
-          onClose={() => setEditTask(false)}
-        />
-        <TaskDelete
-          task={task}
-          isOpen={deleteTask}
-          onClose={() => setDeleteTask(false)}
-        />
       </div>
     </div>,
     document.querySelector("#modal-container")
