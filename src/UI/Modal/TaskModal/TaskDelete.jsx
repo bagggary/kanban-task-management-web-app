@@ -3,56 +3,38 @@ import { createPortal } from "react-dom";
 import { useDataContext } from "../../../context/DataContext";
 import { useIdContext } from "../../../context/IdContext";
 
-export default function TaskDelete({ task, setFormAppear, selectedBoard }) {
+export default function TaskDelete({ task, isOpen, onClose, columnId }) {
   const { data, setData } = useDataContext();
-  const { id, setId } = useIdContext();
+  const { id } = useIdContext();
 
   const board = data && data.filter((boardData) => boardData.id === id)[0];
 
   function deleteTask() {
+    const currentBoardIndex = data.findIndex(
+      (currentBoard) => currentBoard.id === id
+    );
+    const currentColumnIndex =
+      board &&
+      board.columns.findIndex((currentColumn) => currentColumn.id === columnId);
+    const currentTaskIndex = data[currentBoardIndex].columns[
+      currentColumnIndex
+    ].tasks.findIndex((currentTask) => currentTask.id === task.id);
     const columnsFilter = [...board.columns];
-    let colIndex;
-    columnsFilter.forEach((col, index) => {
-      if (col.name === task.status) {
-        colIndex = index;
-      }
-    });
-    const taskLocation = [...columnsFilter[colIndex].tasks];
-    const taskIndex = taskLocation.findIndex((tsk) => tsk.title === task.title);
-    taskLocation.splice(taskIndex, 1);
-    columnsFilter[colIndex].tasks = taskLocation;
-
-    setData((prev) => {
-      let modifiedData = [...prev];
-      modifiedData[selectedBoard] = {
-        ...modifiedData[selectedBoard],
-        columns: columnsFilter,
-      };
-      return modifiedData;
-    });
-    setFormAppear((prev) => {
-      return {
-        ...prev,
-        overlay: false,
-        taskDelete: false,
-        subOption: false,
-      };
-    });
+    const taskLocation = [...columnsFilter[currentColumnIndex].tasks];
+    taskLocation.splice(currentTaskIndex, 1);
+    let updatedData = [...data];
+    updatedData[currentBoardIndex].columns[currentColumnIndex].tasks =
+      taskLocation;
+    setData(updatedData);
+    onClose();
   }
 
   function cancelDelete() {
-    setFormAppear((prev) => {
-      return {
-        ...prev,
-        overlay: false,
-        taskDelete: false,
-        subOption: false,
-      };
-    });
+    onClose();
   }
 
   return createPortal(
-    <div className="overlay">
+    <div className={`overlay ${isOpen && "show"}`}>
       <div className="delete board-dele">
         <h1>Delete this task?</h1>
         <p>
