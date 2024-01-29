@@ -23,7 +23,6 @@ export default function TaksDetails({
   const currentColumn =
     board &&
     board.columns.filter((boardColumn) => boardColumn.id === columnId)[0];
-
   useEffect(() => {
     function outsideClick(e) {
       if (e.target.className === "overlay show") {
@@ -58,7 +57,6 @@ export default function TaksDetails({
     });
 
     const statusTasks = [...currentColumn.tasks];
-    console.log(statusTasks);
     const statusIndex = statusTasks.findIndex(
       (stat) => stat.title === task.title
     );
@@ -69,40 +67,32 @@ export default function TaksDetails({
     );
     statusColumns[colIndex].tasks = statusTasks;
     statusColumns[newStatusIndex].tasks.push(removedTask);
-    setData((prev) => {
-      const currentColumnIndex =
-        data && data.findIndex((boardIndex) => boardIndex.id === id);
-      let newData = [...prev];
-      newData[currentColumnIndex] = {
-        ...newData[currentColumnIndex],
-        columns: statusColumns,
-      };
-      return newData;
-    });
+    const currentColumnIndex =
+      data && data.findIndex((boardIndex) => boardIndex.id === id);
+    let updatedData = [...data];
+    updatedData[currentColumnIndex] = {
+      ...updatedData[currentColumnIndex],
+      columns: statusColumns,
+    };
+    setData(updatedData);
   }
 
   function handleSubtaskChange(index) {
     const updatedTask = { ...task };
     updatedTask.subtasks[index].isCompleted =
       !updatedTask.subtasks[index].isCompleted;
-    const taskIndex = board.columns.findIndex(
-      (col) => col.name === task.status
+    const currentTaskIndex = currentColumn.tasks.findIndex(
+      (selectedTask) => selectedTask.id === task.id
     );
-    const updatedColumns = [...currentColumn];
-    const taskIndexInColumn = updatedColumns[taskIndex].tasks.findIndex(
-      (t) => t.title === task.title
-    );
-    updatedColumns[taskIndexInColumn].tasks[taskIndexInColumn] = updatedTask;
+    const currentBoardIndex =
+      data && data.findIndex((boardData) => boardData.id === id);
     const currentColumnIndex =
       data && data.findIndex((boardIndex) => boardIndex.id === id);
-    setData((prev) => {
-      let newData = [...prev];
-      newData[currentColumnIndex] = {
-        ...newData[currentColumnIndex],
-        columns: updatedColumns,
-      };
-      return newData;
-    });
+    let updatedData = [...data];
+    updatedData[currentBoardIndex].columns[currentColumnIndex].tasks[
+      currentTaskIndex
+    ] = updatedTask;
+    setData(updatedData);
   }
 
   function statusHandler(e) {
