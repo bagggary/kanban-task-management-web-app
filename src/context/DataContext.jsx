@@ -16,8 +16,7 @@ const dataReducer = (state, action) => {
   switch (type) {
     case "SET_DATA":
       return {
-        ...state,
-        jsonData: payload,
+        data: payload,
       };
     default:
       return state;
