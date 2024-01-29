@@ -2,19 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useDataContext } from "../../../context/DataContext";
 import { useIdContext } from "../../../context/IdContext";
-export default function EditTask({ task, onClose, isOpen }) {
+import { generateId } from "../../../util";
+export default function EditTask({ task, onClose, isOpen, columnId }) {
   const [editTask, setEditTask] = useState(task);
   const [formErrors, setFormErrors] = useState({});
-  const [sub, setSub] = useState(editTask.subtasks);
-  const { data, setData } = useDataContext();
+  const { jsonData, data, setData } = useDataContext();
   const { id } = useIdContext();
-
-  const currentColumnIndex =
-    data && data.findIndex((boardIndex) => boardIndex.id === id);
 
   useEffect(() => {
     const clickOutside = (e) => {
-      // if (taskEditRef.current && !taskEditRef.current.contains(event.trager)) {
       if (e.target.className === "overlay show") {
         onClose();
       }
@@ -24,35 +20,36 @@ export default function EditTask({ task, onClose, isOpen }) {
       document.removeEventListener("click", clickOutside);
     };
   }, [onClose]);
-  const handleChanges = (e) => {
-    e.preventDefault();
+
+  const handleChanges = () => {
     const errors = validate();
+    const currentBoardIndex =
+      data && data.findIndex((boardIndex) => boardIndex.id === id);
+    const currentColumnIndex =
+      data &&
+      data[currentBoardIndex].columns.findIndex(
+        (boardColumn) => boardColumn.id === columnId
+      );
+    const currentTaskIndex =
+      data &&
+      data[currentBoardIndex].columns[currentColumnIndex].tasks.findIndex(
+        (currentTask) => currentTask.id === task.id
+      );
+
     if (Object.keys(errors).length === 0) {
-      setData((prev) => {
-        let newData = [...prev];
-        prev.map((col, index) => {
-          if (currentColumnIndex === index) {
-            let updatedColumns = [...col.columns];
-            const columnIndex = updatedColumns.findIndex(
-              (col) => col.name === editTask.status
-            );
-            const editedTask = [...updatedColumns[columnIndex].tasks];
-            const taskIndex = editedTask.findIndex(
-              (tsk) => tsk.title === task.title
-            );
-            editedTask[taskIndex] = editTask;
-            updatedColumns[columnIndex] = {
-              ...updatedColumns[columnIndex],
-              tasks: editedTask,
-            };
-            newData[currentColumnIndex] = {
-              ...prev[currentColumnIndex],
-              columns: updatedColumns,
-            };
-          }
-        });
-        return newData;
-      });
+      let updatedData = [...data];
+      const currentColumns = [...data[currentBoardIndex].columns];
+      const currentTasks = [...currentColumns[currentColumnIndex].tasks];
+      currentTasks[currentTaskIndex] = editTask;
+      currentColumns[currentColumnIndex] = {
+        ...currentColumns[currentColumnIndex],
+        tasks: currentTasks,
+      };
+      updatedData[currentBoardIndex] = {
+        ...data[currentBoardIndex],
+        columns: currentColumns,
+      };
+      setData(updatedData);
       onClose();
     } else {
       setFormErrors(errors);
@@ -81,11 +78,7 @@ export default function EditTask({ task, onClose, isOpen }) {
   };
 
   function addSubTask() {
-    const newSub = { value: "", placeholder: `e.g. New Subtask ` };
-    const newSubTasks = { title: "", isCompletd: false };
-    setSub((prev) => {
-      return [...prev, newSub];
-    });
+    const newSubTasks = { id: generateId(2, 4), title: "", isCompleted: false };
     setEditTask((prev) => {
       return {
         ...prev,
@@ -95,22 +88,17 @@ export default function EditTask({ task, onClose, isOpen }) {
   }
 
   function removeSub(id) {
-    if (sub.length <= 2) {
+    if (editTask.subtasks.length <= 2) {
       return;
     }
-    const newSubtaskData = [...sub];
-    newSubtaskData.splice(id, 1);
-    const newEditedSubtaskdata = [...editTask.subtasks];
-    newEditedSubtaskdata.splice(id, 1);
     setEditTask((prev) => {
+      const subtasksData = prev.subtasks.filter((subtask) => subtask.id !== id);
       return {
         ...prev,
-        subtasks: newEditedSubtaskdata,
+        subtasks: subtasksData,
       };
     });
-    setSub(newSubtaskData);
   }
-
   const validate = () => {
     const errors = {};
     if (!editTask.title) {
@@ -156,10 +144,12 @@ recharge the batteries a little."
           <div className="f-sub">
             <label htmlFor="sub">Subtask</label>
             <div className="sub-styles task">
-              {sub &&
-                sub.map((subtsk, index) => {
+              {editTask &&
+                editTask.subtasks.map((subtsk, index) => {
                   return (
                     <div
+                      key={subtsk.id}
+                      id={subtsk.id}
                       className={`sub-${index} ${
                         formErrors[`err-${index}`] && `error`
                       }`}
@@ -167,12 +157,12 @@ recharge the batteries a little."
                       <input
                         type="text"
                         id="sub"
-                        placeholder={subtsk.placeholder && subtsk.placeholder}
+                        placeholder={`subtask - ${index + 1}`}
                         onChange={(e) => handleAddTask(e, index)}
                         value={subtsk.title}
                       />
                       <svg
-                        onClick={(e) => removeSub(index)}
+                        onClick={() => removeSub(subtsk.id)}
                         width="15"
                         height="15"
                         xmlns="http://www.w3.org/2000/svg"
