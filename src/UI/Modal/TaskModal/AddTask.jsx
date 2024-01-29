@@ -1,64 +1,53 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useId } from "react";
 import useToggle from "../../../hooks/useToggle";
 import { createPortal } from "react-dom";
+import { generateId } from "../../../util";
+import { useDataContext } from "../../../context/DataContext";
+import { useIdContext } from "../../../context/IdContext";
 
-export default function AddTask({
-  selectBoard,
-  isOpen,
-  onClose,
-  data,
-  setData,
-}) {
+export default function AddTask({ selectBoard, isOpen, onClose }) {
   const [show, toggleShow] = useToggle(false);
-  const [dataTasks, setDataTasks] = useState([]);
   const [formErrors, setFormErrors] = useState({});
-  const [status, setStatus] = useState(data[selectBoard].columns[0].name);
+  const { data, setData } = useDataContext();
+  const { id } = useIdContext();
   const [taskObj, setTaskObj] = useState({
+    id: generateId(5, 5),
     title: "",
     description: "",
-    status: status,
+    status: "",
     subtasks: [
       { id: "1323432432", title: "", isCompletd: false },
       { id: "2342342343", title: "", isCompletd: false },
     ],
   });
 
-  //   TODO : Remove the sub state and append the taskObj subtasks to the mapped subtasks
+  const board = data && data.filter((dataBoard) => dataBoard.id === id)[0];
 
-  const generateId = () => {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUWVXYZ";
-    const numbers = "123456789";
-    let id = "";
-    for (let i = 0; i < 2; i++) {
-      const twoLetters = letters.charAt(
-        Math.floor(Math.random() * letters.length)
-      );
-      id += twoLetters;
-    }
-    for (let k = 0; k < 4; k++) {
-      const fourNumbers = numbers.charAt(
-        Math.floor(Math.random() * numbers.length)
-      );
-      id += fourNumbers;
-    }
-    return id;
-  };
+  useEffect(() => {
+    setTaskObj((prev) => {
+      return {
+        ...prev,
+        status: board.columns[0].name,
+      };
+    });
+  }, []);
 
   const resetForm = () => {
     setTaskObj({
+      id: generateId(5, 5),
       title: "",
       description: "",
-      status: status,
+      status: board.columns[0].name,
       subtasks: [
-        { id: generateId(), title: "", isCompletd: false },
-        { id: generateId(), title: "", isCompletd: false },
+        { id: generateId(2, 4), title: "", isCompletd: false },
+        { id: generateId(2, 4), title: "", isCompletd: false },
       ],
     });
   };
 
   useEffect(() => {
     function outsideClick(e) {
-      // ERROR : using the ref.current to close when outside dosen't work issue related to the event listener when assing "click"
+      // ERROR : using the ref.current to close when outside dosen't work issue related to the event listener when assinging "click"
       //   if (taskRef.current && !taskRef.current.contains(e.target)) {
       //   }
       if (e.target.className === "overlay show") {
@@ -74,18 +63,6 @@ export default function AddTask({
       document.removeEventListener("click", outsideClick);
     };
   }, [onClose]);
-
-  useEffect(() => {
-    // setDataTasks(data[selectBoard].columns);
-    console.log(data[selectBoard]);
-    // setTaskObj((prev) => {
-    //   return {
-    //     ...prev,
-    //     status: data[selectBoard].columns[0].name,
-    //   };
-    // });
-    // console.log(dataTasks);
-  }, []);
 
   function titleHandle(e) {
     const { name, value } = e.target;
@@ -110,7 +87,7 @@ export default function AddTask({
   };
   // function to handle adding newSubTask
   function addSubTask() {
-    const newSubTasks = { title: "", isCompletd: false };
+    const newSubTasks = { id: generateId(2, 4), title: "", isCompletd: false };
     setTaskObj((prev) => {
       return {
         ...prev,
@@ -134,18 +111,6 @@ export default function AddTask({
     return errors;
   };
 
-  function handleStatus(e) {
-    setStatus(e.target.textContent);
-    setTaskObj((prev) => {
-      return {
-        ...prev,
-        status: status,
-      };
-    });
-  }
-
-  status;
-
   const handleStatusChange = (event) => {
     const selectedStatus = event.target.textContent;
     setTaskObj((prevTaskObj) => ({
@@ -159,26 +124,18 @@ export default function AddTask({
     e.preventDefault();
     const errors = validate();
     if (Object.keys(errors).length === 0) {
-      setData((prev) => {
-        let newData = [...prev];
-        prev.map((col, index) => {
-          if (selectBoard === index) {
-            let updatedColumns = [...col.columns];
-            const columnIndex = updatedColumns.findIndex(
-              (col) => col.name === taskObj.status
-            );
-            updatedColumns[columnIndex] = {
-              ...updatedColumns[columnIndex],
-              tasks: [...updatedColumns[columnIndex].tasks, taskObj],
-            };
-            newData[selectBoard] = {
-              ...prev[selectBoard],
-              columns: updatedColumns,
-            };
-          }
-        });
-        return newData;
-      });
+      let updatedData = [...data];
+      const currentBoardIndex = data.findIndex(
+        (currentboard) => currentboard.id === board.id
+      );
+      const currentColumnIndex = board.columns.findIndex(
+        (currentColumn) => currentColumn.name === taskObj.status
+      );
+
+      updatedData[currentBoardIndex].columns[currentColumnIndex].tasks.push(
+        taskObj
+      );
+      setData(updatedData);
       onClose();
       resetForm();
     } else {
@@ -236,6 +193,7 @@ export default function AddTask({
                   return (
                     <div
                       key={subtsk.id}
+                      id={subtsk.id}
                       className={`sub-${index} ${
                         formErrors[`err-${index}`] && `error`
                       }`}
@@ -287,10 +245,10 @@ export default function AddTask({
             </span>
             <div className={`stat-dropdown ${show ? "show" : ""} transition`}>
               <ul>
-                {dataTasks &&
-                  dataTasks.map((tsk, index) => {
+                {board &&
+                  board.columns.map((tsk, _) => {
                     return (
-                      <li key={index} id={index} onClick={handleStatusChange}>
+                      <li key={tsk.id} id={tsk.id} onClick={handleStatusChange}>
                         {tsk.name}
                       </li>
                     );
