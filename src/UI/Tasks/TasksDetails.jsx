@@ -78,20 +78,27 @@ export default function TaksDetails({
   }
 
   function handleSubtaskChange(index) {
-    const updatedTask = { ...task };
+    const updatedTask = { ...task, subtasks: [...task.subtasks] };
+
     updatedTask.subtasks[index].isCompleted =
       !updatedTask.subtasks[index].isCompleted;
-    const currentTaskIndex = currentColumn.tasks.findIndex(
+
+    const currentColumnIndex = board.columns.findIndex(
+      (column) => column.id === columnId
+    );
+    const currentTaskIndex = board.columns[currentColumnIndex].tasks.findIndex(
       (selectedTask) => selectedTask.id === task.id
     );
-    const currentBoardIndex =
-      data && data.findIndex((boardData) => boardData.id === id);
-    const currentColumnIndex =
-      data && data.findIndex((boardIndex) => boardIndex.id === id);
-    let updatedData = [...data];
+    const currentBoardIndex = data.findIndex(
+      (boardData) => boardData.id === id
+    );
+
+    let updatedData = JSON.parse(JSON.stringify(data));
+
     updatedData[currentBoardIndex].columns[currentColumnIndex].tasks[
       currentTaskIndex
     ] = updatedTask;
+
     setData(updatedData);
   }
 
