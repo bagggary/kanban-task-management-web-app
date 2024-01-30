@@ -5,7 +5,7 @@ import { generateId } from "../../../util";
 import { useDataContext } from "../../../context/DataContext";
 import { useIdContext } from "../../../context/IdContext";
 
-export default function AddTask({ selectBoard, isOpen, onClose }) {
+export default function AddTask({ isOpen, onClose }) {
   const [show, toggleShow] = useToggle(false);
   const [formErrors, setFormErrors] = useState({});
   const { data, setData } = useDataContext();
@@ -30,7 +30,7 @@ export default function AddTask({ selectBoard, isOpen, onClose }) {
         status: board.columns[0].name,
       };
     });
-  }, []);
+  }, [id]);
 
   const resetForm = () => {
     setTaskObj({

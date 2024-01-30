@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { useDataContext } from "../../../context/DataContext";
+import { useIdContext } from "../../../context/IdContext";
+import { generateId } from "../../../util";
 
-export default function EditBoard({
-  data,
-  selectBoard,
-  setData,
-  isOpen,
-  onClose,
-  setFormAppear,
-}) {
-  const [dataState, setDataState] = useState(null);
+export default function EditBoard({ isOpen, onClose }) {
   const [formErrors, setFormErrors] = useState({});
+  const { data, setData } = useDataContext();
+  const { id } = useIdContext();
+  const [editBoard, setEditBoard] = useState(null);
+  const board = data && data.filter((boardData) => boardData.id === id)[0];
+
+  useEffect(() => {
+    setEditBoard(board);
+  }, [id]);
+
   useEffect(() => {
     function outsideClick(event) {
       if (event.target.className === "overlay show") {
@@ -22,17 +27,13 @@ export default function EditBoard({
     };
   }, [onClose]);
 
-  useEffect(() => {
-    setDataState(data[selectBoard]);
-  }, [data]);
-
   function removeSub(id) {
-    if (dataState.columns.length <= 2) {
+    if (editBoard.columns.length <= 2) {
       return;
     }
-    const newColumnsData = [...dataState.columns];
+    const newColumnsData = [...editBoard.columns];
     newColumnsData.splice(id, 1);
-    setDataState((prev) => {
+    setEditBoard((prev) => {
       return {
         ...prev,
         columns: newColumnsData,
@@ -40,8 +41,8 @@ export default function EditBoard({
     });
   }
   function addCol() {
-    const newBoardCol = { name: "", tasks: [] };
-    setDataState((prev) => {
+    const newBoardCol = { id: generateId(5, 5), name: "", tasks: [] };
+    setEditBoard((prev) => {
       return {
         ...prev,
         columns: [...prev.columns, newBoardCol],
@@ -52,27 +53,21 @@ export default function EditBoard({
     e.preventDefault();
     const errors = validate();
     if (Object.keys(errors).length === 0) {
-      setData((prev) => {
-        const newDataState = [...prev];
-        newDataState[selectBoard] = dataState;
-        return newDataState;
-      });
-      setFormAppear((prev) => {
-        return {
-          ...prev,
-          overlay: false,
-          editBoard: false,
-        };
-      });
+      let updatedData = [...data];
+      const currentBoardIndex =
+        data && data.findIndex((currentBoard) => currentBoard.id === id);
+      updatedData[currentBoardIndex] = editBoard;
+      setData(updatedData);
+      onClose();
     } else {
       setFormErrors(errors);
     }
   };
 
   const handleAddBoard = (e, index) => {
-    const columns = [...dataState.columns];
+    const columns = [...editBoard.columns];
     columns[index].name = e.target.value;
-    setDataState((prev) => {
+    setEditBoard((prev) => {
       return {
         ...prev,
         columns,
@@ -82,11 +77,11 @@ export default function EditBoard({
 
   const validate = () => {
     const errors = {};
-    if (!dataState.name) {
+    if (!editBoard.name) {
       errors.name = "can't be empty";
       errors.nameError = true;
     }
-    dataState.columns.forEach((col, index) => {
+    editBoard.columns.forEach((col, index) => {
       if (!col.name) {
         errors[`col-${index}`] = "Can't be empty";
         errors[`err-${index}`] = true;
@@ -95,7 +90,7 @@ export default function EditBoard({
     return errors;
   };
   function titleHandle(e) {
-    setDataState((prev) => {
+    setEditBoard((prev) => {
       return {
         ...prev,
         name: e.target.value,
@@ -103,7 +98,7 @@ export default function EditBoard({
     });
   }
 
-  return (
+  return createPortal(
     <div className={`overlay ${isOpen && "show"}`}>
       <div className="add-new edit transition">
         <h1>Edit Board</h1>
@@ -115,7 +110,7 @@ export default function EditBoard({
               name="name"
               id="title"
               placeholder="e.g. Take coffee break"
-              value={dataState && dataState.name}
+              value={editBoard && editBoard.name}
               onChange={titleHandle}
             />
             <p>{formErrors.name && formErrors.name}</p>
@@ -123,19 +118,18 @@ export default function EditBoard({
           <div className="f-sub">
             <label>BoardColumns</label>
             <div className="sub-styles">
-              {dataState &&
-                dataState.columns.map((col, index) => {
+              {editBoard &&
+                editBoard.columns.map((col, index) => {
                   return (
                     <div
-                      key={index}
+                      key={col.id}
                       className={`sub-${index} ${
                         formErrors[`err-${index}`] && `error`
                       }`}
-                      id={index}
+                      id={col.id}
                     >
                       <input
                         type="text"
-                        id={index}
                         placeholder={`e.g. Col-${index + 1} `}
                         value={col.name}
                         onChange={(e) => handleAddBoard(e, index)}
@@ -170,6 +164,7 @@ export default function EditBoard({
           </button>
         </form>
       </div>
-    </div>
+    </div>,
+    document.querySelector("#modal-container")
   );
 }

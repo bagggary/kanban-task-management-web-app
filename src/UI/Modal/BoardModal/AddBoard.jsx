@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useDataContext } from "../../../context/DataContext";
+import { generateId } from "../../../util";
 
 export default function ({ isOpen, onClose }) {
-  const { setData } = useDataContext();
+  const { data, setData } = useDataContext();
   const [boardObj, setBoardObj] = useState({
+    id: generateId(5, 5),
     name: "",
     columns: [
-      { name: "", tasks: [] },
-      { name: "", tasks: [] },
+      { id: generateId(5, 5), name: "", tasks: [] },
+      { id: generateId(5, 5), name: "", tasks: [] },
     ],
   });
-  const [colFields, setColFields] = useState([
-    { value: "", error: "" },
-    { value: "", error: "" },
-  ]);
 
   const [formErrors, setFormErrors] = useState({});
   useEffect(() => {
     function outsideClick(e) {
       if (e.target.className === "overlay show") {
         onClose();
+        resetForm();
+        setFormErrors({});
       }
     }
     document.addEventListener("click", outsideClick);
@@ -28,6 +28,17 @@ export default function ({ isOpen, onClose }) {
       document.removeEventListener("click", outsideClick);
     };
   }, [onClose]);
+
+  const resetForm = () => {
+    setBoardObj({
+      id: generateId(5, 5),
+      name: "",
+      columns: [
+        { id: generateId(5, 5), name: "", tasks: [] },
+        { id: generateId(5, 5), name: "", tasks: [] },
+      ],
+    });
+  };
 
   function titleHandle(e) {
     const { name, value } = e.target;
@@ -54,9 +65,7 @@ export default function ({ isOpen, onClose }) {
     e.preventDefault();
     const errors = validate();
     if (Object.keys(errors).length === 0) {
-      setData((prev) => {
-        return [...prev, boardObj];
-      });
+      setData([...data, boardObj]);
       onClose();
     } else {
       setFormErrors(errors);
@@ -78,23 +87,25 @@ export default function ({ isOpen, onClose }) {
     return errors;
   };
 
-  function revomveCol() {
-    if (colFields.length <= 2) {
+  function removeCol(id) {
+    if (boardObj.columns.length <= 2) {
       return;
     } else {
-      setColFields((prevState) => {
-        const updatedFields = [...prevState];
-        updatedFields.pop();
-        return [...updatedFields];
+      const updatedFields = [...boardObj.columns];
+      const columnIndex = updatedFields.findIndex(
+        (currentColumn) => currentColumn.id === id
+      );
+      updatedFields.splice(columnIndex, 1);
+      setBoardObj((prev) => {
+        return {
+          ...prev,
+          columns: updatedFields,
+        };
       });
     }
   }
   function addCol() {
-    const newCol = { value: "", error: "" };
-    const newBoardCol = { name: "", tasks: [] };
-    setColFields((prev) => {
-      return [...prev, newCol];
-    });
+    const newBoardCol = { id: generateId(5, 5), name: "", tasks: [] };
     setBoardObj((prev) => {
       return {
         ...prev,
@@ -121,24 +132,24 @@ export default function ({ isOpen, onClose }) {
           <div className="f-sub">
             <label>Columns</label>
             <div className="sub-styles">
-              {colFields &&
-                colFields.map((_, index) => {
+              {boardObj.columns &&
+                boardObj.columns.map((column, index) => {
                   return (
                     <div
-                      key={index}
+                      key={column.id}
                       className={`sub-${index} ${
                         formErrors[`err-${index}`] && `error`
                       }`}
-                      id={index}
+                      id={column.id}
                     >
                       <input
                         type="text"
-                        id={index}
+                        id={column.id}
                         placeholder={`e.g. Col-${index + 1} `}
                         onChange={(e) => handleAddBoard(e, index)}
                       />
                       <svg
-                        onClick={revomveCol}
+                        onClick={() => removeCol(column.id)}
                         width="15"
                         height="15"
                         xmlns="http://www.w3.org/2000/svg"
