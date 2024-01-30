@@ -6,37 +6,30 @@ import EditBoard from "../Modal/BoardModal/EditBoard";
 import AddTask from "../Modal/TaskModal/AddTask";
 import BoardDelete from "../Modal/BoardModal/BoardDelete";
 import { useTheme } from "../../context/ThemeContext";
-import TaksDetails from "../Tasks/TasksDetails";
 import { useDataContext } from "../../context/DataContext";
 import { useSideContext } from "../../context/SideToggle";
 import { useIdContext } from "../../context/IdContext";
+import AddBoard from "../Modal/BoardModal/AddBoard";
 
-export default function Navbar({
-  handleBoard,
-  selectBoard,
-  formAppear,
-  setFormAppear,
-  setSelectedBoard,
-}) {
+export default function Navbar({ selectBoard, setFormAppear }) {
   const [open, setOpen] = useState(false);
   const { side, toggle } = useSideContext();
   const [addTaskOpen, setAddTaskOpen] = useState(false);
+  const [boardOpen, setBoardOpen] = useState(false);
   const [deleteTaskOpen, setDeleteTaskOpen] = useState(false);
   const [editTaskOpen, setEditTaskOpen] = useState(false);
+  const [boardOptions, setBoardOptions] = useState(false);
   const optionsRef = useRef(null);
   const { theme, toggleTheme } = useTheme();
 
-  const { data, setData } = useDataContext();
+  const { data } = useDataContext();
   const { id, setId } = useIdContext();
+  const currentBoardIndex =
+    data && data.findIndex((currentBoard) => currentBoard.id === id);
   useEffect(() => {
     function outsideClick(event) {
-      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
-        setFormAppear((prev) => {
-          return {
-            ...prev,
-            boardOptions: false,
-          };
-        });
+      if (event.target.className !== "ellipsis") {
+        setBoardOptions(false);
       }
     }
     document.addEventListener("mousedown", outsideClick);
@@ -49,59 +42,9 @@ export default function Navbar({
   }
 
   function boardHandle() {
-    setFormAppear((prev) => {
-      return {
-        ...prev,
-        board: true,
-        overlay: true,
-      };
-    });
+    setBoardOpen(true);
     setOpen(false);
   }
-  // function handleEditBoard() {
-  //   setFormAppear((prev) => {
-  //     return {
-  //       ...prev,
-  //       editBoard: true,
-  //       overlay: true,
-  //     };
-  //   });
-  // }
-  // function handleDeleteBoard() {
-  //   setFormAppear((prev) => {
-  //     return {
-  //       ...prev,
-  //       deleteBoard: true,
-  //       overlay: true,
-  //     };
-  //   });
-  // }
-  // function handleTask() {
-  //   setFormAppear((prev) => {
-  //     return {
-  //       ...prev,
-  //       task: true,
-  //       overlay: true,
-  //     };
-  //   });
-  // }
-  const HandleBoardOptions = () => {
-    setFormAppear((prev) => {
-      return {
-        ...prev,
-        boardOptions: true,
-      };
-    });
-  };
-  // function handleAddingTask() {
-  //   setFormAppear((prev) => {
-  //     return {
-  //       ...prev,
-  //       task: true,
-  //       overlay: true,
-  //     };
-  //   });
-  // }
   const handleToggle = () => {
     toggleTheme();
   };
@@ -126,11 +69,11 @@ export default function Navbar({
                   </picture>
                 </div>
                 <div className="left__larger">
-                  {data && data[selectBoard].name.toString()}
+                  {data && data[currentBoardIndex].name.toString()}
                 </div>
                 <div className="dropdown">
                   <div className="dropdown__name" onClick={handleDropdown}>
-                    {data && data[selectBoard].name.toString()}
+                    {data && data[currentBoardIndex].name.toString()}
                     <span className={`${open ? "rot" : ""}`}>
                       <svg
                         width="10"
@@ -148,7 +91,10 @@ export default function Navbar({
                   </div>
                   <div className={` dropdown__options ${open ? "open" : ""}`}>
                     <div className="dropdown__options__boards">
-                      {/* <h2> ALL BOARDS ({board.columns.length})</h2> */}
+                      <h2>
+                        {" "}
+                        ALL BOARDS ({data[currentBoardIndex].columns.length})
+                      </h2>
                       {/* move this element to seperate folder container */}
                       <ul>
                         {data &&
@@ -251,11 +197,7 @@ export default function Navbar({
                   </span>{" "}
                   Add New Task
                 </div>
-                <div
-                  onClick={HandleBoardOptions}
-                  className="ellipsis"
-                  ref={optionsRef}
-                >
+                <div onClick={() => setBoardOptions(true)} className="ellipsis">
                   <svg width="5" height="20" xmlns="http://www.w3.org/2000/svg">
                     <g fill="#828FA3" fillRule="evenodd">
                       <circle cx="2.308" cy="2.308" r="2.308" />
@@ -265,11 +207,23 @@ export default function Navbar({
                   </svg>
                   <div
                     className={`ellipsis-options ${
-                      formAppear.boardOptions ? "show" : "hide"
+                      boardOptions ? "show" : "hide"
                     }`}
                   >
-                    <div onClick={() => setEditTaskOpen(true)}>Edit Board</div>
-                    <div onClick={() => setDeleteTaskOpen(true)}>
+                    <div
+                      onClick={() => {
+                        setEditTaskOpen(true);
+                        setBoardOptions(false);
+                      }}
+                    >
+                      Edit Board
+                    </div>
+                    <div
+                      onClick={() => {
+                        setDeleteTaskOpen(true);
+                        setBoardOptions(false);
+                      }}
+                    >
                       Delete Board
                     </div>
                   </div>
@@ -288,33 +242,13 @@ export default function Navbar({
           </svg>
         </div>
       </header>
-      <EditBoard
-        selectBoard={selectBoard}
-        formAppear={formAppear}
-        isOpen={editTaskOpen}
-        onClose={() => setEditTaskOpen(false)}
-        data={data}
-        setData={setData}
-        setFormAppear={setFormAppear}
-      />
+      <EditBoard isOpen={editTaskOpen} onClose={() => setEditTaskOpen(false)} />
       <BoardDelete
-        selectBoard={selectBoard}
         isOpen={deleteTaskOpen}
         onClose={() => setDeleteTaskOpen(false)}
-        data={data}
-        setData={setData}
-        setFormAppear={setFormAppear}
-        setSelectedBoard={setSelectedBoard}
       />
-      <AddTask
-        selectBoard={selectBoard}
-        formAppear={formAppear}
-        data={data}
-        isOpen={addTaskOpen}
-        onClose={() => setAddTaskOpen(false)}
-        setData={setData}
-        setFormAppear={setFormAppear}
-      />
+      <AddTask isOpen={addTaskOpen} onClose={() => setAddTaskOpen(false)} />
+      <AddBoard isOpen={boardOpen} onClose={() => setBoardOpen(false)} />
     </>
   );
 }
