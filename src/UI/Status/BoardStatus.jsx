@@ -1,66 +1,97 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Tasks from "../Tasks/Tasks";
-import { useDataContext } from "../../context/DataContext";
-import { useIdContext } from "../../context/IdContext";
+import { useDroppable } from "@dnd-kit/core";
+import {
+  SortableContext,
+  rectSortingStrategy,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { getRandomColor } from "../../util";
+import { SortableTasks } from "../Tasks/SortableTasks";
+import { CSS } from "@dnd-kit/utilities";
 
-export default function BoardStatus({
-  column,
-  // formAppear,
-  // setFormAppear,
-  // onTaskClick,
-  // boardSubtask,
-  boardId,
-}) {
+export default function BoardStatus({ column, boardId }) {
   const [bulletColor, _] = useState(getRandomColor(boardId));
-  const { id } = useIdContext();
-  const { data } = useDataContext();
+  // const { id } = column;
+  // const { setNodeRef } = useDroppable({ id });
+  const continerRef = useRef(null);
+  const [height, setHeight] = useState(null);
 
-  // const board = data && data.filter((dataBoard) => dataBoard.id === id)[0];
+  // useEffect(() => {
+  //   setHeight(continerRef.current.offsetHeight);
+  // });
 
-  // const boardSub = data && data.filter((dataBoard) => dataBoard.id === id);
+  useEffect(() => {
+    const handleResize = () => {
+      setHeight(continerRef.current.offsetHeight);
+    };
 
-  function getRandomColor(index) {
-    const colors = [
-      "rgb(73, 196, 229)",
-      "rgb(132, 113, 242)",
-      "rgb(103, 226, 174)",
-    ];
-    if (index < colors.length) {
-      return colors[index];
-    } else {
-      const letters = "0123456789ABCDEF";
-      let color = "#";
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
+    handleResize(); // Initial height calculation
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: column.id,
+    data: {
+      type: "Column",
+      column,
+    },
+  });
+
+  const style = {
+    transition,
+    transform: CSS.Translate.toString(transform),
+  };
+
+  if (isDragging) {
+    const draggingStyles = {
+      height: height,
+    };
+    const combinedStyles = { ...style, ...draggingStyles };
+    return (
+      <div
+        className="dragging-element"
+        style={combinedStyles}
+        ref={setNodeRef}
+      ></div>
+    );
   }
 
   return (
-    <>
-      <div className="board-column">
-        <div className="board-column-name">
+    <div>
+      <div className="board-column" ref={setNodeRef} style={style}>
+        <div className="board-column-name" {...attributes} {...listeners}>
           <div
             className="board-column-name-bullet"
             style={{ backgroundColor: bulletColor }}
           ></div>
           <h3> {`${column.name.toUpperCase()} (${column.tasks.length})`} </h3>
         </div>
-        <div className="tasks-description">
-          {column.tasks.map((tsk, _) => {
-            return (
-              <Tasks
-                task={tsk}
-                columnId={column.id}
-                subtasks={tsk.subtasks}
-                id={tsk.id}
-                key={tsk.id}
-              />
-            );
-          })}
-        </div>
+        <SortableContext
+          id={column.id}
+          items={column.tasks}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="tasks-description" ref={continerRef}>
+            {column.tasks.map(({ id }) => {
+              return <SortableTasks key={id} taskId={id} />;
+            })}
+          </div>
+        </SortableContext>
       </div>
-    </>
+    </div>
   );
 }
