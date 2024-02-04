@@ -18,14 +18,12 @@ export default function Tasks({ subtasks, task, columnId }) {
   }, []);
 
   return (
-    <>
-      <div
-        className={`task-card ${isMounted ? "scale-in" : ""}`}
-        onClick={() => setDetails(true)}
-      >
-        <h3>{task.title}</h3>
-        <p>{`${completedTasks()} of ${subtasks.length} subtasks`}</p>
-      </div>
+    <div
+      className={`task-card ${isMounted ? "scale-in" : ""}`}
+      onClick={() => setDetails(true)}
+    >
+      <h3>{task.title}</h3>
+      <p>{`${completedTasks()} of ${subtasks.length} subtasks`}</p>
       <TaksDetails
         isOpen={details}
         onClose={() => setDetails(false)}
@@ -46,6 +44,6 @@ export default function Tasks({ subtasks, task, columnId }) {
         onClose={() => setTaskDelete(false)}
         columnId={columnId}
       />
-    </>
+    </div>
   );
 }
