@@ -15,14 +15,9 @@ try {
 } catch (error) {
   console.error("Error parsing localData:", error);
   initialState = {
-    data: Data, // Provide a default value in case of parsing error
+    data: Data,
   };
 }
-
-// const localData = localStorage.getItem("kanbanTasks");
-// const initialState = {
-//   data: localData ? JSON.parse(localData) : Data,
-// };
 
 const dataReducer = (state, action) => {
   const { type, payload } = action;
@@ -42,6 +37,17 @@ export const DataProvider = ({ children }) => {
   const setData = (data) => {
     dispatch({ type: "SET_DATA", payload: data });
   };
+
+  useEffect(() => {
+    try {
+      const storedData = localStorage.getItem("kanbanTasks");
+      if (!storedData) {
+        localStorage.setItem("kanbanTasks", JSON.stringify(state.data));
+      }
+    } catch (error) {
+      console.error("Error setting initial data in localStorage:", error);
+    }
+  }, []);
 
   useEffect(() => {
     try {
