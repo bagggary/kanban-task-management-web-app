@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Tasks from "../Tasks/Tasks";
 import { useDroppable } from "@dnd-kit/core";
 import {
@@ -18,16 +18,16 @@ export default function BoardStatus({ column, boardId }) {
   const continerRef = useRef(null);
   const [height, setHeight] = useState(null);
 
-  // useEffect(() => {
-  //   setHeight(continerRef.current.offsetHeight);
-  // });
+  const tasksId = useMemo(() => {
+    return column.tasks.map((task) => task.id);
+  }, [column.tasks]);
 
   useEffect(() => {
     const handleResize = () => {
       setHeight(continerRef.current.offsetHeight);
     };
 
-    handleResize(); // Initial height calculation
+    handleResize();
 
     window.addEventListener("resize", handleResize);
 
@@ -80,14 +80,10 @@ export default function BoardStatus({ column, boardId }) {
           ></div>
           <h3> {`${column.name.toUpperCase()} (${column.tasks.length})`} </h3>
         </div>
-        <SortableContext
-          id={column.id}
-          items={column.tasks}
-          strategy={verticalListSortingStrategy}
-        >
+        <SortableContext items={tasksId}>
           <div className="tasks-description" ref={continerRef}>
-            {column.tasks.map(({ id }) => {
-              return <SortableTasks key={id} taskId={id} />;
+            {column.tasks.map((task) => {
+              return <SortableTasks taskId={task.id} />;
             })}
           </div>
         </SortableContext>
