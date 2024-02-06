@@ -121,8 +121,10 @@
     }
     p {
       font-weight: 700;
-      font-size: clamp(10px, 5vw, 14px);
+      font-size: clamp(12px, 5vw, 16px);
       line-height: 15px;
+      text-align: center;
+      line-height: 1.5rem;
       color: var(--font-color);
     }
   }

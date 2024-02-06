@@ -146,20 +146,19 @@ nav {
   left: 0px;
   bottom: 32px;
   background-color: #635fc7;
-  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 0 rem(100) rem(100) 0;
   z-index: 10;
   cursor: pointer;
+  @include breakpoint-down(xsmall) {
+    display: none;
+  }
   svg {
     fill: white;
   }
   &:hover {
     background-color: var(--secondary-color);
-  }
-  @include breakpoint-down(xsmall) {
-    display: none;
   }
 }
 
