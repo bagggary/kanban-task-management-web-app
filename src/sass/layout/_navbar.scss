@@ -70,29 +70,6 @@ nav {
         }
       }
     }
-    .add-task-larger {
-      width: rem(164);
-      height: rem(48);
-      border-radius: rem(24);
-      color: white;
-      font-weight: 700;
-      font-size: 15px;
-      line-height: 19px;
-      background-color: #635fc7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      &:hover {
-        background-color: var(--secondary-color);
-      }
-      @include breakpoint(small) {
-        margin-right: rem(24);
-      }
-      @include breakpoint-down(xsmall) {
-        display: none;
-      }
-    }
   }
   .dropdown__name {
     color: var(--font-color);
@@ -184,4 +161,61 @@ nav {
   @include breakpoint-down(xsmall) {
     display: none;
   }
+}
+
+.add-task-larger {
+  width: rem(164);
+  height: rem(48);
+  border-radius: rem(24);
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 19px;
+  background-color: #635fc7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--secondary-color);
+  }
+  @include breakpoint(small) {
+    margin-right: rem(24);
+  }
+  @include breakpoint-down(xsmall) {
+    display: none;
+  }
+}
+
+.create-new-board {
+  width: rem(180);
+  height: rem(52);
+  border-radius: rem(24);
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 19px;
+  background-color: #635fc7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 3px;
+  &:hover {
+    background-color: var(--secondary-color);
+  }
+}
+
+.board-selection {
+  display: flex;
+  flex-direction: column;
+  gap: rem(20);
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - rem(101.28));
+}
+
+.disable {
+  cursor: not-allowed;
+  pointer-events: none;
 }

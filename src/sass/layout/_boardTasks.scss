@@ -34,6 +34,13 @@
     }
   }
 }
+.task-transition {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.task-transition.dragging {
+  transform: scale(1.1);
+}
+
 .board-column {
   display: flex;
   flex-direction: column;
@@ -59,7 +66,7 @@
 .dragging-task {
   cursor: drag;
   width: rem(280);
-  height: rem(150);
+  height: rem(100);
   background-color: var(--bg-card);
   border: 2px solid var(--primary-color);
   border-radius: 8px;
@@ -75,7 +82,8 @@
 .task-card {
   cursor: pointer;
   width: rem(280);
-  height: rem(150);
+  min-height: rem(100);
+  height: auto;
   background-color: var(--bg-card);
   box-shadow: 0px 4px 6px rgba(54, 78, 126, 0.101545);
   border-radius: 8px;
@@ -100,7 +108,7 @@
 
 .dragging-element {
   width: rem(280);
-  min-height: 100px;
+  min-height: rem(100);
   background-color: var(--linargradient);
   opacity: 0.7;
   border-radius: 5px;

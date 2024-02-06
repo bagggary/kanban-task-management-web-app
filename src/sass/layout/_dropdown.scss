@@ -103,3 +103,27 @@
     }
   }
 }
+
+.board-content {
+  overflow: hidden;
+  width: 100%;
+  .board-selection {
+    width: 100vw;
+    transform: translateX(180px);
+    @include breakpoint-down(medium) {
+      transform: translateX(260px);
+    }
+    @include breakpoint-down(small) {
+      transform: translateX(0px);
+    }
+    &.content-screen {
+      transform: translateX(0);
+    }
+    p {
+      font-weight: 700;
+      font-size: clamp(10px, 5vw, 14px);
+      line-height: 15px;
+      color: var(--font-color);
+    }
+  }
+}
