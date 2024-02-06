@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useId } from "react";
+import React, { useState, useEffect } from "react";
 import useToggle from "../../../hooks/useToggle";
 import { createPortal } from "react-dom";
 import { generateId } from "../../../util";
@@ -21,9 +21,13 @@ export default function AddTask({ isOpen, onClose }) {
     ],
   });
 
-  const board = data && data.filter((dataBoard) => dataBoard.id === id)[0];
+  const board =
+    id && data && data.filter((dataBoard) => dataBoard.id === id)[0];
 
   useEffect(() => {
+    if (!id) {
+      return;
+    }
     setTaskObj((prev) => {
       return {
         ...prev,
