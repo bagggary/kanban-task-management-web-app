@@ -8,12 +8,11 @@ import useToggle from "../../hooks/useToggle";
 import { useSideContext } from "../../context/SideToggle";
 import { useIdContext } from "../../context/IdContext";
 
-export default function Sidenav({}) {
+export default function Sidenav() {
   const { theme, toggleTheme } = useTheme();
   const [isAddBoardOpen, setIsAddBoardOpen] = useState(false);
-  const { data, setData } = useDataContext();
+  const { data } = useDataContext();
   const { side, toggle } = useSideContext();
-  const { id, setId } = useIdContext();
   function handleToggle() {
     toggleTheme();
   }
