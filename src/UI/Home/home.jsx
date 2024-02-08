@@ -15,29 +15,43 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { SortableTasks } from "../Tasks/SortableTasks";
 import { createPortal } from "react-dom";
+import EmptyId from "../empty/emptyId";
 
 function Home() {
   const { side } = useSideContext();
   const { data, setData } = useDataContext();
   const { id } = useIdContext();
   const [editColumn, setEditColumn] = useState(false);
-  const board = data.filter((boardData) => boardData.id === id)[0];
   const [activeTask, setActiveTask] = useState(null);
   const [activeColumn, setActiveColumn] = useState(null);
-  const [updateData, setUpdateData] = useState(data);
+  const [updateData, setUpdateData] = useState(null);
 
-  const columnId = useMemo(
-    () => board.columns.map((col) => col.id),
-    [board.columns]
-  );
+  useEffect(() => {
+    if (updateData !== null) {
+      setData(updateData);
+    }
+    return;
+  }, [updateData]);
+  const board = id && data.filter((boardData) => boardData.id === id)[0];
 
-  const sensors = useSensors(
+  const columnId = useMemo(() => {
+    if (!board) {
+      return [];
+    }
+    return board.columns.map((col) => col.id);
+  }, [board]);
+
+  let sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 10,
       },
     })
   );
+
+  if (!id) {
+    return <EmptyId />;
+  }
 
   const handleDragStart = (e) => {
     if (e.active.data.current.type === "Column") {
@@ -46,6 +60,12 @@ function Home() {
 
     if (e.active.data.current.type === "Task") {
       setActiveTask(e.active.data.current.task);
+    }
+
+    if (updateData === null) {
+      setUpdateData(data);
+    } else {
+      return;
     }
   };
 
@@ -56,12 +76,6 @@ function Home() {
       return moveTaskAndUpdateData(prev, active, over);
     });
   };
-
-  useEffect(() => {
-    if (updateData !== null) {
-      setData(updateData);
-    }
-  }, [updateData]);
 
   const moveTaskAndUpdateData = (prevData, active, over) => {
     if (!over) return prevData;
@@ -231,7 +245,7 @@ function Home() {
   return (
     <>
       <div className="content">
-        <Sidenav handleBoard={(e) => handleActive(e.target.id)} />
+        <Sidenav />
         <DndContext
           sensors={sensors}
           onDragStart={handleDragStart}

@@ -14,7 +14,7 @@ export default function EmptyId() {
           side ? "" : "content-screen"
         }`}
       >
-        <p>No current board selected , Select board or create new one </p>
+        <p>No current board selected. Select board or Create new one </p>
         <div className="create-new-board" onClick={() => setCreateBoard(true)}>
           <span>
             <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
