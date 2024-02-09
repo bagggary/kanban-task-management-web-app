@@ -3,14 +3,16 @@ import { useIdContext } from "../../context/IdContext";
 import { useDataContext } from "../../context/DataContext";
 
 export default function BoardsList({ boardId }) {
-  const { data, setData } = useDataContext();
+  const { data } = useDataContext();
   const { id, setId } = useIdContext();
 
-  const board =
-    id && data.filter((boardData, _) => boardData.id === boardId)[0];
+  const board = id
+    ? data.filter((boardData, _) => boardData.id === boardId)[0]
+    : data.filter((currentBoardIndex) => currentBoardIndex.id === boardId)[0];
+
   return (
     <li
-      className={` transition ${board.id === id ? "active" : ""}`}
+      className={` transition ${id && (board.id === id ? "active" : "")}`}
       onClick={() => setId(boardId)}
       id={boardId}
     >
