@@ -11,7 +11,7 @@ import { useSideContext } from "../../context/SideToggle";
 import { useIdContext } from "../../context/IdContext";
 import AddBoard from "../Modal/BoardModal/AddBoard";
 
-export default function Navbar({ selectBoard, setFormAppear }) {
+export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { side, toggle } = useSideContext();
   const [addTaskOpen, setAddTaskOpen] = useState(false);
@@ -24,8 +24,9 @@ export default function Navbar({ selectBoard, setFormAppear }) {
 
   const { data } = useDataContext();
   const { id, setId } = useIdContext();
-  const currentBoardIndex =
-    data && data.findIndex((currentBoard) => currentBoard.id === id);
+  const currentBoardIndex = id
+    ? data && data.findIndex((currentBoard) => currentBoard.id === id)
+    : 0;
   useEffect(() => {
     function outsideClick(event) {
       if (event.target.className !== "ellipsis") {
@@ -69,11 +70,11 @@ export default function Navbar({ selectBoard, setFormAppear }) {
                   </picture>
                 </div>
                 <div className="left__larger">
-                  {data && data[currentBoardIndex].name.toString()}
+                  {id ? data[currentBoardIndex].name.toString() : ""}
                 </div>
                 <div className="dropdown">
                   <div className="dropdown__name" onClick={handleDropdown}>
-                    {data && data[currentBoardIndex].name.toString()}
+                    {id ? data[currentBoardIndex].name.toString() : ""}
                     <span className={`${open ? "rot" : ""}`}>
                       <svg
                         width="10"
@@ -93,7 +94,8 @@ export default function Navbar({ selectBoard, setFormAppear }) {
                     <div className="dropdown__options__boards">
                       <h2>
                         {" "}
-                        ALL BOARDS ({data[currentBoardIndex].columns.length})
+                        ALL BOARDS ({" "}
+                        {id ? data[currentBoardIndex].columns.length : ""})
                       </h2>
                       {/* move this element to seperate folder container */}
                       <ul>
@@ -116,7 +118,7 @@ export default function Navbar({ selectBoard, setFormAppear }) {
                                 >
                                   <path d="M0 2.889A2.889 2.889 0 0 1 2.889 0H13.11A2.889 2.889 0 0 1 16 2.889V13.11A2.888 2.888 0 0 1 13.111 16H2.89A2.889 2.889 0 0 1 0 13.111V2.89Zm1.333 5.555v4.667c0 .859.697 1.556 1.556 1.556h6.889V8.444H1.333Zm8.445-1.333V1.333h-6.89A1.556 1.556 0 0 0 1.334 2.89V7.11h8.445Zm4.889-1.333H11.11v4.444h3.556V5.778Zm0 5.778H11.11v3.11h2a1.556 1.556 0 0 0 1.556-1.555v-1.555Zm0-7.112V2.89a1.555 1.555 0 0 0-1.556-1.556h-2v3.111h3.556Z" />
                                 </svg>
-                                <div>{board.name}</div>
+                                <div>{id && board.name}</div>
                               </li>
                             );
                           })}
@@ -166,8 +168,11 @@ export default function Navbar({ selectBoard, setFormAppear }) {
                   </div>
                 </div>
               </div>
-              <div className="right">
-                <div className="add-task" onClick={() => setAddTaskOpen(true)}>
+              <div className="right ">
+                <div
+                  className={`add-task ${!id && "disable"}`}
+                  onClick={() => setAddTaskOpen(true)}
+                >
                   <svg
                     width="12"
                     height="12"
@@ -180,7 +185,7 @@ export default function Navbar({ selectBoard, setFormAppear }) {
                   </svg>
                 </div>
                 <div
-                  className="add-task-larger"
+                  className={`add-task-larger ${!id && "disable"}`}
                   onClick={() => setAddTaskOpen(true)}
                 >
                   <span>
@@ -211,6 +216,7 @@ export default function Navbar({ selectBoard, setFormAppear }) {
                     }`}
                   >
                     <div
+                      className={`${!id && "disable"}`}
                       onClick={() => {
                         setEditTaskOpen(true);
                         setBoardOptions(false);
@@ -219,6 +225,7 @@ export default function Navbar({ selectBoard, setFormAppear }) {
                       Edit Board
                     </div>
                     <div
+                      className={`${!id && "disable"}`}
                       onClick={() => {
                         setDeleteTaskOpen(true);
                         setBoardOptions(false);
