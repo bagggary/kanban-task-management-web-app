@@ -8,6 +8,7 @@ import EditBoard from "../Modal/BoardModal/EditBoard";
 import {
   DndContext,
   DragOverlay,
+  DragStartEvent,
   PointerSensor,
   useSensor,
   useSensors,
@@ -16,6 +17,7 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { SortableTasks } from "../Tasks/SortableTasks";
 import { createPortal } from "react-dom";
 import EmptyId from "../empty/emptyId";
+import { Columns } from "../../types";
 
 function Home() {
   const { side } = useSideContext();
@@ -53,12 +55,12 @@ function Home() {
     return <EmptyId />;
   }
 
-  const handleDragStart = (e) => {
-    if (e.active.data.current.type === "Column") {
+  const handleDragStart = (e: DragStartEvent) => {
+    if (e.active?.data?.current?.type === "Column") {
       setActiveColumn(e.active.data.current.column);
     }
 
-    if (e.active.data.current.type === "Task") {
+    if (e.active?.data?.current?.type === "Task") {
       setActiveTask(e.active.data.current.task);
     }
 
@@ -258,9 +260,11 @@ function Home() {
             }`}
           >
             <SortableContext items={columnId}>
-              {board.columns.map((col, _) => (
-                <BoardStatus key={col.id} boardId={col.id} column={col} />
-              ))}
+              {board
+                ? board?.columns.map((col: Columns) => (
+                    <BoardStatus key={col.id} boardId={col.id} column={col} />
+                  ))
+                : ""}
             </SortableContext>
             <div className="new-column" onClick={() => setEditColumn(true)}>
               <p>+ New Column</p>

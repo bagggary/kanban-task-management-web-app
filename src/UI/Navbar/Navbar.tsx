@@ -1,35 +1,37 @@
-import React, { useState, useRef, useEffect, useId } from "react";
+import React, { useState, useRef, useEffect, MouseEventHandler } from "react";
 import darkLogo from "/src/assets/icons/logo-dark.svg";
 import lightLogo from "/src/assets/icons/logo-light.svg";
 import mobileLogo from "/src/assets/icons/logo-mobile.svg";
 import EditBoard from "../Modal/BoardModal/EditBoard";
-import AddTask from "../Modal/TaskModal/AddTask";
-import BoardDelete from "../Modal/BoardModal/BoardDelete";
-import { useTheme } from "../../context/ThemeContext";
 import { useDataContext } from "../../context/DataContext";
+import AddBoard from "../Modal/BoardModal/AddBoard";
+import { Boards } from "../../types";
+import AddTask from "../Modal/TaskModal/AddTask";
+import { useTheme } from "../../context/ThemeContext";
 import { useSideContext } from "../../context/SideToggle";
 import { useIdContext } from "../../context/IdContext";
-import AddBoard from "../Modal/BoardModal/AddBoard";
+import BoardDelete from "../Modal/BoardModal/BoardDelete";
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const { side, toggle } = useSideContext();
-  const [addTaskOpen, setAddTaskOpen] = useState(false);
-  const [boardOpen, setBoardOpen] = useState(false);
-  const [deleteTaskOpen, setDeleteTaskOpen] = useState(false);
-  const [editTaskOpen, setEditTaskOpen] = useState(false);
-  const [boardOptions, setBoardOptions] = useState(false);
-  const optionsRef = useRef(null);
+  const [addTaskOpen, setAddTaskOpen] = useState<boolean>(false);
+  const [boardOpen, setBoardOpen] = useState<boolean>(false);
+  const [deleteTaskOpen, setDeleteTaskOpen] = useState<boolean>(false);
+  const [editTaskOpen, setEditTaskOpen] = useState<boolean>(false);
+  const [boardOptions, setBoardOptions] = useState<boolean>(false);
+  const optionsRef = useRef<HTMLDivElement | null>(null);
   const { theme, toggleTheme } = useTheme();
 
   const { data } = useDataContext();
   const { id, setId } = useIdContext();
   const currentBoardIndex = id
-    ? data && data.findIndex((currentBoard) => currentBoard.id === id)
+    ? data && data.findIndex((currentBoard: Boards) => currentBoard?.id === id)
     : 0;
   useEffect(() => {
-    function outsideClick(event) {
-      if (event.target.className !== "ellipsis") {
+    function outsideClick(event: MouseEvent) {
+      const target = event.target as HTMLTextAreaElement;
+      if (target.className !== "ellipsis") {
         setBoardOptions(false);
       }
     }
@@ -38,15 +40,16 @@ export default function Navbar() {
       document.removeEventListener("mousedown", outsideClick);
     };
   }, [optionsRef]);
+
   function handleDropdown() {
     setOpen((prev) => !prev);
   }
 
-  function boardHandle() {
+  function boardHandle(): void {
     setBoardOpen(true);
     setOpen(false);
   }
-  const handleToggle = () => {
+  const handleToggle = (): void => {
     toggleTheme();
   };
   return (
@@ -100,9 +103,9 @@ export default function Navbar() {
                       {/* move this element to seperate folder container */}
                       <ul>
                         {data &&
-                          data.map((element, _) => {
+                          data.map((element: Boards) => {
                             const board = data.filter(
-                              (boardData, _) => boardData.id === element.id
+                              (boardData: Boards) => boardData.id === element.id
                             )[0];
                             return (
                               <li

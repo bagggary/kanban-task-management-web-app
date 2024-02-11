@@ -1,12 +1,10 @@
 import React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import BoardsList from "../Boards/BoardsList";
 import AddBoard from "../Modal/BoardModal/AddBoard";
 import { useTheme } from "../../context/ThemeContext";
 import { useDataContext } from "../../context/DataContext";
-import useToggle from "../../hooks/useToggle";
 import { useSideContext } from "../../context/SideToggle";
-import { useIdContext } from "../../context/IdContext";
 
 export default function Sidenav() {
   const { theme, toggleTheme } = useTheme();

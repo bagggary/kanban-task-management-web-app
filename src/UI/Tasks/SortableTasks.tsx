@@ -4,7 +4,7 @@ import { useIdContext } from "../../context/IdContext";
 import Tasks from "./Tasks";
 import { useSortable } from "@dnd-kit/sortable";
 
-export function SortableTasks({ taskId }) {
+export function SortableTasks({ taskId }: { taskId: string }) {
   const { data } = useDataContext();
   const { id } = useIdContext();
   const board =
@@ -13,7 +13,7 @@ export function SortableTasks({ taskId }) {
   const column = board.columns.find((currentColumn) =>
     currentColumn.tasks.some((task) => task.id === taskId)
   );
-  const task = column.tasks.filter(
+  const task = column?.tasks.filter(
     (currentTask) => currentTask.id === taskId
   )[0];
 
@@ -46,8 +46,8 @@ export function SortableTasks({ taskId }) {
       <div style={style} ref={setNodeRef} {...listeners} {...attributes}>
         <Tasks
           task={task}
-          columnId={column.id}
-          subtasks={task.subtasks}
+          columnId={column?.id}
+          subtasks={task?.subtasks}
           key={taskId}
         />
       </div>

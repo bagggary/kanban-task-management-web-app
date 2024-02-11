@@ -1,24 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { createPortal } from "react-dom";
 import { useDataContext } from "../../../context/DataContext";
-import { useIdContext } from "../../../context/IdContext";
 import { generateId } from "../../../util";
+import { Errors, ModalProps } from "../../../types";
 
-export default function EditBoard({ isOpen, onClose }) {
-  const [formErrors, setFormErrors] = useState({});
+export default function ({ isOpen, onClose }: ModalProps) {
   const { data, setData } = useDataContext();
-  const { id } = useIdContext();
-  const [editBoard, setEditBoard] = useState(null);
-  const board = data && data.filter((boardData) => boardData.id === id)[0];
+  const [boardObj, setBoardObj] = useState({
+    id: generateId(5, 5),
+    name: "",
+    columns: [
+      { id: generateId(5, 5), name: "", tasks: [] },
+      { id: generateId(5, 5), name: "", tasks: [] },
+    ],
+  });
 
+  const [formErrors, setFormErrors] = useState<Errors>({});
   useEffect(() => {
-    setEditBoard(board);
-  }, [id]);
-
-  useEffect(() => {
-    function outsideClick(event) {
-      if (event.target.className === "overlay show") {
+    function outsideClick(e: MouseEvent) {
+      const target = e.target as HTMLTextAreaElement;
+      if (target.className === "overlay show") {
         onClose();
+        resetForm();
+        setFormErrors({});
       }
     }
     document.addEventListener("click", outsideClick);
@@ -27,47 +31,31 @@ export default function EditBoard({ isOpen, onClose }) {
     };
   }, [onClose]);
 
-  function removeSub(id) {
-    if (editBoard.columns.length <= 2) {
-      return;
-    }
-    const newColumnsData = [...editBoard.columns];
-    newColumnsData.splice(id, 1);
-    setEditBoard((prev) => {
-      return {
-        ...prev,
-        columns: newColumnsData,
-      };
+  const resetForm = () => {
+    setBoardObj({
+      id: generateId(5, 5),
+      name: "",
+      columns: [
+        { id: generateId(5, 5), name: "", tasks: [] },
+        { id: generateId(5, 5), name: "", tasks: [] },
+      ],
     });
-  }
-  function addCol() {
-    const newBoardCol = { id: generateId(5, 5), name: "", tasks: [] };
-    setEditBoard((prev) => {
-      return {
-        ...prev,
-        columns: [...prev.columns, newBoardCol],
-      };
-    });
-  }
-  const handleSumbit = (e) => {
-    e.preventDefault();
-    const errors = validate();
-    if (Object.keys(errors).length === 0) {
-      let updatedData = [...data];
-      const currentBoardIndex =
-        data && data.findIndex((currentBoard) => currentBoard.id === id);
-      updatedData[currentBoardIndex] = editBoard;
-      setData(updatedData);
-      onClose();
-    } else {
-      setFormErrors(errors);
-    }
   };
 
-  const handleAddBoard = (e, index) => {
-    const columns = [...editBoard.columns];
+  function titleHandle(e: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setBoardObj((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  }
+
+  const handleAddBoard = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const columns = [...boardObj.columns];
     columns[index].name = e.target.value;
-    setEditBoard((prev) => {
+    setBoardObj((prev) => {
       return {
         ...prev,
         columns,
@@ -75,13 +63,23 @@ export default function EditBoard({ isOpen, onClose }) {
     });
   };
 
+  const handleSumbit = () => {
+    const errors = validate();
+    if (Object.keys(errors).length === 0) {
+      setData([...data, boardObj]);
+      onClose();
+    } else {
+      setFormErrors(errors);
+    }
+  };
+
   const validate = () => {
-    const errors = {};
-    if (!editBoard.name) {
-      errors.name = "can't be empty";
+    const errors: Errors = {};
+    if (!boardObj.name) {
+      errors.name = "Can't be empty";
       errors.nameError = true;
     }
-    editBoard.columns.forEach((col, index) => {
+    boardObj.columns.forEach((col, index) => {
       if (!col.name) {
         errors[`col-${index}`] = "Can't be empty";
         errors[`err-${index}`] = true;
@@ -89,53 +87,70 @@ export default function EditBoard({ isOpen, onClose }) {
     });
     return errors;
   };
-  function titleHandle(e) {
-    setEditBoard((prev) => {
+
+  function removeCol(id: string) {
+    if (boardObj.columns.length <= 2) {
+      return;
+    } else {
+      const updatedFields = [...boardObj.columns];
+      const columnIndex = updatedFields.findIndex(
+        (currentColumn) => currentColumn.id === id
+      );
+      updatedFields.splice(columnIndex, 1);
+      setBoardObj((prev) => {
+        return {
+          ...prev,
+          columns: updatedFields,
+        };
+      });
+    }
+  }
+  function addCol() {
+    const newBoardCol = { id: generateId(5, 5), name: "", tasks: [] };
+    setBoardObj((prev) => {
       return {
         ...prev,
-        name: e.target.value,
+        columns: [...prev.columns, newBoardCol],
       };
     });
   }
-
   return createPortal(
     <div className={`overlay ${isOpen && "show"}`}>
-      <div className="add-new edit transition">
-        <h1>Edit Board</h1>
+      <div className="add-new board transition">
+        <h1>Add New Board</h1>
         <form>
-          <div className={`f-tit ${formErrors.name && `error`}`}>
-            <label htmlFor="title">BoardName</label>
+          <div className={`f-tit ${formErrors.nameError && `error`}`}>
+            <label htmlFor="title">Title</label>
             <input
               type="text"
               name="name"
               id="title"
               placeholder="e.g. Take coffee break"
-              value={editBoard && editBoard.name}
               onChange={titleHandle}
             />
             <p>{formErrors.name && formErrors.name}</p>
           </div>
           <div className="f-sub">
-            <label>BoardColumns</label>
+            <label>Columns</label>
             <div className="sub-styles">
-              {editBoard &&
-                editBoard.columns.map((col, index) => {
+              {boardObj.columns &&
+                boardObj.columns.map((column, index) => {
                   return (
                     <div
-                      key={col.id}
+                      key={column.id}
                       className={`sub-${index} ${
                         formErrors[`err-${index}`] && `error`
                       }`}
-                      id={col.id}
+                      id={column.id}
                     >
                       <input
                         type="text"
+                        id={column.id}
                         placeholder={`e.g. Col-${index + 1} `}
-                        value={col.name}
                         onChange={(e) => handleAddBoard(e, index)}
                       />
                       <svg
-                        onClick={(e) => removeSub(index)}
+                        onClick={() => removeCol(column.id)}
                         width="15"
                         height="15"
                         xmlns="http://www.w3.org/2000/svg"
@@ -159,12 +174,13 @@ export default function EditBoard({ isOpen, onClose }) {
               + Add New Column
             </button>
           </div>
+
           <button type="button" onClick={handleSumbit}>
-            Save Changes
+            Create New Board
           </button>
         </form>
       </div>
     </div>,
-    document.querySelector("#modal-container")
+    document.querySelector("#modal-container") || document.body
   );
 }

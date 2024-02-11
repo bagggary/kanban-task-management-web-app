@@ -1,22 +1,22 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import Tasks from "../Tasks/Tasks";
-import { useDroppable } from "@dnd-kit/core";
-import {
-  SortableContext,
-  rectSortingStrategy,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { getRandomColor } from "../../util";
 import { SortableTasks } from "../Tasks/SortableTasks";
 import { CSS } from "@dnd-kit/utilities";
+import { Columns } from "../../types";
 
-export default function BoardStatus({ column, boardId }) {
-  const [bulletColor, _] = useState(getRandomColor(boardId));
+export default function BoardStatus({
+  column,
+  boardId,
+}: {
+  column: Columns;
+  boardId: string;
+}) {
+  // const [bulletColor, _] = useState(getRandomColor(boardId));
   // const { id } = column;
   // const { setNodeRef } = useDroppable({ id });
-  const continerRef = useRef(null);
-  const [height, setHeight] = useState(null);
+  const continerRef = useRef<HTMLDivElement | null>(null);
+  const [height, setHeight] = useState<number | null>(null);
 
   const tasksId = useMemo(() => {
     return column.tasks.map((task) => task.id);
@@ -24,7 +24,12 @@ export default function BoardStatus({ column, boardId }) {
 
   useEffect(() => {
     const handleResize = () => {
-      setHeight(continerRef.current.offsetHeight);
+      if (
+        continerRef.current &&
+        continerRef.current.offsetHeight !== undefined
+      ) {
+        setHeight(continerRef.current?.offsetHeight);
+      }
     };
 
     handleResize();
@@ -34,7 +39,7 @@ export default function BoardStatus({ column, boardId }) {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [continerRef]);
 
   const {
     setNodeRef,
@@ -58,7 +63,7 @@ export default function BoardStatus({ column, boardId }) {
 
   if (isDragging) {
     const draggingStyles = {
-      height: height,
+      height: height ? height?.toString() : "auto",
     };
     const combinedStyles = { ...style, ...draggingStyles };
     return (
@@ -76,7 +81,7 @@ export default function BoardStatus({ column, boardId }) {
         <div className="board-column-name" {...attributes} {...listeners}>
           <div
             className="board-column-name-bullet"
-            style={{ backgroundColor: bulletColor }}
+            style={{ backgroundColor: "green" }}
           ></div>
           <h3> {`${column.name.toUpperCase()} (${column.tasks.length})`} </h3>
         </div>

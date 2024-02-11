@@ -1,33 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  MouseEventHandler,
+} from "react";
 import useToggle from "../../../hooks/useToggle";
 import { createPortal } from "react-dom";
 import { generateId } from "../../../util";
 import { useDataContext } from "../../../context/DataContext";
 import { useIdContext } from "../../../context/IdContext";
+import { Boards, Errors, ModalProps, Tasks } from "../../../types";
 
-export default function AddTask({ isOpen, onClose }) {
+export default function AddTask({ isOpen, onClose }: ModalProps) {
   const [show, toggleShow] = useToggle(false);
-  const [formErrors, setFormErrors] = useState({});
+  const [formErrors, setFormErrors] = useState<Errors>({});
   const { data, setData } = useDataContext();
   const { id } = useIdContext();
-  const [taskObj, setTaskObj] = useState({
+  const [taskObj, setTaskObj] = useState<Tasks>({
     id: generateId(5, 5),
     title: "",
     description: "",
     status: "",
     subtasks: [
-      { id: "1323432432", title: "", isCompletd: false },
-      { id: "2342342343", title: "", isCompletd: false },
+      { id: "1323432432", title: "", isCompleted: false },
+      { id: "2342342343", title: "", isCompleted: false },
     ],
   });
 
-  const board =
-    id && data && data.filter((dataBoard) => dataBoard.id === id)[0];
+  const board = id && data.find((dataBoard) => dataBoard.id === id);
 
   useEffect(() => {
-    if (!id) {
+    if (!id || !board) {
       return;
     }
+
     setTaskObj((prev) => {
       return {
         ...prev,
@@ -37,24 +43,28 @@ export default function AddTask({ isOpen, onClose }) {
   }, [id]);
 
   const resetForm = () => {
+    if (!board) {
+      return;
+    }
     setTaskObj({
       id: generateId(5, 5),
       title: "",
       description: "",
-      status: board.columns[0].name,
+      status: board?.columns[0].name,
       subtasks: [
-        { id: generateId(2, 4), title: "", isCompletd: false },
-        { id: generateId(2, 4), title: "", isCompletd: false },
+        { id: generateId(2, 4), title: "", isCompleted: false },
+        { id: generateId(2, 4), title: "", isCompleted: false },
       ],
     });
   };
 
   useEffect(() => {
-    function outsideClick(e) {
+    function outsideClick(e: MouseEvent) {
       // ERROR : using the ref.current to close when outside dosen't work issue related to the event listener when assinging "click"
       //   if (taskRef.current && !taskRef.current.contains(e.target)) {
       //   }
-      if (e.target.className === "overlay show") {
+      const target = e.target as HTMLTextAreaElement;
+      if (target.className === "overlay show") {
         onClose();
         resetForm();
         setFormErrors({});
@@ -68,7 +78,17 @@ export default function AddTask({ isOpen, onClose }) {
     };
   }, [onClose]);
 
-  function titleHandle(e) {
+  function descHandler(e: ChangeEvent<HTMLTextAreaElement>) {
+    const { name, value } = e.target;
+    setTaskObj((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  }
+
+  function titleHandle(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setTaskObj((prev) => {
       return {
@@ -79,7 +99,7 @@ export default function AddTask({ isOpen, onClose }) {
   }
 
   //function to handle add the value of each subtasks onChange on each input field
-  const handleAddTask = (e, index) => {
+  const handleAddTask = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const subtasks = [...taskObj.subtasks];
     taskObj.subtasks[index].title = e.target.value;
     setTaskObj((prev) => {
@@ -91,7 +111,7 @@ export default function AddTask({ isOpen, onClose }) {
   };
   // function to handle adding newSubTask
   function addSubTask() {
-    const newSubTasks = { id: generateId(2, 4), title: "", isCompletd: false };
+    const newSubTasks = { id: generateId(2, 4), title: "", isCompleted: false };
     setTaskObj((prev) => {
       return {
         ...prev,
@@ -101,7 +121,7 @@ export default function AddTask({ isOpen, onClose }) {
   }
   // adding validation to each input field to ensure that all input fileds are filled and then added to the main data set
   const validate = () => {
-    const errors = {};
+    const errors: Errors = {};
     if (!taskObj.title) {
       errors.title = "Can't be empty";
       errors.titleError = true;
@@ -115,24 +135,27 @@ export default function AddTask({ isOpen, onClose }) {
     return errors;
   };
 
-  const handleStatusChange = (event) => {
-    const selectedStatus = event.target.textContent;
-    setTaskObj((prevTaskObj) => ({
-      ...prevTaskObj,
-      status: selectedStatus,
-    }));
+  const handleStatusChange = (event: React.MouseEvent) => {
+    const target = event.target as HTMLDivElement;
+    const selectedStatus = target.textContent;
+    setTaskObj((prev) => {
+      return {
+        ...prev,
+        status: selectedStatus as string,
+      };
+    });
   };
 
   // handling submit function to set the main data to data object json
-  const handleSumbit = (e) => {
-    e.preventDefault();
+  const handleSumbit = () => {
+    if (!board) return;
     const errors = validate();
     if (Object.keys(errors).length === 0) {
       let updatedData = [...data];
       const currentBoardIndex = data.findIndex(
         (currentboard) => currentboard.id === board.id
       );
-      const currentColumnIndex = board.columns.findIndex(
+      const currentColumnIndex = board?.columns.findIndex(
         (currentColumn) => currentColumn.name === taskObj.status
       );
 
@@ -148,7 +171,7 @@ export default function AddTask({ isOpen, onClose }) {
   };
   //   TODO : solve the remove problem , removing only the last element
   //   SOLUTION : the issue related to the key of each item , it has to be an ID , Use a unique key for each element in the array. Something like id which react can see has been deleted.
-  function removeSub(id) {
+  function removeSub(id: number) {
     if (taskObj.subtasks.length <= 2) {
       return;
     }
@@ -174,7 +197,7 @@ export default function AddTask({ isOpen, onClose }) {
               name="title"
               value={taskObj.title}
               placeholder="e.g. Take coffee break"
-              onChange={(e) => titleHandle(e)}
+              onChange={titleHandle}
             />
             <p>{formErrors.title && formErrors.title}</p>
           </div>
@@ -185,7 +208,7 @@ export default function AddTask({ isOpen, onClose }) {
               name="description"
               placeholder="e.g. It’s always good to take a break. This 15 minute break will 
                            recharge the batteries a little."
-              onChange={(e) => titleHandle(e)}
+              onChange={(e) => descHandler(e)}
               value={taskObj.description}
             ></textarea>
           </div>
@@ -235,7 +258,7 @@ export default function AddTask({ isOpen, onClose }) {
             </button>
           </div>
           {/* this has to change to cover the status of each board created to do so .  */}
-          <div className="f-stat" onClick={toggleShow}>
+          <div className="f-stat" onClick={() => toggleShow()}>
             <div className="stat-title">{taskObj.status}</div>
             <span>
               <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
@@ -252,7 +275,11 @@ export default function AddTask({ isOpen, onClose }) {
                 {board &&
                   board.columns.map((tsk, _) => {
                     return (
-                      <li key={tsk.id} id={tsk.id} onClick={handleStatusChange}>
+                      <li
+                        key={tsk.id}
+                        id={tsk.id}
+                        onClick={(e) => handleStatusChange(e)}
+                      >
                         {tsk.name}
                       </li>
                     );
@@ -260,12 +287,12 @@ export default function AddTask({ isOpen, onClose }) {
               </ul>
             </div>
           </div>
-          <button type="button" onClick={(e) => handleSumbit(e)}>
+          <button type="button" onClick={handleSumbit}>
             Create Task
           </button>
         </form>
       </div>
     </div>,
-    document.querySelector("#modal-container")
+    document.querySelector("#modal-container") || document.body
   );
 }

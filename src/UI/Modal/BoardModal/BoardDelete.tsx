@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { useDataContext } from "../../../context/DataContext";
 import { useIdContext } from "../../../context/IdContext";
+import { ModalProps } from "../../../types";
 
-export default function BoardDelete({ isOpen, onClose }) {
+export default function BoardDelete({ isOpen, onClose }: ModalProps) {
   const { data, setData } = useDataContext();
   const { id, setId } = useIdContext();
 
@@ -10,8 +11,9 @@ export default function BoardDelete({ isOpen, onClose }) {
     ? data && data.findIndex((currentBoard) => currentBoard.id === id)
     : 0;
   useEffect(() => {
-    const clickOutside = (e) => {
-      if (e.target.className === "overlay show") {
+    const clickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLTextAreaElement;
+      if (target.className === "overlay show") {
         onClose();
       }
       document.addEventListener("click", clickOutside);
@@ -19,7 +21,7 @@ export default function BoardDelete({ isOpen, onClose }) {
     return () => {
       document.removeEventListener("click", clickOutside);
     };
-  }, []);
+  }, [onClose]);
 
   function deleteBoard() {
     let updatedData = [...data];
