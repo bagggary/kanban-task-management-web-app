@@ -3,6 +3,9 @@
 logs
 **/*.backup.*
 **/*.back.*
+*.config
+prepros_*
+prepros*
 
 node_modules
 bower_components
