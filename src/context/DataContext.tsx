@@ -1,13 +1,18 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import Data from "../assets/data.json";
+import { Boards } from "../types";
 
-const DataContext = createContext(null);
-
-export const useDataContext = () => {
-  return useContext(DataContext);
+export type DataAction = {
+  type: string;
+  payload: Boards[];
 };
+export type IDataContext = {
+  data: Boards[];
+  setData: (data: Boards[]) => void;
+};
+
 const localData = localStorage.getItem("kanbanTasks");
-let initialState;
+let initialState: { data: Boards[] };
 try {
   initialState = {
     data: localData ? JSON.parse(localData) : Data,
@@ -19,7 +24,19 @@ try {
   };
 }
 
-const dataReducer = (state, action) => {
+const DataContext = createContext<IDataContext>({
+  data: initialState.data,
+  setData: () => {},
+});
+
+export const useDataContext = () => {
+  return useContext(DataContext);
+};
+
+const dataReducer = (
+  state = initialState,
+  action: DataAction
+): { data: Boards[] } => {
   const { type, payload } = action;
   switch (type) {
     case "SET_DATA":
@@ -31,10 +48,10 @@ const dataReducer = (state, action) => {
   }
 };
 
-export const DataProvider = ({ children }) => {
+export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(dataReducer, initialState);
 
-  const setData = (data) => {
+  const setData = (data: Boards[]): void => {
     dispatch({ type: "SET_DATA", payload: data });
   };
 
