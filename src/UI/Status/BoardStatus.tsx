@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { getRandomColor } from "../../util";
 import { SortableTasks } from "../Tasks/SortableTasks";
 import { CSS } from "@dnd-kit/utilities";
 import { Columns } from "../../types";
@@ -12,9 +11,6 @@ export default function BoardStatus({
   column: Columns;
   boardId: string;
 }) {
-  // const [bulletColor, _] = useState(getRandomColor(boardId));
-  // const { id } = column;
-  // const { setNodeRef } = useDroppable({ id });
   const continerRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState<number | null>(null);
 

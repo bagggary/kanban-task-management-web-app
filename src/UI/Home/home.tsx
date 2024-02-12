@@ -7,6 +7,7 @@ import BoardStatus from "../Status/BoardStatus";
 import EditBoard from "../Modal/BoardModal/EditBoard";
 import {
   DndContext,
+  DragEndEvent,
   DragOverlay,
   DragStartEvent,
   PointerSensor,
@@ -17,16 +18,16 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { SortableTasks } from "../Tasks/SortableTasks";
 import { createPortal } from "react-dom";
 import EmptyId from "../empty/emptyId";
-import { Columns } from "../../types";
+import { Boards, Columns, Tasks } from "../../types";
 
 function Home() {
   const { side } = useSideContext();
   const { data, setData } = useDataContext();
   const { id } = useIdContext();
   const [editColumn, setEditColumn] = useState(false);
-  const [activeTask, setActiveTask] = useState(null);
-  const [activeColumn, setActiveColumn] = useState(null);
-  const [updateData, setUpdateData] = useState(null);
+  const [activeTask, setActiveTask] = useState<Tasks | null>(null);
+  const [activeColumn, setActiveColumn] = useState<Columns | null>(null);
+  const [updateData, setUpdateData] = useState<Boards[] | null>(null);
 
   useEffect(() => {
     if (updateData !== null) {
@@ -71,7 +72,7 @@ function Home() {
     }
   };
 
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: any) => {
     const { active, over } = e;
 
     setUpdateData((prev) => {
@@ -79,7 +80,11 @@ function Home() {
     });
   };
 
-  const moveTaskAndUpdateData = (prevData, active, over) => {
+  const moveTaskAndUpdateData = (
+    prevData: Boards[] | any,
+    active: any,
+    over: any
+  ) => {
     if (!over) return prevData;
 
     const activeId = active.id;
@@ -97,7 +102,8 @@ function Home() {
     if (isActiveATask && isOverATask) {
       // if the active task is not in the same column
       if (active.data.current.task.status !== over.data.current.task.status) {
-        const sourceColumn = board.columns.find((col) =>
+        if (!board) return;
+        const sourceColumn = board?.columns.find((col: Columns) =>
           col.tasks.some((task) => task.id === activeId)
         );
 
@@ -141,12 +147,13 @@ function Home() {
         }
       } else {
         // if task is in the same column
-        const currentColumn = board.columns.find((col) =>
+        if (!board) return;
+        const currentColumn = board?.columns.find((col) =>
           col.tasks.some((task) => task.id === activeId)
         );
 
         const currentColumnIndex = board.columns.findIndex(
-          (col) => col.id === currentColumn.id
+          (col) => col.id === currentColumn?.id
         );
 
         const currentBoardIndex = updatedData.findIndex(
@@ -179,7 +186,8 @@ function Home() {
 
     // if task is dragged to an empty column
     if (isActiveATask && isOverAColumn) {
-      const sourceColumn = board.columns.find((col) =>
+      if (!board) return;
+      const sourceColumn = board?.columns.find((col: Columns) =>
         col.tasks.some((task) => task.id === activeId)
       );
 
@@ -217,7 +225,7 @@ function Home() {
     return updatedData;
   };
 
-  const handleDragEnd = (e) => {
+  const handleDragEnd = (e: DragEndEvent) => {
     setActiveColumn(null);
     setActiveTask(null);
     const { active, over } = e;
@@ -225,8 +233,8 @@ function Home() {
     const activeColumnId = active.id;
     const overColumnId = over.id;
     if (activeColumnId === overColumnId) return;
-
-    const column = [...board.columns];
+    if (!board) return;
+    const column = [...board?.columns];
     const activeColumnIndex = column.findIndex(
       (col) => col.id === activeColumnId
     );

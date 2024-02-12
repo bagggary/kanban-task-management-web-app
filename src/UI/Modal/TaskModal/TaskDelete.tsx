@@ -2,8 +2,21 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { useDataContext } from "../../../context/DataContext";
 import { useIdContext } from "../../../context/IdContext";
+import { Tasks } from "../../../types";
 
-export default function TaskDelete({ task, isOpen, onClose, columnId }) {
+export type TaskOptionsProps = {
+  task: Tasks;
+  isOpen: boolean;
+  onClose: () => void;
+  columnId: string;
+};
+
+export default function TaskDelete({
+  task,
+  isOpen,
+  onClose,
+  columnId,
+}: TaskOptionsProps) {
   const { data, setData } = useDataContext();
   const { id } = useIdContext();
 
@@ -18,7 +31,7 @@ export default function TaskDelete({ task, isOpen, onClose, columnId }) {
       board.columns.findIndex((currentColumn) => currentColumn.id === columnId);
     const currentTaskIndex = data[currentBoardIndex].columns[
       currentColumnIndex
-    ].tasks.findIndex((currentTask) => currentTask.id === task.id);
+    ].tasks.findIndex((currentTask) => currentTask.id === task?.id);
     const columnsFilter = [...board.columns];
     const taskLocation = [...columnsFilter[currentColumnIndex].tasks];
     taskLocation.splice(currentTaskIndex, 1);
@@ -38,8 +51,8 @@ export default function TaskDelete({ task, isOpen, onClose, columnId }) {
       <div className="delete board-dele">
         <h1>Delete this task?</h1>
         <p>
-          Are you sure you want to delete the <span>{task.title}</span> task and
-          its subtasks? This action cannot be reversed.
+          Are you sure you want to delete the <span>{task?.title}</span> task
+          and its subtasks? This action cannot be reversed.
         </p>
         <div className="delete-options">
           <button onClick={deleteTask}>Delete</button>
@@ -47,6 +60,6 @@ export default function TaskDelete({ task, isOpen, onClose, columnId }) {
         </div>
       </div>
     </div>,
-    document.querySelector("#modal-container")
+    document.querySelector("#modal-container") || document.body
   );
 }

@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import TaksDetails from "./TasksDetails";
+import { useEffect, useState } from "react";
 import TaskDelete from "../Modal/TaskModal/TaskDelete";
 import EditTask from "../Modal/TaskModal/EditTask";
-import { Subtasks, Tasks } from "../../types";
+import { Subtasks, Tasks as TaskType } from "../../types";
+import TaksDetails from "./TasksDetails";
 
 export default function Tasks({
   subtasks,
   task,
   columnId,
 }: {
-  subtasks: Subtasks;
-  task: Tasks;
+  subtasks: Subtasks[];
+  task: TaskType;
   columnId: string;
 }) {
   const [isMounted, setIsMounted] = useState(false);
@@ -18,10 +18,10 @@ export default function Tasks({
   const [edit, setEdit] = useState(false);
   const [taskDelete, setTaskDelete] = useState(false);
   const completedTasks = () => {
-    const completedSubtasks = subtasks.filter(
-      (subtask: Subtasks, index: number) => subtask.isCompleted
+    const completedSubtasks = subtasks?.filter(
+      (subtask: Subtasks, _: number) => subtask.isCompleted
     );
-    return completedSubtasks.length;
+    return completedSubtasks?.length;
   };
 
   useEffect(() => {
@@ -33,8 +33,8 @@ export default function Tasks({
       className={`task-card ${isMounted ? "scale-in" : ""}`}
       onClick={() => setDetails(true)}
     >
-      <h3>{task.title}</h3>
-      <p>{`${completedTasks()} of ${subtasks.length} subtasks`}</p>
+      <h3>{task?.title}</h3>
+      <p>{`${completedTasks()} of ${subtasks?.length} subtasks`}</p>
       <TaksDetails
         isOpen={details}
         onClose={() => setDetails(false)}

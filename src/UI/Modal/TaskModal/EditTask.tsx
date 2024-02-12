@@ -1,17 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { createPortal } from "react-dom";
 import { useDataContext } from "../../../context/DataContext";
 import { useIdContext } from "../../../context/IdContext";
 import { generateId } from "../../../util";
-export default function EditTask({ task, onClose, isOpen, columnId }) {
+import { TaskOptionsProps } from "./TaskDelete";
+import { Errors } from "../../../types";
+export default function EditTask({
+  task,
+  onClose,
+  isOpen,
+  columnId,
+}: TaskOptionsProps) {
   const [editTask, setEditTask] = useState(task);
-  const [formErrors, setFormErrors] = useState({});
-  const { jsonData, data, setData } = useDataContext();
+  const [formErrors, setFormErrors] = useState<Errors>({});
+  const { data, setData } = useDataContext();
   const { id } = useIdContext();
 
   useEffect(() => {
-    const clickOutside = (e) => {
-      if (e.target.className === "overlay show") {
+    const clickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLTextAreaElement;
+      if (target.className === "overlay show") {
         onClose();
       }
     };
@@ -33,7 +41,7 @@ export default function EditTask({ task, onClose, isOpen, columnId }) {
     const currentTaskIndex =
       data &&
       data[currentBoardIndex].columns[currentColumnIndex].tasks.findIndex(
-        (currentTask) => currentTask.id === task.id
+        (currentTask) => currentTask.id === task?.id
       );
 
     if (Object.keys(errors).length === 0) {
@@ -56,7 +64,7 @@ export default function EditTask({ task, onClose, isOpen, columnId }) {
     }
   };
 
-  function titleHandle(e) {
+  function titleHandle(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
     setEditTask((prev) => {
       return {
@@ -66,9 +74,10 @@ export default function EditTask({ task, onClose, isOpen, columnId }) {
     });
   }
 
-  const handleAddTask = (e, index) => {
+  const handleAddTask = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const subtasks = [...editTask.subtasks];
-    subtasks[index].title = e.target.value;
+    const target = e.target as HTMLInputElement;
+    subtasks[index].title = target.value;
     setEditTask((prev) => {
       return {
         ...prev,
@@ -87,7 +96,7 @@ export default function EditTask({ task, onClose, isOpen, columnId }) {
     });
   }
 
-  function removeSub(id) {
+  function removeSub(id: string) {
     if (editTask.subtasks.length <= 2) {
       return;
     }
@@ -100,7 +109,7 @@ export default function EditTask({ task, onClose, isOpen, columnId }) {
     });
   }
   const validate = () => {
-    const errors = {};
+    const errors: Errors = {};
     if (!editTask.title) {
       errors.title = "Can't be empty";
       errors.titleError = true;
@@ -198,6 +207,6 @@ recharge the batteries a little."
         </form>
       </div>
     </div>,
-    document.querySelector("#modal-container")
+    document.querySelector("#modal-container") || document.body
   );
 }

@@ -1,15 +1,10 @@
-import React, {
-  useState,
-  useEffect,
-  ChangeEvent,
-  MouseEventHandler,
-} from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import useToggle from "../../../hooks/useToggle";
 import { createPortal } from "react-dom";
 import { generateId } from "../../../util";
 import { useDataContext } from "../../../context/DataContext";
 import { useIdContext } from "../../../context/IdContext";
-import { Boards, Errors, ModalProps, Tasks } from "../../../types";
+import { Errors, ModalProps, Tasks } from "../../../types";
 
 export default function AddTask({ isOpen, onClose }: ModalProps) {
   const [show, toggleShow] = useToggle(false);

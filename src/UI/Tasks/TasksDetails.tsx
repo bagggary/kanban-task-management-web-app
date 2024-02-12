@@ -1,8 +1,18 @@
-import React, { useEffect, useState, useRef, Fragment } from "react";
+import React, { useEffect, useState, useRef, ChangeEvent } from "react";
 import useToggle from "../../hooks/useToggle";
 import { useDataContext } from "../../context/DataContext";
 import { useIdContext } from "../../context/IdContext";
 import { createPortal } from "react-dom";
+import { Tasks } from "../../types";
+
+type TaskDetailsProps = {
+  task: Tasks;
+  isOpen: boolean;
+  onClose: () => void;
+  columnId: string;
+  onOpenEdit: () => void;
+  onOpenDelete: () => void;
+};
 export default function TaksDetails({
   task,
   isOpen,
@@ -10,34 +20,39 @@ export default function TaksDetails({
   columnId,
   onOpenEdit,
   onOpenDelete,
-}) {
+}: TaskDetailsProps) {
   const [show, toggleShow] = useToggle(false);
   const [subOption, setSubOption] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState(task.status);
+  const [currentStatus, setCurrentStatus] = useState<string>(task?.status);
   const { data, setData } = useDataContext();
   const { id } = useIdContext();
-  const optionsRef = useRef(null);
-  const detailsRef = useRef(null);
+  const optionsRef = useRef<HTMLDivElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
 
   const board = data && data.filter((boardData) => boardData.id === id)[0];
   const currentColumn =
     board &&
     board.columns.filter((boardColumn) => boardColumn.id === columnId)[0];
+
   useEffect(() => {
-    function outsideClick(e) {
-      if (e.target.className === "overlay show") {
+    function modalOutsideClick(e: MouseEvent) {
+      const target = e.target as HTMLTextAreaElement;
+      if (target.className === "overlay show") {
         onClose();
       }
     }
 
-    document.addEventListener("click", outsideClick);
+    document.addEventListener("click", modalOutsideClick);
     return () => {
-      document.removeEventListener("click", outsideClick);
+      document.removeEventListener("click", modalOutsideClick);
     };
   }, [onClose]);
   useEffect(() => {
-    function outsideClick(event) {
-      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+    function outsideClick(event: MouseEvent) {
+      if (
+        optionsRef.current &&
+        !optionsRef.current.contains(event.target as Node)
+      ) {
         setSubOption(false);
       }
     }
@@ -47,9 +62,9 @@ export default function TaksDetails({
     };
   }, [optionsRef]);
 
-  function updateStatus(targetStatus) {
+  function updateStatus(targetStatus: string) {
     const statusColumns = [...board.columns];
-    let colIndex;
+    let colIndex: number = 0;
     statusColumns.forEach((col, index) => {
       if (col.name === task.status) {
         colIndex = index;
@@ -77,7 +92,7 @@ export default function TaksDetails({
     setData(updatedData);
   }
 
-  function handleSubtaskChange(index) {
+  function handleSubtaskChange(index: number) {
     const updatedTask = { ...task, subtasks: [...task.subtasks] };
 
     updatedTask.subtasks[index].isCompleted =
@@ -102,12 +117,14 @@ export default function TaksDetails({
     setData(updatedData);
   }
 
-  function statusHandler(e) {
-    if (currentStatus === e.target.textContent) {
+  function statusHandler(e: React.MouseEvent<HTMLLIElement, MouseEvent>) {
+    const target = e.target as HTMLDivElement;
+    if (!target.textContent) return;
+    if (currentStatus === target.textContent) {
       return;
     }
-    updateStatus(e.target.textContent);
-    setCurrentStatus(e.target.textContent);
+    updateStatus(target.textContent);
+    setCurrentStatus(target.textContent);
   }
 
   return createPortal(
@@ -184,7 +201,11 @@ export default function TaksDetails({
                 {data &&
                   board.columns.map((stat, index) => {
                     return (
-                      <li key={index} id={index} onClick={statusHandler}>
+                      <li
+                        key={index}
+                        id={stat.id}
+                        onClick={(e) => statusHandler(e)}
+                      >
                         {stat.name}
                       </li>
                     );
@@ -195,6 +216,6 @@ export default function TaksDetails({
         </div>
       </div>
     </div>,
-    document.querySelector("#modal-container")
+    document.querySelector("#modal-container") || document.body
   );
 }
