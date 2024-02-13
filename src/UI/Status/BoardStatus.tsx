@@ -3,13 +3,14 @@ import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { SortableTasks } from "../Tasks/SortableTasks";
 import { CSS } from "@dnd-kit/utilities";
 import { Columns } from "../../types";
+import { getRandomColor } from "../../util";
 
 export default function BoardStatus({
   column,
-  boardId,
+  index,
 }: {
   column: Columns;
-  boardId: string;
+  index?: number;
 }) {
   const continerRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState<number | null>(null);
@@ -77,7 +78,7 @@ export default function BoardStatus({
         <div className="board-column-name" {...attributes} {...listeners}>
           <div
             className="board-column-name-bullet"
-            style={{ backgroundColor: "green" }}
+            style={{ backgroundColor: getRandomColor(index as number) }}
           ></div>
           <h3> {`${column.name.toUpperCase()} (${column.tasks.length})`} </h3>
         </div>
