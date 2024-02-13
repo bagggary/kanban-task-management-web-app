@@ -35,6 +35,7 @@ function Home() {
     }
     return;
   }, [updateData]);
+
   const board = id && data.filter((boardData) => boardData.id === id)[0];
 
   const columnId = useMemo(() => {
@@ -65,15 +66,15 @@ function Home() {
       setActiveTask(e.active.data.current.task);
     }
 
-    if (updateData === null) {
-      setUpdateData(data);
-    } else {
-      return;
-    }
+    // if (!updateData) {
+    //   setUpdateData(data);
+    // }
+    // this line causing issue when deleting existing board and update data using drag and drop
   };
 
   const handleDragOver = (e: any) => {
     const { active, over } = e;
+    setUpdateData(data);
 
     setUpdateData((prev) => {
       return moveTaskAndUpdateData(prev, active, over);
@@ -269,8 +270,8 @@ function Home() {
           >
             <SortableContext items={columnId}>
               {board
-                ? board?.columns.map((col: Columns) => (
-                    <BoardStatus key={col.id} boardId={col.id} column={col} />
+                ? board?.columns.map((col: Columns, index: number) => (
+                    <BoardStatus key={col.id} column={col} index={index} />
                   ))
                 : ""}
             </SortableContext>
@@ -280,9 +281,7 @@ function Home() {
           </div>
           {createPortal(
             <DragOverlay>
-              {activeColumn && (
-                <BoardStatus column={activeColumn} boardId={activeColumn.id} />
-              )}
+              {activeColumn && <BoardStatus column={activeColumn} />}
               {activeTask && <SortableTasks taskId={activeTask.id} />}
             </DragOverlay>,
             document.body
