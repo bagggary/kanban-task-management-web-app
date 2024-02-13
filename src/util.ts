@@ -22,15 +22,14 @@ export function getRandomColor(index: number) {
     "rgb(73, 196, 229)",
     "rgb(132, 113, 242)",
     "rgb(103, 226, 174)",
+    "rgb(33, 25, 81)",
+    "rgb(131, 111, 255)",
+    "rgb(208, 72, 72)",
+    "rgb(253, 231, 103)",
   ];
   if (index < colors.length) {
     return colors[index];
   } else {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+    return "rgb(104, 149, 210)";
   }
 }
