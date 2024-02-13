@@ -188,7 +188,7 @@ export default function AddTask({ isOpen, onClose }: ModalProps) {
             <label htmlFor="title">Title</label>
             <input
               type="text"
-              id="title"
+              id={`title`}
               name="title"
               value={taskObj.title}
               placeholder="e.g. Take coffee break"
@@ -222,18 +222,18 @@ export default function AddTask({ isOpen, onClose }: ModalProps) {
                     >
                       <input
                         type="text"
-                        id="sub"
+                        id={`sub-${subtsk.id}-${index}`}
                         placeholder={`Subtask ${index + 1}`}
                         onChange={(e) => handleAddTask(e, index)}
                         value={subtsk.title}
                       />
                       <svg
-                        onClick={(e) => removeSub(index)}
+                        onClick={() => removeSub(index)}
                         width="15"
                         height="15"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <g fill-rule="evenodd">
+                        <g fillRule="evenodd">
                           <path d="m12.728 0 2.122 2.122L2.122 14.85 0 12.728z" />
                           <path d="M0 2.122 2.122 0 14.85 12.728l-2.122 2.122z" />
                         </g>
@@ -259,7 +259,7 @@ export default function AddTask({ isOpen, onClose }: ModalProps) {
               <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
                 <path
                   stroke="#635FC7"
-                  stroke-width="2"
+                  strokeWidth="2"
                   fill="none"
                   d="m1 1 4 4 4-4"
                 />
