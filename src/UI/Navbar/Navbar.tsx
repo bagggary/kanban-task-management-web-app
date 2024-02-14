@@ -22,6 +22,7 @@ export default function Navbar() {
   const [boardOptions, setBoardOptions] = useState<boolean>(false);
   const optionsRef = useRef<HTMLDivElement | null>(null);
   const { theme, toggleTheme } = useTheme();
+  const boardsRef = useRef<HTMLDivElement | null>(null);
 
   const { data } = useDataContext();
   const { id, setId } = useIdContext();
@@ -40,6 +41,21 @@ export default function Navbar() {
       document.removeEventListener("mousedown", outsideClick);
     };
   }, [optionsRef]);
+
+  useEffect(() => {
+    function outsideClick(event: MouseEvent) {
+      if (
+        boardsRef.current &&
+        !boardsRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", outsideClick);
+    return () => {
+      document.removeEventListener("mousedown", outsideClick);
+    };
+  }, [boardsRef]);
 
   function handleDropdown() {
     setOpen((prev) => !prev);
@@ -93,26 +109,25 @@ export default function Navbar() {
                       </svg>
                     </span>
                   </div>
-                  <div className={` dropdown__options ${open ? "open" : ""}`}>
+                  <div
+                    ref={boardsRef}
+                    className={` dropdown__options ${open ? "open" : ""}`}
+                  >
                     <div className="dropdown__options__boards">
-                      <h2>
-                        {" "}
-                        ALL BOARDS ({" "}
-                        {id ? data[currentBoardIndex].columns.length : ""})
-                      </h2>
+                      <h2> ALL BOARDS ( {data ? data.length : 0})</h2>
                       {/* move this element to seperate folder container */}
                       <ul>
                         {data &&
                           data.map((element: Boards) => {
-                            const board = data.filter(
-                              (boardData: Boards) => boardData.id === element.id
-                            )[0];
                             return (
                               <li
-                                className={board.id === id ? "active" : ""}
-                                id={board.id}
-                                key={board.id}
-                                onClick={() => setId(element.id)}
+                                className={element.id === id ? "active" : ""}
+                                id={element.id}
+                                key={element.id}
+                                onClick={() => {
+                                  setId(element.id);
+                                  setOpen(false);
+                                }}
                               >
                                 <svg
                                   width="16"
@@ -121,7 +136,7 @@ export default function Navbar() {
                                 >
                                   <path d="M0 2.889A2.889 2.889 0 0 1 2.889 0H13.11A2.889 2.889 0 0 1 16 2.889V13.11A2.888 2.888 0 0 1 13.111 16H2.89A2.889 2.889 0 0 1 0 13.111V2.89Zm1.333 5.555v4.667c0 .859.697 1.556 1.556 1.556h6.889V8.444H1.333Zm8.445-1.333V1.333h-6.89A1.556 1.556 0 0 0 1.334 2.89V7.11h8.445Zm4.889-1.333H11.11v4.444h3.556V5.778Zm0 5.778H11.11v3.11h2a1.556 1.556 0 0 0 1.556-1.555v-1.555Zm0-7.112V2.89a1.555 1.555 0 0 0-1.556-1.556h-2v3.111h3.556Z" />
                                 </svg>
-                                <div>{id && board.name}</div>
+                                <div>{data && element.name}</div>
                               </li>
                             );
                           })}
