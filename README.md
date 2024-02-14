@@ -43,8 +43,7 @@ Users should be able to:
 - Mark subtasks as complete and move tasks between columns
 - Hide/show the board sidebar
 - Toggle the theme between light/dark modes
-- **Bonus**: Allow users to drag and drop tasks to change their status and re-order them in a column
-- **note** : Unable to implement drag and drop id missing from JSON file , need to update data to be able to implement this feature -- _future Development_
+- Allow users to drag and drop tasks to change their status and re-order them in a column
 
 ### Screenshot
 
@@ -84,6 +83,10 @@ Finally, I extensively tested the project, making sure that each function was op
 - ReactContext-API
 - [React](https://reactjs.org/) - JS library
 - [Syntactically Awesome Style Sheets](https://sass-lang.com/) - For styles
+- ContextAPI - State Management
+- DnD kit - Drag and Drop [Column & Tasks]
+- TypeScript - Type cheking to catch potential errors on compile-time
+- LocalStorage - persist data when refreshing the page
 
 ### What I learned
 
@@ -93,15 +96,8 @@ The only problem i had to deal with is the deep nested objects and arrays , here
 
 ### Continued development
 
-for this project :
--- add localStorage to save data
--- implement drag and drop
-
 for next projects :
 -- Framer Motion --> animation
--- tailwindCSS --> for styles
--- React Redux --> state management
--- Typescript instead of JS
 
 ## Author
 
